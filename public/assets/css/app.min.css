@@ -14200,9 +14200,9 @@ span.flatpickr-weekday {
 }
 
 .auth-one-bg {
-    background-image: url(../images/auth-one-bg.jpg);
-    background-position: center;
-    background-size: cover
+    background-image: url(../images/banner/sign-in-banner.jpg);
+    background-position: left center;
+    background-size: contain;
 }
 
 .auth-one-bg .bg-overlay {
@@ -18083,5 +18083,3 @@ span.flatpickr-weekday {
 #task-error-msg {
     display: none
 }
-
-/*# sourceMappingURL=app.min.css.map */
