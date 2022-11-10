@@ -9,7 +9,7 @@
                             <img src="assets/images/logo/logo.png" alt="" height="50">
                         </span>
                         <span class="logo-lg">
-                            <img src="assets/images/logo/logowhite.png" alt="" height="80">
+                            <img src="assets/images/logo/logo-white.png" alt="" height="80">
                         </span>
                     </a>
 
