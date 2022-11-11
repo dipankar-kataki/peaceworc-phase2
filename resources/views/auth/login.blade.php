@@ -56,13 +56,13 @@
                                                         </div>
                                                         <div class="carousel-inner text-center text-white-50 pb-5">
                                                             <div class="carousel-item active">
-                                                                <p class="fs-15 fst-italic">" Great! Clean code, clean design, easy for customization. Thanks very much! "</p>
+                                                                <p class="fs-15 fst-italic">"Caregiving is a constant learning experience."</p>
                                                             </div>
                                                             <div class="carousel-item">
-                                                                <p class="fs-15 fst-italic">" The theme is really great with an amazing customer support."</p>
+                                                                <p class="fs-15 fst-italic">"There will come a time when your loved one is gone, and you will find comfort in the fact that you were their caregiver."</p>
                                                             </div>
                                                             <div class="carousel-item">
-                                                                <p class="fs-15 fst-italic">" Great! Clean code, clean design, easy for customization. Thanks very much! "</p>
+                                                                <p class="fs-15 fst-italic">"The simple act of caring is heroic."</p>
                                                             </div>
                                                         </div>
                                                     </div>
