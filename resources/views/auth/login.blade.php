@@ -81,7 +81,7 @@
                                             </div>
 
                                             <div class="mt-4">
-                                                <form action="https://themesbrand.com/velzon/html/default/index.html">
+                                                <form>
 
                                                     <div class="mb-3">
                                                         <label for="username" class="form-label">Username</label>
@@ -156,10 +156,10 @@
         <script src="assets/libs/simplebar/simplebar.min.js"></script>
         <script src="assets/libs/node-waves/waves.min.js"></script>
         <script src="assets/libs/feather-icons/feather.min.js"></script>
-        <script src="assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
-        <script src="assets/js/plugins.js"></script>
+        {{-- <script src="assets/js/pages/plugins/lord-icon-2.1.0.js"></script> --}}
+        {{-- <script src="assets/js/plugins.js"></script> --}}
 
-        <!-- password-addon init -->
-        <script src="assets/js/pages/password-addon.init.js"></script>
+        {{-- <!-- password-addon init -->
+        <script src="assets/js/pages/password-addon.init.js"></script> --}}
     </body>
 </html>
