@@ -81,11 +81,11 @@
                                             </div>
 
                                             <div class="mt-4">
-                                                <form>
-
+                                                <form id="loginForm">
+                                                    @csrf
                                                     <div class="mb-3">
-                                                        <label for="username" class="form-label">Username</label>
-                                                        <input type="text" class="form-control" id="username" placeholder="Enter username">
+                                                        <label for="email" class="form-label">Email</label>
+                                                        <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
                                                     </div>
 
                                                     <div class="mb-3">
@@ -94,26 +94,14 @@
                                                         </div>
                                                         <label class="form-label" for="password-input">Password</label>
                                                         <div class="position-relative auth-pass-inputgroup mb-3">
-                                                            <input type="password" class="form-control pe-5 password-input" placeholder="Enter password" id="password-input">
+                                                            <input type="password" name="password" id="password" class="form-control pe-5 password-input" placeholder="Enter password">
                                                             <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                                                         </div>
                                                     </div>
 
                                                     <div class="mt-4">
-                                                        <button class="btn btn-success w-100" type="submit">Sign In</button>
+                                                        <button class="btn btn-success w-100" id="signInBtn" type="button">Sign In</button>
                                                     </div>
-
-                                                    <div class="mt-4 text-center">
-                                                        <div class="signin-other-title">
-                                                            <h5 class="fs-13 mb-4 title">Sign In with</h5>
-                                                        </div>
-
-                                                        <div>
-                                                            <button type="button" class="btn btn-primary btn-icon waves-effect waves-light"><i class="ri-facebook-fill fs-16"></i></button>
-                                                            <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-google-fill fs-16"></i></button>
-                                                        </div>
-                                                    </div>
-
                                                 </form>
                                             </div>
                                         </div>
@@ -152,6 +140,7 @@
         <!-- end auth-page-wrapper -->
 
         <!-- JAVASCRIPT -->
+
         <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
         {{-- <script src="assets/libs/simplebar/simplebar.min.js"></script> --}}
         {{-- <script src="assets/libs/node-waves/waves.min.js"></script> --}}
@@ -161,5 +150,48 @@
 
         {{-- <!-- password-addon init -->
         <script src="assets/js/pages/password-addon.init.js"></script> --}}
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+        <script>
+            const signInBtn = document.getElementById('signInBtn');
+            signInBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                const loginForm = document.getElementById("loginForm");
+                const formData = new FormData(loginForm);
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.open('POST', "{{route('admin.login')}}");
+                xhr.setRequestHeader('X-CSRF-TOKEN', '{{csrf_token()}}');
+
+                xhr.addEventListener('load', () => {
+                    if(xhr.status == 200 && xhr.readyState === 4){
+                        const res = JSON.parse(xhr.responseText)
+                        if(res.status === 1){
+                            window.location.replace(res.url);
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops!',
+                                text: res.message,
+                            })
+                        }
+                        
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops!',
+                            text: 'Something Went Wrong. Login failed.',
+                        })
+                    }
+                });
+                
+                xhr.send(formData);
+            });
+        </script>
     </body>
 </html>
