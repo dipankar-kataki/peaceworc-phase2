@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('profile-registration', [ProfileRegistrationController::class, 'profileRegistration']);
     Route::post('edit-profile-registration', [ProfileRegistrationController::class, 'editProfileRegistration']);
     Route::post('create-authorize-officer', [AuthorizeOfficerController::class, 'createAuthorizeOfficer']);
+    Route::get('get-authorize-officer', [AuthorizeOfficerController::class, 'authorizeOfficer']);
     Route::get('information-status', [InformationStatusController::class, 'informationStatus']);
     Route::post('logout', [LogOutController::class,'logout']);
 });

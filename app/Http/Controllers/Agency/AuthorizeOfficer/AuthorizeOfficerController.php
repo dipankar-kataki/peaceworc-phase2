@@ -14,6 +14,17 @@ class AuthorizeOfficerController extends Controller
 {
     use ApiResponse;
 
+
+    public function authorizeOfficer(){
+        try{
+            $authorizeOfficerDetails = AuthorizeOfficer::where('agency_id', Auth::user()->id)->get();
+            return $this->success('Great! Authorize Officer Details Fetched Successfully.', $authorizeOfficerDetails, null, 200);
+        }catch(\Exception $e){
+            return $this->error('Oops! Failed To Fetch Authorize Officer Details. Something Went Wrong.', null, null, 500);
+        }
+    }
+
+
     public function createAuthorizeOfficer(Request $request){
         $validator = Validator::make($request->all(),[
             'firstname' => 'required | string',

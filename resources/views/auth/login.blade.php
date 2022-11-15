@@ -160,6 +160,8 @@
             signInBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 
+                signInBtn.innerHTML = 'Please Wait...';
+                signInBtn.setAttribute('disabled', true);
                 const loginForm = document.getElementById("loginForm");
                 const formData = new FormData(loginForm);
 
@@ -170,6 +172,7 @@
 
                 xhr.addEventListener('load', () => {
                     if(xhr.status == 200 && xhr.readyState === 4){
+
                         const res = JSON.parse(xhr.responseText)
                         if(res.status === 1){
                             window.location.replace(res.url);
@@ -179,6 +182,9 @@
                                 title: 'Oops!',
                                 text: res.message,
                             })
+                            signInBtn.removeAttribute('disabled');
+                            signInBtn.innerHTML = 'Sign In';
+
                         }
                         
                     }else{
@@ -187,6 +193,9 @@
                             title: 'Oops!',
                             text: 'Something Went Wrong. Login failed.',
                         })
+
+                        signInBtn.removeAttribute('disabled');
+                        signInBtn.innerHTML = 'Sign In';
                     }
                 });
                 
