@@ -33,19 +33,19 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
-                    <a class="{{Request::is('admin/dashboard') ? 'nav-link menu-link active' : 'nav-link menu-link'}} " href="{{route('admin.dashboard')}}">
+                    <a class="{{Route::is('admin.dashboard') ? 'nav-link menu-link active' : 'nav-link menu-link'}} " href="{{route('admin.dashboard')}}">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
                     </a>
                 </li> <!-- end Dashboard Menu -->
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse"
+                    <a class="{{Request::segment(2) == 'agency' ? 'nav-link menu-link active' : 'nav-link menu-link'}}" href="#agencyItems" data-bs-toggle="collapse"
                         role="button" aria-expanded="false" aria-controls="sidebarApps">
                         <i class="ri-building-fill"></i> <span data-key="t-apps">Agency</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarApps">
+                    <div class="collapse menu-dropdown" id="agencyItems">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#" class="nav-link"> Agency List
+                                <a href="{{route('admin.get.agency.list')}}" class="{{Request::segment(3) == 'list' ? 'nav-link menu-link active' : 'nav-link menu-link'}}"> Agency List
                                 </a>
                             </li>
                             <li class="nav-item">
