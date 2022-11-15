@@ -27,5 +27,6 @@ Route::post('login', [LoginController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('profile-registration', [ProfileRegistrationController::class, 'profileRegistration']);
+    Route::post('edit-profile-registration', [ProfileRegistrationController::class, 'editProfileRegistration']);
     Route::post('logout', [LogOutController::class,'logout']);
 });
