@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Agency\Registration;
 
 use App\Http\Controllers\Controller;
+use App\Models\AgencyInformationStatus;
 use App\Models\AgencyProfileRegistration;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileRegistrationController extends Controller
@@ -53,6 +55,14 @@ class ProfileRegistrationController extends Controller
                     ]);
 
                     if($create){
+                        try{
+                            AgencyInformationStatus::create([
+                                'user_id' => Auth::user()->id,
+                                'is_registration_complete' => 1
+                            ]);
+                        }catch(\Exception $e){
+                            Log::error('Not Able To Update Registration Complete Status ====>',$e);
+                        }
                         return $this->success('Great! Profile Registration Successful.', null, null, 201 );
                     }else{
                         return $this->error('Oops! Failed To Register Profile. Something Went Wrong.', null, null, 500);
@@ -111,7 +121,8 @@ class ProfileRegistrationController extends Controller
                         ]);
     
                         if($update){
-                            return $this->success('Great! Details Inserted Successfully.', null, null, 201 );
+                            $agencyProfileDetails = AgencyProfileRegistration::where('user_id', Auth::user()->id)->first();
+                            return $this->success('Great! Details Inserted Successfully.', $agencyProfileDetails, null, 201 );
                         }else{
                             return $this->error('Oops! Failed To Update Profile. Something Went Wrong.', null, null, 500);
                         }

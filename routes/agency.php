@@ -3,6 +3,7 @@
 use App\Http\Controllers\Agency\Auth\LoginController;
 use App\Http\Controllers\Agency\Auth\LogOutController;
 use App\Http\Controllers\Agency\Auth\SignUpController;
+use App\Http\Controllers\Agency\AuthorizeOfficer\AuthorizeOfficerController;
 use App\Http\Controllers\Agency\Registration\ProfileRegistrationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,5 +29,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('profile-registration', [ProfileRegistrationController::class, 'profileRegistration']);
     Route::post('edit-profile-registration', [ProfileRegistrationController::class, 'editProfileRegistration']);
+    Route::post('create-authorize-officer', [AuthorizeOfficerController::class, 'createAuthorizeOfficer']);
     Route::post('logout', [LogOutController::class,'logout']);
 });

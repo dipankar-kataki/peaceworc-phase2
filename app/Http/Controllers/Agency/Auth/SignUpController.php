@@ -35,7 +35,7 @@ class SignUpController extends Controller
                     $token = $create->createToken('auth_token')->plainTextToken;
                     return $this->success('Great! SignUp Completed Successfully', null, $token, 201);
                 }else{
-                    return $this->success('Oops! SignUp Failed', null, null, 500);
+                    return $this->error('Oops! SignUp Failed', null, null, 500);
                 }
             }catch(\Exception $e){
                 return $this->error('Opps! Something Went Wrong.', null, null, 500);
