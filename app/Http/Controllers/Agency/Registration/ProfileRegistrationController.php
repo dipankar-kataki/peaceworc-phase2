@@ -111,7 +111,7 @@ class ProfileRegistrationController extends Controller
                         ]);
     
                         if($update){
-                            return $this->success('Great! Details Inserted Successful.', null, null, 201 );
+                            return $this->success('Great! Details Inserted Successfully.', null, null, 201 );
                         }else{
                             return $this->error('Oops! Failed To Update Profile. Something Went Wrong.', null, null, 500);
                         }
