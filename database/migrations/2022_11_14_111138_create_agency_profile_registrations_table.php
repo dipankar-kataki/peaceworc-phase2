@@ -14,7 +14,7 @@ class CreateAgencyProfileRegistrationsTable extends Migration
     public function up()
     {
         Schema::create('agency_profile_registrations', function (Blueprint $table) {
-            $table->unsignedBigInteger('id');
+            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('phone',15);
             $table->string('legal_structure',50);

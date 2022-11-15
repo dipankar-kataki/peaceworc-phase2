@@ -17,7 +17,7 @@ class ProfileRegistrationController extends Controller
             'phone' => 'required',
             'legal_structure' => 'required',
             'organization_type' => 'required',
-            'tax_id_or_ein_id' => 'required',
+            'tax_id_or_ein_id' => 'required | max:9',
             'street' => 'required',
             'city_or_district' => 'required',
             'state' => 'required',
@@ -60,6 +60,7 @@ class ProfileRegistrationController extends Controller
                     }
                 }catch(\Exception $e){
                     return $this->error('Oops! Failed To Register Profile. Something Went Wrong.', null, null, 500);
+                    // return $this->error($e, null, null, 500);
                 }
             }
             
