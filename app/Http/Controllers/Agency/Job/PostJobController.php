@@ -54,4 +54,9 @@ class PostJobController extends Controller
             }
         }
     }
+
+    public function getJob(){
+        $job_details = AgencyPostJob::where('user_id', Auth::user()->id)->latest()->get();
+        return $this->success('Great! Job Fetched Successfully', $job_details, null, 200);
+    }
 }

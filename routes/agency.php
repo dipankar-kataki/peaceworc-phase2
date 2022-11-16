@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::group(['prefix' => 'job'], function(){
         Route::post('create', [PostJobController::class, 'createJob']);
+        Route::get('get-job', [PostJobController::class, 'getJob']);
     });
     
     Route::post('logout', [LogOutController::class,'logout']);
