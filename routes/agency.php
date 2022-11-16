@@ -4,6 +4,7 @@ use App\Http\Controllers\Agency\Auth\LoginController;
 use App\Http\Controllers\Agency\Auth\LogOutController;
 use App\Http\Controllers\Agency\Auth\SignUpController;
 use App\Http\Controllers\Agency\AuthorizeOfficer\AuthorizeOfficerController;
+use App\Http\Controllers\Agency\Job\PostJobController;
 use App\Http\Controllers\Agency\Registration\ProfileRegistrationController;
 use App\Http\Controllers\Agency\Status\InformationStatusController;
 use Illuminate\Http\Request;
@@ -40,6 +41,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::group(['prefix' => 'information'], function(){
         Route::get('status', [InformationStatusController::class, 'informationStatus']);
+    });
+
+    Route::group(['prefix' => 'job'], function(){
+        Route::post('create', [PostJobController::class, 'createJob']);
     });
     
     Route::post('logout', [LogOutController::class,'logout']);
