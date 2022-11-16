@@ -28,10 +28,19 @@ Route::post('login', [LoginController::class, 'login']);
 // });
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
-    Route::post('profile-registration', [ProfileRegistrationController::class, 'profileRegistration']);
-    Route::post('edit-profile-registration', [ProfileRegistrationController::class, 'editProfileRegistration']);
-    Route::post('create-authorize-officer', [AuthorizeOfficerController::class, 'createAuthorizeOfficer']);
-    Route::get('get-authorize-officer', [AuthorizeOfficerController::class, 'authorizeOfficer']);
-    Route::get('information-status', [InformationStatusController::class, 'informationStatus']);
+    Route::group(['prefix' => 'profile'], function(){
+        Route::post('registration', [ProfileRegistrationController::class, 'profileRegistration']);
+        Route::post('edit-registration', [ProfileRegistrationController::class, 'editProfileRegistration']);
+    });
+
+    Route::group(['prefix' => 'authorize-officer'], function(){
+        Route::post('create-officer', [AuthorizeOfficerController::class, 'createAuthorizeOfficer']);
+        Route::get('get-officer', [AuthorizeOfficerController::class, 'authorizeOfficer']);
+    });
+
+    Route::group(['prefix' => 'information'], function(){
+        Route::get('status', [InformationStatusController::class, 'informationStatus']);
+    });
+    
     Route::post('logout', [LogOutController::class,'logout']);
 });
