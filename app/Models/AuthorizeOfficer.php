@@ -15,4 +15,16 @@ class AuthorizeOfficer extends Model
     public function user(){
         return $this->belongsTo(User::class, 'agency_id', 'id');
     }
+
+    public function getRoleAttribute($value){
+        if($value == 3){
+            return 'Owner';
+        }
+        if($value == 4){
+            return 'Admin';
+        }
+        if($value == 5){
+            return 'Operator';
+        }
+    }
 }

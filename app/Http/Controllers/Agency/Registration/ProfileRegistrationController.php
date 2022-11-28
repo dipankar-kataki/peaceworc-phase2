@@ -17,6 +17,7 @@ class ProfileRegistrationController extends Controller
 
     public function addBusinessInfo(Request $request){
         $validator = Validator::make($request->all(),[
+            'photo' => 'required|image|mimes:jpg,png,jpeg|max:1048',
             'email' => 'required',
             'phone' => 'required',
             'tax_id_or_ein_id' => 'required | max:9',
@@ -38,7 +39,15 @@ class ProfileRegistrationController extends Controller
                 return $this->error('Oops! Failed To Add Business information. Tax Id Or EIN Already Exists.', null, null, 400);
             }else{
                 try{
+
+                    if ($request->hasFile('photo')) {
+                        $image = time() . '.' . $request->photo->extension();
+                        $request->photo->move(public_path('Agency/Uploads/Profile/image/'), $image);
+                        $imageName = 'Agency/Uploads/Profile/image/' . $image;
+                    }
+        
                     $create = AgencyProfileRegistration::where('user_id', Auth::user()->id,)->update([
+                        'photo' => $imageName,
                         'email' => $request->email,
                         'phone' => $request->phone,
                         'tax_id_or_ein_id' => $request->tax_id_or_ein_id,
@@ -112,8 +121,15 @@ class ProfileRegistrationController extends Controller
             try{
 
                 $getAgencyProfileDetails = AgencyProfileRegistration::where('user_id', Auth::user()->id)->first();
+
+                if ($request->hasFile('photo')) {
+                    $image = time() . '.' . $request->photo->extension();
+                    $request->photo->move(public_path('Agency/Uploads/Profile/image/'), $image);
+                    $imageName = 'Agency/Uploads/Profile/image/' . $image;
+                }
                     
                 $update = AgencyProfileRegistration::where('user_id', Auth::user()->id)->update([
+                    'photo' => $request->photo == null ? $getAgencyProfileDetails->photo :  $imageName,
                     'legal_structure' => $request->legal_structure == null ? $getAgencyProfileDetails->legal_structure :  $request->legal_structure,
                     'organization_type' => $request->organization_type == null ? $getAgencyProfileDetails->organization_type :  $request->organization_type,
                     'street' => $request->street == null ? $getAgencyProfileDetails->street :  $request->street,

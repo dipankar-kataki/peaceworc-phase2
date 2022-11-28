@@ -17,20 +17,20 @@ class AuthorizeOfficerController extends Controller
 
     public function authorizeOfficer(){
         try{
-            $authorizeOfficerDetails = AuthorizeOfficer::where('agency_id', Auth::user()->id)->get();
+            $authorizeOfficerDetails = AuthorizeOfficer::where('agency_id', Auth::user()->id)->latest()->get();
             return $this->success('Great! Authorize Officer Details Fetched Successfully.', $authorizeOfficerDetails, null, 200);
         }catch(\Exception $e){
-            return $this->error('Oops! Failed To Fetch Authorize Officer Details. Something Went Wrong.', null, null, 500);
+            return $this->error($e, null, null, 500);
         }
     }
 
 
     public function createAuthorizeOfficer(Request $request){
         $validator = Validator::make($request->all(),[
-            'firstname' => 'required | string',
-            'lastname' => 'required | string',
-            'email' => 'required | email | unique:authorize_officers',
-            'phone' => 'required | max:11'
+            'fullname' => 'required|string',
+            'email' => 'required|email|unique:authorize_officers',
+            'phone' => 'required|max:11',
+            'role' => 'required|string'
         ]);
 
         if($validator->fails()){
@@ -47,14 +47,14 @@ class AuthorizeOfficerController extends Controller
                     try{
                         $create = AuthorizeOfficer::create([
                             'agency_id' => Auth::user()->id,
-                            'firstname' => $request->firstname,
-                            'lastname' => $request->lastname,
+                            'name' => $request->fullname,
                             'email' => $request->email,
-                            'phone' => $request->phone
+                            'phone' => $request->phone,
+                            'role' => $request->role
                         ]);
         
                         if($create){
-                            $authorizeOfficerDetails = AuthorizeOfficer::where('agency_id', Auth::user()->id)->get();
+                            $authorizeOfficerDetails = AuthorizeOfficer::where('agency_id', Auth::user()->id)->latest()->get();
                             return $this->success('Great! Authorize Officer Added Successfully.', $authorizeOfficerDetails, null, 201);
                         }else{
                             return $this->error('Oops! Failed To Add Authorize Officer.', null, null, 500);
@@ -67,14 +67,14 @@ class AuthorizeOfficerController extends Controller
                 try{
                     $create = AuthorizeOfficer::create([
                         'agency_id' => Auth::user()->id,
-                        'firstname' => $request->firstname,
-                        'lastname' => $request->lastname,
+                        'name' => $request->fullname,
                         'email' => $request->email,
-                        'phone' => $request->phone
+                        'phone' => $request->phone,
+                        'role' => $request->role
                     ]);
     
                     if($create){
-                        $authorizeOfficerDetails = AuthorizeOfficer::where('agency_id', Auth::user()->id)->get();
+                        $authorizeOfficerDetails = AuthorizeOfficer::where('agency_id', Auth::user()->id)->latest()->get();
                         AgencyInformationStatus::where('user_id', Auth::user()->id)->update([
                             'is_authorize_info_added' => 1
                         ]);

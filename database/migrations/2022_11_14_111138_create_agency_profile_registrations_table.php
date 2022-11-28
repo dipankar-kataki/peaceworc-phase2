@@ -16,6 +16,7 @@ class CreateAgencyProfileRegistrationsTable extends Migration
         Schema::create('agency_profile_registrations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->string('photo')->nullable();
             $table->string('company_name');
             $table->string('email')->unique()->nullable();
             $table->string('phone',15)->nullable();
