@@ -32,8 +32,9 @@ Route::post('send-forgot-password-mail', [ForgotPasswordController::class, 'send
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::group(['prefix' => 'profile'], function(){
-        Route::post('registration', [ProfileRegistrationController::class, 'profileRegistration']);
-        Route::post('edit-registration', [ProfileRegistrationController::class, 'editProfileRegistration']);
+        Route::post('add-business-info', [ProfileRegistrationController::class, 'addBusinessInfo']);
+        Route::post('add-optional-info', [ProfileRegistrationController::class, 'addOptionalInfo']);
+        Route::post('edit-basic-profile-details', [ProfileRegistrationController::class, 'editBasicProfileDetails']);
     });
 
     Route::group(['prefix' => 'authorize-officer'], function(){

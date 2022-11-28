@@ -16,7 +16,8 @@ class InformationStatusController extends Controller
         $status = AgencyInformationStatus::where('user_id', Auth::user()->id)->first();
         if($status == null){
             $status = [
-                'is_registration_complete' => 0,
+                'is_business_info_complete' => 0,
+                'is_other_info_added' => 0,
                 'is_authorize_info_added' => 0,
                 'is_profile_approved' => 0
             ];

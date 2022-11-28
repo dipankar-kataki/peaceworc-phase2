@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
@@ -23,7 +24,7 @@ class LoginController extends Controller
             return $this->error('Opps! Validation Error. '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
-                if ( ! Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => Role::Agency]) ){
+                if ( ! Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => Role::Agency_Owner]) ){
                     return $this->error('Invalid credentials. User unauthorized',null, 'null', 401);
                 }else{
                     $user = User::where('email', $request->email)->firstOrFail();
@@ -36,6 +37,7 @@ class LoginController extends Controller
                     return $this->success('Great! Login Successful', $data, $token, 200);
                 }
             }catch(\Exception $e){
+                Log::error('Not Able To Login ====>',$e);
                 return $this->error('Opps! Something Went Wrong.', null, null, 500);
             }
         }
