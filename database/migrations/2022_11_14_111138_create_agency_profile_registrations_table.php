@@ -16,14 +16,16 @@ class CreateAgencyProfileRegistrationsTable extends Migration
         Schema::create('agency_profile_registrations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('phone',15);
-            $table->string('legal_structure',50);
-            $table->string('organization_type',50);
-            $table->string('tax_id_or_ein_id',10);
-            $table->string('street',50);
-            $table->string('city_or_district',50);
-            $table->string('state',50);
-            $table->string('zip_code',10);
+            $table->string('company_name');
+            $table->string('email')->unique()->nullable();
+            $table->string('phone',15)->nullable();
+            $table->string('legal_structure',50)->nullable();
+            $table->string('organization_type',50)->nullable();
+            $table->string('tax_id_or_ein_id',10)->nullable();
+            $table->string('street',50)->nullable();
+            $table->string('city_or_district',50)->nullable();
+            $table->string('state',50)->nullable();
+            $table->string('zip_code',10)->nullable();
             $table->integer('number_of_employee')->nullable();
             $table->integer('years_in_business')->nullable();
             $table->string('country_of_business')->nullable();

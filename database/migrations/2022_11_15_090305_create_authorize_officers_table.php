@@ -16,10 +16,10 @@ class CreateAuthorizeOfficersTable extends Migration
         Schema::create('authorize_officers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('agency_id');
-            $table->string('firstname', 50);
-            $table->string('lastname', 50);
+            $table->string('name', 50);
             $table->string('email', 100);
             $table->string('phone', 15);
+            $table->string('role',15);
             $table->timestamps();
 
             $table->foreign('agency_id')->references('id')->on('users')->onDelete('cascade');
