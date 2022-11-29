@@ -27,7 +27,7 @@ class CreateAgencyProfileRegistrationsTable extends Migration
             $table->string('city_or_district',50)->nullable();
             $table->string('state',50)->nullable();
             $table->string('zip_code',10)->nullable();
-            $table->integer('number_of_employee')->nullable();
+            $table->string('number_of_employee',100)->nullable();
             $table->integer('years_in_business')->nullable();
             $table->string('country_of_business')->nullable();
             $table->string('annual_business_revenue')->nullable();
