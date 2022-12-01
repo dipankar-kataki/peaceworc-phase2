@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Agency\AuthorizeOfficer;
 
+use App\Common\Role;
 use App\Http\Controllers\Controller;
 use App\Models\AgencyInformationStatus;
 use App\Models\AuthorizeOfficer;
+use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +20,37 @@ class AuthorizeOfficerController extends Controller
     public function authorizeOfficer(){
         try{
             $authorizeOfficerDetails = AuthorizeOfficer::where('agency_id', Auth::user()->id)->latest()->get();
-            return $this->success('Great! Authorize Officer Details Fetched Successfully.', $authorizeOfficerDetails, null, 200);
+            $ownerOfficer = User::where('id', Auth::user()->id)->where('role', Role::Agency_Owner)->first();
+            $officers = [];
+            $detailsOwner = [
+                'user_id' => $ownerOfficer->id,
+                'agency_id' => $ownerOfficer->id,
+                'name' => $ownerOfficer->name,
+                'email' => $ownerOfficer->email,
+                'phone' => $ownerOfficer->phone,
+                'role' => $ownerOfficer->role
+            ];
+
+            array_push($officers, $detailsOwner);
+
+            if(!$authorizeOfficerDetails->isEmpty()){
+                foreach($authorizeOfficerDetails as $authOfficers){
+                    
+
+                    $detailsAuthorize = [
+                        'user_id' => $authOfficers->id,
+                        'agency_id' => $authOfficers->agency_id,
+                        'name' => $authOfficers->name,
+                        'email' => $authOfficers->email,
+                        'phone' => $authOfficers->phone,
+                        'role' => $authOfficers->role
+                    ];
+
+                    array_push($officers, $detailsAuthorize);
+                }
+            }
+            
+            return $this->success('Great! Authorize Officer Details Fetched Successfully.', $officers, null, 200);
         }catch(\Exception $e){
             return $this->error($e, null, null, 500);
         }
