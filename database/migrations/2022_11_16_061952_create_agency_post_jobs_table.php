@@ -24,7 +24,7 @@ class CreateAgencyPostJobsTable extends Migration
             $table->string('end_time',50);
             $table->string('amount',50);
             $table->string('address');
-            $table->String('description');
+            $table->string('description');
             $table->string('medical_history')->nullable();
             $table->string('experties')->nullable();
             $table->string('other_requirements')->nullable();
