@@ -11,4 +11,8 @@ class AgencyPostJob extends Model
 
     protected $table = 'agency_post_jobs';
     protected $guarded = [];
+
+    public function getCareItemsAttribute($value){
+        return json_decode($value);
+    }
 }
