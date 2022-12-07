@@ -13,7 +13,7 @@ class AgencyPostJob extends Model
     protected $guarded = [];
 
     public function getCareItemsAttribute($value){
-        if($value == 0){
+        if(empty(json_decode($value))){
             return [];
         }else{
             return json_decode($value);
@@ -21,7 +21,7 @@ class AgencyPostJob extends Model
     }
 
     public function getMedicalHistoryAttribute($value){
-        if($value == 0){
+        if(empty(json_decode($value))){
             return [];
         }else{
             return json_decode($value);
@@ -29,7 +29,7 @@ class AgencyPostJob extends Model
     }
 
     public function getExpertiesAttribute($value){
-        if($value == 0){
+        if(empty(json_decode($value))){
             return [];
         }else{
             return json_decode($value);
@@ -37,7 +37,7 @@ class AgencyPostJob extends Model
     }
 
     public function getOtherRequirementsAttribute($value){
-        if($value == 0){
+        if(empty(json_decode($value))){
             return [];
         }else{
             return json_decode($value);
@@ -45,7 +45,7 @@ class AgencyPostJob extends Model
     }
 
     public function getCheckListAttribute($value){
-        if($value == 0){
+        if(empty(json_decode($value))){
             return [];
         }else{
             return json_decode($value);
