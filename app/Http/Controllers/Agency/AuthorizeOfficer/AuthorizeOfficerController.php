@@ -121,4 +121,20 @@ class AuthorizeOfficerController extends Controller
             
         }
     }
+
+
+    public function deleteAuthorizeOfficer($id){
+        try{
+            $check_if_officer_exists = AuthorizeOfficer::where('id', $id)->exists();
+            if(!$check_if_officer_exists){
+                return $this->error('Oops! Failed To Delete. Officer Not Found', null, null, 500);
+            }else{
+                AuthorizeOfficer::where('id', $id)->delete();
+                return $this->success('Great! Authorize Officer Deleted Successfully.', null, null, 200);
+            }
+        }catch(\Exception $e){
+            return $this->error('Oops! Failed To Delete Authorize Officer. Something Went Wrong.'.$e, null, null, 500);
+        }
+        
+    }
 }

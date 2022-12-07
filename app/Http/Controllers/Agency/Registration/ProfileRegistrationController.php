@@ -18,7 +18,7 @@ class ProfileRegistrationController extends Controller
     public function addBusinessInfo(Request $request){
         $validator = Validator::make($request->all(),[
             'photo' => 'required|image|mimes:jpg,png,jpeg|max:1048',
-            'email' => 'required',
+            'email' => 'required|email',
             'phone' => 'required',
             'tax_id_or_ein_id' => 'required | max:9',
             'street' => 'required',
@@ -30,10 +30,13 @@ class ProfileRegistrationController extends Controller
         if($validator->fails()){
             return $this->error('Oops! Validation Failed. '.$validator->errors()->first(), null, null, 400);
         }else{
+            $check_if_email_exists = AgencyProfileRegistration::where('email',$request->email)->exists();
             $check_if_phone_exists = AgencyProfileRegistration::where('phone', $request->phone)->exists();
             $check_if_tax_id_or_ein_id_exists = AgencyProfileRegistration::where('tax_id_or_ein_id', $request->tax_id_or_ein_id)->exists();
 
-            if($check_if_phone_exists){
+            if($check_if_email_exists){
+                return $this->error('Oops! Failed To Add Business information. Email Already Exists.', null, null, 400);
+            }else if($check_if_phone_exists){
                 return $this->error('Oops! Failed To Add Business information. Phone Number Already Exists.', null, null, 400);
             }else if($check_if_tax_id_or_ein_id_exists){
                 return $this->error('Oops! Failed To Add Business information. Tax Id Or EIN Already Exists.', null, null, 400);
