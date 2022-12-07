@@ -13,22 +13,42 @@ class AgencyPostJob extends Model
     protected $guarded = [];
 
     public function getCareItemsAttribute($value){
-        return json_decode($value);
+        if($value == 0){
+            return [];
+        }else{
+            return json_decode($value);
+        }
     }
 
     public function getMedicalHistoryAttribute($value){
-        return json_decode($value);
+        if($value == 0){
+            return [];
+        }else{
+            return json_decode($value);
+        }
     }
 
     public function getExpertiesAttribute($value){
-        return json_decode($value);
+        if($value == 0){
+            return [];
+        }else{
+            return json_decode($value);
+        }
     }
 
     public function getOtherRequirementsAttribute($value){
-        return json_decode($value);
+        if($value == 0){
+            return [];
+        }else{
+            return json_decode($value);
+        }
     }
 
     public function getCheckListAttribute($value){
-        return json_decode($value);
+        if($value == 0){
+            return [];
+        }else{
+            return json_decode($value);
+        }
     }
 }
