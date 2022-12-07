@@ -15,4 +15,20 @@ class AgencyPostJob extends Model
     public function getCareItemsAttribute($value){
         return json_decode($value);
     }
+
+    public function getMedicalHistoryAttribute($value){
+        return json_decode($value);
+    }
+
+    public function getExpertiesAttribute($value){
+        return json_decode($value);
+    }
+
+    public function getOtherRequirementsAttribute($value){
+        return json_decode($value);
+    }
+
+    public function getCheckListAttribute($value){
+        return json_decode($value);
+    }
 }
