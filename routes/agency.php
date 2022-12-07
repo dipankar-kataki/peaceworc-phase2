@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'authorize-officer'], function(){
         Route::post('create-officer', [AuthorizeOfficerController::class, 'createAuthorizeOfficer']);
         Route::get('get-officer', [AuthorizeOfficerController::class, 'authorizeOfficer']);
-        Route::get('delete-officer/{id}', [AuthorizeOfficerController::class, 'deleteAuthorizeOfficer']);
+        Route::get('delete-officer', [AuthorizeOfficerController::class, 'deleteAuthorizeOfficer']);
     });
 
     Route::group(['prefix' => 'information'], function(){
@@ -50,7 +50,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'job'], function(){
         Route::post('create', [PostJobController::class, 'createJob']);
         Route::get('get-job', [PostJobController::class, 'getJob']);
-        Route::get('delete-job/{id}', [PostJobController::class, 'deleteJob']);
+        Route::get('delete-job', [PostJobController::class, 'deleteJob']);
     });
     
     Route::post('logout', [LogOutController::class,'logout']);
