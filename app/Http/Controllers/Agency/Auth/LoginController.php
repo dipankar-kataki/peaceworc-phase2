@@ -37,7 +37,7 @@ class LoginController extends Controller
                     return $this->success('Great! Login Successful', $data, $token, 200);
                 }
             }catch(\Exception $e){
-                Log::error('Not Able To Login ====>',$e);
+                // Log::error('Not Able To Login ====>',$e);
                 return $this->error('Opps! Something Went Wrong.', null, null, 500);
             }
         }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Caregiver\Auth;
 use App\Common\Role;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
+    use ApiResponse;
     public function login(Request $request){
         $validator = Validator::make($request->all(),[
             'email' => 'required|email',
@@ -35,7 +37,7 @@ class LoginController extends Controller
                     return $this->success('Great! Login Successful', $data, $token, 200);
                 }
             }catch(\Exception $e){
-                Log::error('Not Able To Login ====>',$e);
+                Log::error('Not Able To Login ====>', $e);
                 return $this->error('Opps! Something Went Wrong.', null, null, 500);
             }
         }
