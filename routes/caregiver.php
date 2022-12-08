@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('sign-up', [SignUpController::class, 'signUp']);
+Route::post('signup', [SignUpController::class, 'signUp']);
 Route::post('login', [LoginController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
