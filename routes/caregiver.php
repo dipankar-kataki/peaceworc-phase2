@@ -3,6 +3,7 @@
 use App\Http\Controllers\Caregiver\Auth\LoginController;
 use App\Http\Controllers\Caregiver\Auth\LogOutController;
 use App\Http\Controllers\Caregiver\Auth\SignUpController;
+use App\Http\Controllers\Caregiver\Job\JobController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +26,9 @@ Route::post('signup', [SignUpController::class, 'signUp']);
 Route::post('login', [LoginController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    Route::group(['prefix' => 'job'], function(){
+        Route::get('get-jobs', [JobController::class, 'getJobs']);
+    });
     Route::post('logout', [LogOutController::class, 'logout']);
 });
