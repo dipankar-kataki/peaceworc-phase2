@@ -123,7 +123,7 @@ class AuthorizeOfficerController extends Controller
     }
 
 
-    public function deleteAuthorizeOfficer($id){
+    public function deleteAuthorizeOfficer(){
 
         if($_GET['id'] == null){
             return $this->error('Oops! Something Went Wrong. Invalid Request', null, null, 500);
