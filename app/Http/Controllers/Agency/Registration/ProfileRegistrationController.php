@@ -133,6 +133,7 @@ class ProfileRegistrationController extends Controller
                     
                 $update = AgencyProfileRegistration::where('user_id', Auth::user()->id)->update([
                     'photo' => $request->photo == null ? $getAgencyProfileDetails->photo :  $imageName,
+                    'phone' => $request->phone == null ? $getAgencyProfileDetails->phone :  $request->phone,
                     'legal_structure' => $request->legal_structure == null ? $getAgencyProfileDetails->legal_structure :  $request->legal_structure,
                     'organization_type' => $request->organization_type == null ? $getAgencyProfileDetails->organization_type :  $request->organization_type,
                     'street' => $request->street == null ? $getAgencyProfileDetails->street :  $request->street,
