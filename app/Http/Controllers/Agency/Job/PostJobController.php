@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Agency\Job;
 
 use App\Http\Controllers\Controller;
 use App\Models\AgencyPostJob;
-use App\Models\AgencyProfileRegistration;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,35 +59,7 @@ class PostJobController extends Controller
 
     public function getJob(){
         $job_details = AgencyPostJob::where('user_id', Auth::user()->id)->latest()->get();
-        $job_owner = AgencyProfileRegistration::with('user')->where('user_id',Auth::user()->id)->first();
-        $get_job_details = [];
-        foreach($job_details as $job){
-            $details = [
-                'job_id' => $job->id,
-                'company_name' => $job_owner->company_name,
-                'company_photo' => $job_owner->photo,
-                'job_title' => $job->title,
-                'care_type' => $job->care_type,
-                'care_items' => $job->care_items,
-                'date' => $job->date,
-                'start_time' => $job->start_time,
-                'end_time' => $job->end_time,
-                'amount' => $job->amount,
-                'address' => $job->address,
-                'description' => $job->description,
-                'medical_history' => $job->medical_history,
-                'experties' => $job->experties,
-                'other_requirements' => $job->other_requirements,
-                'check_list' => $job->check_list,
-                'status' => $job->status,
-                'created_at' => $job->created_at->diffForHumans(),
-
-            ];
-
-            array_push($get_job_details, $details);
-        }
-
-        return $this->success('Great! Job Fetched Successfully', $get_job_details, null, 200);
+        return $this->success('Great! Job Fetched Successfully', $job_details, null, 200);
     }
 
     public function deleteJob(){
