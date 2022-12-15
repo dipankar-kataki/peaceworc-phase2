@@ -52,4 +52,21 @@ class AgencyPostJob extends Model
             return json_decode($value);
         }
     }
+
+    public function getStatusAttribute($value){
+        if($value == 0){
+            return 'Job Not Posted';
+        }else if($value == 1){
+            return 'Open Job';
+        }else if($value == 2){
+            return 'Ongoing Job';
+        }else if($value == 3){
+            return 'Job Completed';
+        }else if($value == 4){
+            return 'Job Closed';
+        }else if($value == 5){
+            return 'Pending For Approval';
+        }
+    }
+
 }
