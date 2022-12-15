@@ -49,4 +49,8 @@ class User extends Authenticatable
             return 'Owner';
         }
     }
+
+    public function agencyProfile(){
+        return $this->belongsTo(AgencyProfileRegistration::class, 'user_id', 'id');
+    }
 }

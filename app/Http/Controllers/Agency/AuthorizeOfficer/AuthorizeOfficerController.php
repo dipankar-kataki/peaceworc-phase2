@@ -20,14 +20,14 @@ class AuthorizeOfficerController extends Controller
     public function authorizeOfficer(){
         try{
             $authorizeOfficerDetails = AuthorizeOfficer::where('agency_id', Auth::user()->id)->latest()->get();
-            $ownerOfficer = User::where('id', Auth::user()->id)->where('role', Role::Agency_Owner)->first();
+            $ownerOfficer = User::with('agencyProfile')->where('id', Auth::user()->id)->where('role', Role::Agency_Owner)->first();
             $officers = [];
             $detailsOwner = [
                 'user_id' => $ownerOfficer->id,
                 'agency_id' => $ownerOfficer->id,
                 'name' => $ownerOfficer->name,
                 'email' => $ownerOfficer->email,
-                'phone' => $ownerOfficer->phone,
+                'phone' => $ownerOfficer->agencyProfile->phone,
                 'role' => $ownerOfficer->role
             ];
 
