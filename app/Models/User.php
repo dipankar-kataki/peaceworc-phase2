@@ -51,6 +51,6 @@ class User extends Authenticatable
     }
 
     public function agencyProfile(){
-        return $this->belongsTo(AgencyProfileRegistration::class, 'user_id', 'id');
+        return $this->hasOne(AgencyProfileRegistration::class, 'user_id', 'id');
     }
 }
