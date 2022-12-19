@@ -25,7 +25,7 @@
                     <tr>
                         <td style="text-align:center;">
                           <a href="#" title="logo" target="_blank">
-                            <img width="200" src="{{asset('images/logo/logo.png')}}" title="logo" alt="logo">
+                            <img width="200" src="/assets/images/logo/logo.png" title="logo" alt="logo">
                           </a>
                         </td>
                     </tr>
