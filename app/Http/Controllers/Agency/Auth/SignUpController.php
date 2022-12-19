@@ -27,11 +27,16 @@ class SignUpController extends Controller
         if($validator->fails()){
             return $this->error('Opps! Validation Error. '.$validator->errors()->first(), null, null, 400);
         }else{
-            $otp = rand(100000, 999999);
-            Cache::put('otp', $otp, now()->addMinutes(5));
-            Mail::to($request->email)->queue(new SendEmailVerificationOTPMail($otp));
-
-            return $this->success('Great! Email Verification OTP Sent Successfully. ', 'OTP is '.$otp, null, 200);
+            try{
+                $otp = rand(100000, 999999);
+                Cache::put('otp', $otp, now()->addMinutes(5));
+                Mail::to($request->email)->queue(new SendEmailVerificationOTPMail($otp));
+    
+                return $this->success('Great! Email Verification OTP Sent Successfully. ', 'OTP is '.$otp, null, 200);
+            }catch(\Exception $e){
+                return $this->error('Oops!. '.$e->getMessage(), null, null, 200);
+            }
+            
         }
     }
 
