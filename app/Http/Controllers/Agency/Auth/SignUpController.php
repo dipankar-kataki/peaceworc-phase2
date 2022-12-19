@@ -31,7 +31,7 @@ class SignUpController extends Controller
             Cache::put('otp', $otp, now()->addMinutes(5));
             Mail::to($request->email)->queue(new SendEmailVerificationOTPMail($otp));
 
-            return $this->error('Great! Email Verification OTP Sent Successfully. ', 'OTP is '.$otp, null, 200);
+            return $this->success('Great! Email Verification OTP Sent Successfully. ', 'OTP is '.$otp, null, 200);
         }
     }
 
