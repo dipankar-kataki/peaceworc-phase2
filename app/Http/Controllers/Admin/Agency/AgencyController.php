@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class AgencyController extends Controller
 {
     public function getList(){
-        $agency_list = User::where('role', Role::Agency)->get();
+        $agency_list = User::where('role', Role::Agency_Owner)->get();
         return view('agency.list')->with(['agency_list' => $agency_list ]);
     }
 }

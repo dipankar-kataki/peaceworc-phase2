@@ -49,7 +49,24 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link"> Authorize Officer </a>
+                                <a href="#" class="nav-link"> Authorize Officer List</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="{{Request::segment(2) == 'job' ? 'nav-link menu-link active' : 'nav-link menu-link'}}" href="#jobItems" data-bs-toggle="collapse"
+                        role="button" aria-expanded="false" aria-controls="sidebarApps">
+                        <i class="ri-briefcase-2-fill"></i> <span data-key="t-apps">Jobs</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="jobItems">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="#" class="{{Request::segment(3) == 'open-job' ? 'nav-link menu-link active' : 'nav-link menu-link'}}"> Open Jobs
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Quick Calls</a>
                             </li>
                         </ul>
                     </div>
