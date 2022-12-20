@@ -8,6 +8,7 @@ use App\Mail\SendEmailVerificationOTPMail;
 use App\Models\AgencyProfileRegistration;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -63,6 +64,7 @@ class SignUpController extends Controller
                     $create = User::create([
                         'name' => $request->name,
                         'email' => $request->email,
+                        'email_verified_at' => date('Y-m-d H:i:s'),
                         'password' => Hash::make($request->password),
                         'role' => Role::Agency_Owner
                     ]);

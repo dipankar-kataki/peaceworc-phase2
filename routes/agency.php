@@ -6,6 +6,7 @@ use App\Http\Controllers\Agency\Auth\LogOutController;
 use App\Http\Controllers\Agency\Auth\SignUpController;
 use App\Http\Controllers\Agency\AuthorizeOfficer\AuthorizeOfficerController;
 use App\Http\Controllers\Agency\Job\PostJobController;
+use App\Http\Controllers\Agency\Owner\OwnerProfileController;
 use App\Http\Controllers\Agency\Registration\ProfileRegistrationController;
 use App\Http\Controllers\Agency\Status\InformationStatusController;
 use Illuminate\Http\Request;
@@ -32,7 +33,12 @@ Route::post('check-email-exist', [SignUpController::class, 'checkEmailExists']);
 // });
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
-    Route::group(['prefix' => 'profile'], function(){
+    Route::group(['prefix' => 'owner'], function(){
+        Route::post('edit-phone', [OwnerProfileController::class, 'editPhone']);
+        Route::post('change-password', [OwnerProfileController::class, 'changePassword']);
+    });
+
+    Route::group(['prefix' => 'business-profile'], function(){
         Route::post('add-business-info', [ProfileRegistrationController::class, 'addBusinessInfo']);
         Route::post('add-optional-info', [ProfileRegistrationController::class, 'addOptionalInfo']);
         Route::post('edit-basic-profile-details', [ProfileRegistrationController::class, 'editBasicProfileDetails']);
