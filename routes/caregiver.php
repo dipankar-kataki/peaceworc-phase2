@@ -33,12 +33,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('register', [ProfileRegistrationController::class, 'profileRegistration']);
     });
 
-    Route::group(['prefix' => 'bidding'], function(){
-        Route::post('submit-bid', [BiddingController::class, 'submitBid']);
-    });
+    
 
     Route::group(['prefix' => 'job'], function(){
         Route::get('get-jobs', [JobController::class, 'getJobs']);
+
+        Route::group(['prefix' => 'bidding'], function(){
+            Route::post('submit-bid', [BiddingController::class, 'submitBid']);
+        });
     });
     Route::post('logout', [LogOutController::class, 'logout']);
 });

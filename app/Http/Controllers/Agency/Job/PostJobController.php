@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agency\Job;
 
 use App\Http\Controllers\Controller;
+use App\Models\AgencyInformationStatus;
 use App\Models\AgencyPostJob;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -30,27 +31,38 @@ class PostJobController extends Controller
             return $this->error('Oops! Validation Failed. '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
-                $create = AgencyPostJob::create([
-                    'user_id' => Auth::user()->id,
-                    'title' => $request->title,
-                    'care_type' => $request->care_type,
-                    'care_items' => json_encode($request->care_items),
-                    'date' => $request->date,
-                    'start_time' => $request->start_time,
-                    'end_time' => $request->end_time,
-                    'amount' => $request->amount,
-                    'address' => $request->address,
-                    'description' => $request->description,
-                    'medical_history' => json_encode($request->medical_history),
-                    'experties' => json_encode($request->experties),
-                    'other_requirements' => json_encode($request->other_requirements),
-                    'check_list' => json_encode($request->check_list)
-                ]);
-                if($create){
-                    return $this->success('Great! Job Posted Successfully', null, null, 201);
+
+                $get_status = AgencyInformationStatus::where('user_id', Auth::user()->id)->first();
+                if($get_status->is_business_info_complete == 0 || $get_status->is_other_info_added == 0 || $get_status->is_authorize_info_added == 0){
+                    return $this->error('Oops! The Agency Profile Has To Be Completed First Before Posting A Job.', null, null, 500);
                 }else{
-                    return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                    try{
+                        $create = AgencyPostJob::create([
+                            'user_id' => Auth::user()->id,
+                            'title' => $request->title,
+                            'care_type' => $request->care_type,
+                            'care_items' => json_encode($request->care_items),
+                            'date' => date_create($request->date)->format('Y-m-d'),
+                            'start_time' => $request->start_time,
+                            'end_time' => $request->end_time,
+                            'amount' => $request->amount,
+                            'address' => $request->address,
+                            'description' => $request->description,
+                            'medical_history' => json_encode($request->medical_history),
+                            'experties' => json_encode($request->experties),
+                            'other_requirements' => json_encode($request->other_requirements),
+                            'check_list' => json_encode($request->check_list)
+                        ]);
+                        if($create){
+                            return $this->success('Great! Job Posted Successfully', null, null, 201);
+                        }else{
+                            return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                        }
+                    }catch(\Exception $e){
+                        return $this->error('Oops! Something Went Wrong.'.$e->getMessage(), null, null, 500);
+                    }
                 }
+                
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong.', null, null, 500);
             }

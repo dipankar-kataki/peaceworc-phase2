@@ -29,3 +29,14 @@ Route::group(['middleware' => 'auth'] ,function(){
     Route::get('logout', [LogOutController::class, 'logout'])->name('admin.logout');
     
 });
+
+
+Route::get('/login-expire',function(){
+    return response()->json([
+        'status' => 'error',
+        'message' => 'Login expired. Please re-login.',
+        'data' => null,
+        'token' => 'null',
+        'http_status_code' => 401
+    ]);
+})->name('login-expire');

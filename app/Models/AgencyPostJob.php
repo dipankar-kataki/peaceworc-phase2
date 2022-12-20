@@ -13,6 +13,10 @@ class AgencyPostJob extends Model
     protected $table = 'agency_post_jobs';
     protected $guarded = [];
 
+    public function getDateAttribute($value){
+        return date_create($value)->format('m-d-Y');
+    }
+
     public function getCareItemsAttribute($value){
         if(empty(json_decode($value))){
             return [];
