@@ -175,7 +175,19 @@
 
                         const res = JSON.parse(xhr.responseText)
                         if(res.status === 1){
-                            window.location.replace(res.url);
+
+                            setTimeout(() => {
+                                signInBtn.innerHTML = 'Login Successfull';
+                            }, 1000);
+
+                            setTimeout(() => {
+                                signInBtn.innerHTML = 'Redirecting....';
+                            }, 2000);
+
+                            setTimeout(() => {
+                                window.location.replace(res.url);
+                            }, 4000);
+                            
                         }else{
                             Swal.fire({
                                 icon: 'error',
