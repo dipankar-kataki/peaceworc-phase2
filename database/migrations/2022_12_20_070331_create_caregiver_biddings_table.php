@@ -17,9 +17,6 @@ class CreateCaregiverBiddingsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('job_id');
-            $table->string('start_time');
-            $table->string('end_time');
-            $table->tinyInteger('status')->default(1);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

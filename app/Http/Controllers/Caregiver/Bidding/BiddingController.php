@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Caregiver\Bidding;
 
+use App\Common\JobStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AgencyPostJob;
 use App\Models\CaregiverBidding;
@@ -31,13 +32,49 @@ class BiddingController extends Controller
                 }else{
                     try{
                         $get_job = AgencyPostJob::where('id', $request->job_id)->first();
-                        $job_start_time = $get_job->start_time;
-                        // $full_job_date_time = Carbon::parse($get_job->date.''.$job_start_time);
-                        $current_time = Carbon::now();
 
-                        // $time_diff_btwn_job_time_and_current_time = $current_time - $full_job_date_time ;
+                        if($get_job->bidding_start_time != null && $get_job->bidding_end_time != null){
+                            $create = CaregiverBidding::create([
+                                'user_id' => Auth::user()->id,
+                                'job_id' => $request->job_id
+                            ]);
+                        }else{
+                            
+                            $full_job_date_time = Carbon::parse($get_job->date.''.$get_job->start_time);
+                            $current_time = Carbon::now();
+    
+                            $to = Carbon::createFromFormat('Y-m-d H:s:i', $current_time);
+                            $from = Carbon::createFromFormat('Y-m-d H:s:i', $full_job_date_time);
+    
+                            $diff_in_hours = $to->diffInHours($from);
+                            
+                            $bidding_start_time = 0;
+                            $bidding_end_time = 0;
+    
+                            if( $diff_in_hours > 72){
+                                $bidding_start_time = $current_time;
+                                $bidding_end_time = Carbon::now()->addHours(12);
+                            }else if($diff_in_hours <= 72 && $diff_in_hours > 5){
+                                $bidding_start_time = $current_time;
+                                $bidding_end_time = Carbon::now()->addHours(3);
+                            }
+    
+                            $create = CaregiverBidding::create([
+                                'user_id' => Auth::user()->id,
+                                'job_id' => $request->job_id
+                            ]);
+    
+                            if($create){
+    
+                                AgencyPostJob::where('id', $request->job_id)->update([
+                                    'status' => JobStatus::BiddingStarted,
+                                    'bidding_start_time' => $bidding_start_time,
+                                    'bidding_end_time' => $bidding_end_time
+                                ]);
+                            }
+                        }
 
-                        return $this->success('Great! Bid Successfully Recorded. ', $current_time, null, 200);
+                        return $this->success('Great! Bid Successfully Recorded. ', null, null, 200);
                     }catch(\Exception $e){
                         return $this->error('Oops! Something Went Wrong. Server Error. '.$e, null, null, 500);
                     }

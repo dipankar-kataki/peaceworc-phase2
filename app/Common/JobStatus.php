@@ -9,4 +9,7 @@ Class JobStatus{
     const Completed = 3;
     const Closed = 4;
     const PendingForApproval = 5;
+    const BiddingStarted = 6;
+    const QuickCall = 7;
+    const OnHold = 8;
 }
