@@ -35,6 +35,8 @@ class JobController extends Controller
                 'other_requirements' => $job->other_requirements,
                 'check_list' => $job->check_list,
                 'status' => $job->status,
+                'bidding_start_time' => $job->bidding_start_time,
+                'bidding_end_time' => $job->bidding_end_time,
                 'created_at' => $job->created_at->diffForHumans(),
 
             ];
