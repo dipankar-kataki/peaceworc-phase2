@@ -33,8 +33,8 @@ class PostJobController extends Controller
             try{
 
                 $get_status = AgencyInformationStatus::where('user_id', Auth::user()->id)->first();
-                if($get_status->is_business_info_complete == 0 || $get_status->is_other_info_added == 0 || $get_status->is_authorize_info_added == 0){
-                    return $this->error('Oops! The Agency Profile Has To Be Completed First Before Posting A Job.', null, null, 500);
+                if($get_status->is_business_info_complete == 0 ||  $get_status->is_authorize_info_added == 0){
+                    return $this->error('Oops! The Agency Profile Has To Be Completed First Before Posting A Job.', null, null, 400);
                 }else{
                     try{
                         $create = AgencyPostJob::create([
