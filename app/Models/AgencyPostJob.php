@@ -70,6 +70,12 @@ class AgencyPostJob extends Model
             return 'Job Closed';
         }else if($value == 5){
             return 'Pending For Approval';
+        }else if($value == 6){
+            return 'Bidding Started';
+        }else if($value == 7){
+            return 'Quick Call';
+        }else if($value == 8){
+            return 'Bidding Ended. Job Will Be Awarded Soon.';
         }
     }
 
