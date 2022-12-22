@@ -17,7 +17,10 @@ class Authenticate extends Middleware
     {
         if (!$request->expectsJson()) {
             
-            if(!Auth::check()){
+            if( (!Auth::check()) && ($request->segment(1) == 'admin') ){
+                return route('web.login');
+            }
+            else if (!Auth::check()){
                 return route('login-expire');
             }else{
                 return route('web.login');
