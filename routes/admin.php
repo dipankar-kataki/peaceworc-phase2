@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth'] ,function(){
 
     Route::group([ 'prefix' => 'agency'], function(){
         Route::get('list', [AgencyController::class, 'getList'])->name('admin.get.agency.list');
+        Route::get('profile', [AgencyController::class, 'profile'])->name('admin.get.agency.profile');
     });
     Route::get('logout', [LogOutController::class, 'logout'])->name('admin.logout');
     

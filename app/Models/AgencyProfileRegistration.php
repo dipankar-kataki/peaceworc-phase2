@@ -17,4 +17,14 @@ class AgencyProfileRegistration extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function getStatusAttribute($value){
+        if($value == 1){
+            return '<span class="badge bg-success">OPEN</span>';
+        }else if($value == 2){
+            return '<span class="badge bg-warning">Suspended</span>';
+        }else if($value == 3){
+            return '<span class="badge bg-danger">Deleted</span>';
+        }
+    }
+
 }
