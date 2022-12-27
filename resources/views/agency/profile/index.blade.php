@@ -13,19 +13,25 @@
         <div class="row g-4">
             <div class="col-auto">
                 <div class="avatar-lg">
-                    <img src="/assets/images/users/avatar-1.jpg" alt="user-img" class="img-thumbnail rounded-circle" />
+                    <img src="{{asset($agency_details->photo)}}" alt="user-img" class="img-thumbnail rounded-circle" />
                 </div>
             </div>
             <!--end col-->
             <div class="col">
                 <div class="p-2">
-                    <h3 class="text-white mb-1">Anna Adame</h3>
-                    <p class="text-white-75">Owner & Founder</p>
+                    <h3 class="text-white mb-1">{{$agency_details->company_name}}  
+                        <i class=" gmdi-verified-r me-1 align-middle"></i>
+                    </h3>
+                    {{-- <p class="text-white-75">Owner & Founder</p> --}}
                     <div class="hstack text-white-50 gap-1">
-                        <div class="me-2"><i class="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>California, United States</div>
-                        <div>
-                            <i class="ri-building-line me-1 text-white-75 fs-16 align-middle"></i>Themesbrand
+                        <div class="me-2">
+                            <i class="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle">
+                                {{$agency_details->street}}, {{$agency_details->city_or_district}}, {{$agency_details->state}}, {{$agency_details->zip_code}}
+                            </i>
                         </div>
+                        {{-- <div>
+                            <i class="ri-building-line me-1 text-white-75 fs-16 align-middle"></i>Themesbrand
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -35,7 +41,7 @@
                     <div class="col-lg-6 col-4">
                         <div class="p-2">
                             <h4 class="text-white mb-1">24.3K</h4>
-                            <p class="fs-14 mb-0">Followers</p>
+                            <p class="fs-14 mb-0">Rating</p>
                         </div>
                     </div>
                     <div class="col-lg-6 col-4">
@@ -92,8 +98,8 @@
                                     <div class="card-body">
                                         <h5 class="card-title mb-5">Complete Your Profile</h5>
                                         <div class="progress animated-progress custom-progress progress-label">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="label">30%</div>
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="label">80%</div>
                                             </div>
                                         </div>
                                     </div>

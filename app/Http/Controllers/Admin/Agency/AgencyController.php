@@ -11,9 +11,15 @@ use Illuminate\Http\Request;
 
 class AgencyController extends Controller
 {
-    public function getList(){
-        $agency_list = AgencyProfileRegistration::where('status', VisibilityStatus::Open)->get();
-        return view('agency.list')->with(['agency_list' => $agency_list ]);
+    public function getList(Request $request){
+       
+        if($request->id != null){
+            $agency_details = AgencyProfileRegistration::with('user')->where('id', $request->id)->first();
+            return view('agency.profile.index')->with(['agency_details' => $agency_details ]);
+        }else{
+            $agency_list = AgencyProfileRegistration::get();
+            return view('agency.list')->with(['agency_list' => $agency_list ]);
+        }
     }
 
     public function profile(){

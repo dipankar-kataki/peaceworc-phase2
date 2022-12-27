@@ -178,15 +178,15 @@
 
                             setTimeout(() => {
                                 signInBtn.innerHTML = 'Login Successfull';
-                            }, 1000);
+                            }, 500);
 
                             setTimeout(() => {
                                 signInBtn.innerHTML = 'Redirecting....';
-                            }, 2000);
+                            }, 700);
 
                             setTimeout(() => {
                                 window.location.replace(res.url);
-                            }, 4000);
+                            }, 1000);
                             
                         }else{
                             Swal.fire({
