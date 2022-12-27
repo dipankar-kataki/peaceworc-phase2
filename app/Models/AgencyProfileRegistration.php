@@ -19,11 +19,11 @@ class AgencyProfileRegistration extends Model
 
     public function getStatusAttribute($value){
         if($value == 1){
-            return '<span class="badge bg-success">OPEN</span>';
+            return 'OPEN';
         }else if($value == 2){
-            return '<span class="badge bg-warning">Suspended</span>';
+            return 'SUSPENDED';
         }else if($value == 3){
-            return '<span class="badge bg-danger">Deleted</span>';
+            return 'DELETED';
         }
     }
 

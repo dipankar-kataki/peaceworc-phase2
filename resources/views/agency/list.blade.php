@@ -48,7 +48,14 @@
                                     <td>{{$item->phone}}</td>
                                     <td>{{$item->tax_id_or_ein_id}}</td>
                                     <td>{{$item->created_at->format('M-d, Y')}}</td>
-                                    <td>{!! $item->status !!}</td>
+                                    <td>
+                                        @if ($item->status == 'OPEN')
+                                            <span class="bg-success">OPEN</span>
+                                        @elseif($item->status == 'SUSPENDED')
+                                            <span class="bg-warning">SUSPENDED</span>
+                                        @elseif($item->status == 'DELETED')
+                                            <span class="bg-danger">DELETED</span>
+                                        @endif
                                     <td>
                                         <div class="dropdown d-inline-block">
                                             <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
