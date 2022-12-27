@@ -27,7 +27,7 @@
                                 <tr style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                     <td class="content-block" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top">
                                         <div style="text-align: left;margin-bottom: 5px;">
-                                            <img src="{{asset('/assets/images/logo/logo.png')}}" alt="" height="70">
+                                            <img src="{{asset('/assets/images/logo/logo.png')}}" alt="" height="60">
                                         </div>
                                     </td>
                                 </tr>
