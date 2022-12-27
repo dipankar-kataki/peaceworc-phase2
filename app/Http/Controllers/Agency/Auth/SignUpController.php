@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -33,9 +34,10 @@ class SignUpController extends Controller
                 Cache::put('otp', $otp, now()->addMinutes(5));
                 Mail::to($request->email)->queue(new SendEmailVerificationOTPMail($otp));
     
-                return $this->success('Great! Email Verification OTP Sent Successfully. ', 'OTP is '.$otp, null, 200);
+                return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 200);
             }catch(\Exception $e){
-                return $this->error('Oops!. '.$e->getMessage(), null, null, 200);
+                Log::error('Email Verification Mail Error', $e->getMessage());
+                return $this->error('Oops!. Something Went Wrong.', null, null, 200);
             }
             
         }
