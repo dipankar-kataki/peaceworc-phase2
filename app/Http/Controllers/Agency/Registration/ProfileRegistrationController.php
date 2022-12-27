@@ -159,4 +159,8 @@ class ProfileRegistrationController extends Controller
             }
         }
     }
+
+    public function getProfileDetails(){
+        
+    }
 }

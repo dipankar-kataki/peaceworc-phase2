@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'business-profile'], function(){
         Route::post('add-business-info', [ProfileRegistrationController::class, 'addBusinessInfo']);
         Route::post('add-optional-info', [ProfileRegistrationController::class, 'addOptionalInfo']);
+        Route::get('get-profile-details', [ProfileRegistrationController::class, 'getProfileDetails']);
         Route::post('edit-basic-profile-details', [ProfileRegistrationController::class, 'editBasicProfileDetails']);
     });
 
