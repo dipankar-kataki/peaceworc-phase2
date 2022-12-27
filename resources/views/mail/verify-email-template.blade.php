@@ -40,7 +40,7 @@
                                 </tr>
                                 <tr style="font-family: 'Roboto', sans-serif; box-sizing: border-box;  margin: 0;">
                                     <td class="content-block" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 18px; vertical-align: top; margin: 0;   text-align: center;" valign="top">
-                                        <h5 style="font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 16px;">Use the below OTP for your email verification. OTP valid for only 5 minutes.</h5>
+                                        <h5 style="font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 16px;">Use the below OTP for your email verification. OTP valid for only 3 minutes.</h5>
                                     </td>
                                 </tr>
                                 <tr style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
