@@ -31,7 +31,7 @@ class SignUpController extends Controller
         }else{
             try{
                 $otp = rand(100000, 999999);
-                Cache::put('otp', $otp, now()->addMinutes(1));
+                Cache::put('otp', $otp, now()->addMinutes(5));
                 Mail::to($request->email)->queue(new SendEmailVerificationOTPMail($otp));
     
                 return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 200);
