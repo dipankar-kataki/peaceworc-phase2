@@ -46,7 +46,7 @@
                                 <tr style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                     <td class="content-block" style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 22px; text-align: center;">
                                         <div style="font-family: 'Roboto', sans-serif; box-sizing: border-box; font-size: 1.5rem; color: #FFF; text-decoration: none; font-weight: 400; text-align: center; cursor: pointer; display: inline-block; border-radius: .25rem; text-transform: capitalize; background-color: #405189; margin: 0; border-color: #405189; border-style: solid; border-width: 1px; padding: .5rem .9rem;">
-                                            {{-- {{$otp}} --}}142563
+                                            {{$otp}}
                                         </div>
                                     </td>
                                 </tr>
