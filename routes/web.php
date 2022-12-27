@@ -17,4 +17,7 @@ Route::get('/', function () {
     return view('auth.login');
 })->name('web.login');
 
+Route::get('test', function(){
+    return view('mail.verify-email-template');
+});
 
