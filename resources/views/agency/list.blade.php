@@ -50,11 +50,11 @@
                                     <td>{{$item->created_at->format('M-d, Y')}}</td>
                                     <td>
                                         @if ($item->status == 'OPEN')
-                                            <span class="bg-success">OPEN</span>
+                                            <span class="badge badge-soft-success fs-14">OPEN</span>
                                         @elseif($item->status == 'SUSPENDED')
-                                            <span class="bg-warning">SUSPENDED</span>
+                                            <span class="badge badge-soft-warning fs-14">SUSPENDED</span>
                                         @elseif($item->status == 'DELETED')
-                                            <span class="bg-danger">DELETED</span>
+                                            <span class="badge badge-soft-danger fs-14">DELETED</span>
                                         @endif
                                     <td>
                                         <div class="dropdown d-inline-block">
