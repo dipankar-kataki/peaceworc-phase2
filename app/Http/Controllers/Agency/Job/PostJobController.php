@@ -82,7 +82,7 @@ class PostJobController extends Controller
                             return $this->error('Oops! Something Went Wrong.', null, null, 500);
                         }
                     }catch(\Exception $e){
-                        return $this->error('Oops! Something Went Wrong.'.$e->getMessage(), null, null, 500);
+                        return $this->error('Oops! Something Went Wrong.', null, null, 500);
                     }
                 }
                 
@@ -111,7 +111,7 @@ class PostJobController extends Controller
                     return $this->success('Great! Job Deleted Successfully.', null, null, 200);
                 }
             }catch(\Exception $e){
-                return $this->error('Oops! Failed To Delete Job. Something Went Wrong.'.$e, null, null, 500);
+                return $this->error('Oops! Failed To Delete Job. Something Went Wrong.', null, null, 500);
             }
         }
         
