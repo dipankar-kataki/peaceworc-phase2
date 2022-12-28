@@ -22,7 +22,7 @@ class PostJobController extends Controller
             'title' => 'required | string',
             'care_type' => 'required | string',
             'care_items' => 'required',
-            'date' => 'required',
+            'date' => 'required|date_format:m-d-Y',
             'start_time' => 'required',
             'end_time' => 'required',
             'amount' => 'required',
