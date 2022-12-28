@@ -30,7 +30,7 @@ class SignUpController extends Controller
         }else{
             try{
                 // dispatch(function () {
-                    $email = $_REQUEST['email'];
+                    $email = $request->email;
                     $otp = rand(100000, 999999);
                     Cache::put('otp', $otp, now()->addMinutes(3));
 
