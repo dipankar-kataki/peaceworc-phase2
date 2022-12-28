@@ -117,4 +117,9 @@ class JobController extends Controller
             return $this->success('Great! Job Fetched Successfully', $details, null, 200);
         }
     }
+
+    public function getQuickCallJobs(){
+        $get_all_jobs = AgencyPostJob::where('status', JobStatus::QuickCall)->get();
+        return $this->success('Great! Jobs fetched successfully.', $get_all_jobs, null, 200);
+    }
 }

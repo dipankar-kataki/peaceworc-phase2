@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Agency\Job;
 
+use App\Common\JobStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AgencyInformationStatus;
 use App\Models\AgencyPostJob;
 use App\Traits\ApiResponse;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -36,13 +39,32 @@ class PostJobController extends Controller
                 if($get_status->is_business_info_complete == 0 ||  $get_status->is_authorize_info_added == 0){
                     return $this->error('Oops! The Agency Profile Has To Be Completed First Before Posting A Job.', null, null, 400);
                 }else{
+                        $job_date = DateTime::createFromFormat("m-d-Y" , $request->date);
+
+                        $full_job_date_time = Carbon::parse($job_date->format('Y-m-d').''.$request->start_time);
+                        $current_time = Carbon::now();
+
+                        $to = Carbon::createFromFormat('Y-m-d H:s:i', $current_time);
+                        $from = Carbon::createFromFormat('Y-m-d H:s:i', $full_job_date_time);
+
+                        $diff_in_hours = $to->diffInHours($from);
+
+                        $status = 0;
+
+                        if( $diff_in_hours <= 5){
+                            $status = JobStatus::QuickCall;
+                        }else if($diff_in_hours > 5){
+                           $status = JobStatus::Open;
+                        }
+                        
+
                     try{
                         $create = AgencyPostJob::create([
                             'user_id' => Auth::user()->id,
                             'title' => $request->title,
                             'care_type' => $request->care_type,
                             'care_items' => json_encode($request->care_items),
-                            'date' => date_create($request->date)->format('Y-m-d'),
+                            'date' => $job_date->format('Y-m-d'),
                             'start_time' => $request->start_time,
                             'end_time' => $request->end_time,
                             'amount' => $request->amount,
@@ -51,7 +73,8 @@ class PostJobController extends Controller
                             'medical_history' => json_encode($request->medical_history),
                             'experties' => json_encode($request->experties),
                             'other_requirements' => json_encode($request->other_requirements),
-                            'check_list' => json_encode($request->check_list)
+                            'check_list' => json_encode($request->check_list),
+                            'status' => $status
                         ]);
                         if($create){
                             return $this->success('Great! Job Posted Successfully', null, null, 201);
