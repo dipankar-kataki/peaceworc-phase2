@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Traits\ApiResponse;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
+    use ApiResponse;
     /**
      * The path to the "home" route for your application.
      *
@@ -72,8 +74,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting()
     {
+       
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+            return Limit::perMinute(6)->response(function () {
+                return $this->error('Oops! Too Many Attempts. User Blocked For 1 Minute ', null, null, 429);
+            });
         });
     }
 }

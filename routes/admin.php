@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Agency\AgencyController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\LogOutController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,3 +42,13 @@ Route::get('/login-expire',function(){
         'http_status_code' => 401
     ]);
 })->name('login-expire');
+
+Route::get('cache-route', function(){
+    Artisan::call('php artisan route:cache');
+    echo 'Routes Cached';
+});
+
+Route::get('optimize', function(){
+    Artisan::call('php artisan optimize:clear');
+    echo 'Optimized';
+});

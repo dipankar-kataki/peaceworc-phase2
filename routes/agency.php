@@ -22,10 +22,15 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('signup', [SignUpController::class, 'signUp']);
-Route::post('login', [LoginController::class, 'login']);
-Route::post('send-forgot-password-mail', [ForgotPasswordController::class, 'sendForgotPasswordMail']);
-Route::post('check-email-exist', [SignUpController::class, 'checkEmailExists']);
+
+Route::middleware(['throttle:api'])->group(function () {
+    Route::post('signup', [SignUpController::class, 'signUp']);
+    Route::post('login', [LoginController::class, 'login']);
+    Route::post('send-forgot-password-mail', [ForgotPasswordController::class, 'sendForgotPasswordMail']);
+    Route::post('check-email-exist', [SignUpController::class, 'checkEmailExists']);
+    
+});
+
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
