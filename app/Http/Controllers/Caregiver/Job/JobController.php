@@ -129,7 +129,7 @@ class JobController extends Controller
     }
 
     public function getQuickCallJobs(){
-        $get_jobs = AgencyPostJob::where('status', JobStatus::QuickCall)->get();
+        $get_jobs = AgencyPostJob::where('status', JobStatus::QuickCall)->latest()->get();
 
         $get_job_details = [];
 
