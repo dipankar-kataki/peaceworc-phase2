@@ -100,7 +100,7 @@ class PostJobController extends Controller
 
     public function getJob(){
         if(!isset($_GET['id'])){
-            return $this->error('Oops! Something Went Wrong. Failed To Fech Job.', null, null, 500);
+            return $this->error('Oops! Something Went Wrong. Failed To Fetch Job.', null, null, 500);
         }else{
             if($_GET['id'] == null){
                 $job_details = AgencyPostJob::where('user_id', Auth::user()->id)->latest()->get();
@@ -116,21 +116,26 @@ class PostJobController extends Controller
 
     public function deleteJob(){
 
-        if($_GET['id'] == null){
-            return $this->error('Oops! Something Went Wrong. Invalid Request', null, null, 500);
+        if(!isset($_GET['id'])){
+            return $this->error('Oops! Something Went Wrong. Failed To Delete Job.', null, null, 500);
         }else{
-            try{
-                $check_if_job_exists = AgencyPostJob::where('id', $_GET['id'])->exists();
-                if(!$check_if_job_exists){
-                    return $this->error('Oops! Failed To Delete. Job Not Found', null, null, 500);
-                }else{
-                    AgencyPostJob::where('id', $_GET['id'])->delete();
-                    return $this->success('Great! Job Deleted Successfully.', null, null, 200);
+            if($_GET['id'] == null){
+                return $this->error('Oops! Something Went Wrong. Invalid Request', null, null, 500);
+            }else{
+                try{
+                    $check_if_job_exists = AgencyPostJob::where('id', $_GET['id'])->exists();
+                    if(!$check_if_job_exists){
+                        return $this->error('Oops! Failed To Delete. Job Not Found', null, null, 500);
+                    }else{
+                        AgencyPostJob::where('id', $_GET['id'])->delete();
+                        return $this->success('Great! Job Deleted Successfully.', null, null, 200);
+                    }
+                }catch(\Exception $e){
+                    return $this->error('Oops! Failed To Delete Job. Something Went Wrong.', null, null, 500);
                 }
-            }catch(\Exception $e){
-                return $this->error('Oops! Failed To Delete Job. Something Went Wrong.', null, null, 500);
             }
         }
+        
         
     }
 }
