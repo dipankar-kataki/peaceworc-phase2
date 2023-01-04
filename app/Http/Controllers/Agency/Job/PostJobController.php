@@ -102,7 +102,7 @@ class PostJobController extends Controller
         if(!isset($_GET['id'])){
             return $this->error('Oops! Something Went Wrong. Failed To Fetch Job.', null, null, 500);
         }else{
-            if($_GET['id'] == null){
+            if($_GET['id'] == 0){
                 $job_details = AgencyPostJob::where('user_id', Auth::user()->id)->latest()->get();
                 return $this->success('Great! Job Fetched Successfully', $job_details, null, 200);
             }else{

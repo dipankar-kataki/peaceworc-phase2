@@ -18,7 +18,7 @@ class JobController extends Controller
         if(!isset($_GET['id'])){
             return $this->error('Oops! Faile To Fetch Job', null, null, 500);
         }else{
-            if($_GET['id'] == null){
+            if($_GET['id'] == 0){
                 $get_jobs = AgencyPostJob::where('status', JobStatus::Open)->latest()->get();
                 $get_job_details = [];
                 foreach($get_jobs as $job){
