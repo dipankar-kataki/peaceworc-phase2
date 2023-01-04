@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -78,5 +79,14 @@ class AgencyPostJob extends Model
             return 'Bidding Ended. Job Will Be Awarded Soon.';
         }
     }
+
+    public function getStartTimeAttribute($value){
+        return Carbon::parse($value)->format('g:i A');
+    }
+
+    public function getEndTimeAttribute($value){
+        return Carbon::parse($value)->format('g:i A');
+    }
+
 
 }
