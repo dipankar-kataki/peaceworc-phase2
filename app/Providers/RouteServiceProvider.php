@@ -76,7 +76,7 @@ class RouteServiceProvider extends ServiceProvider
     {
        
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(6)->response(function () {
+            return Limit::perMinute(60)->response(function () {
                 return $this->error('Oops! Too Many Attempts. User Blocked For 1 Minute ', null, null, 429);
             });
         });
