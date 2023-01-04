@@ -5,6 +5,7 @@ use App\Http\Controllers\Caregiver\Auth\LogOutController;
 use App\Http\Controllers\Caregiver\Auth\SignUpController;
 use App\Http\Controllers\Caregiver\Bidding\BiddingController;
 use App\Http\Controllers\Caregiver\Job\JobController;
+use App\Http\Controllers\Caregiver\Location\LocationController;
 use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
 use App\Http\Controllers\Caregiver\Registration\ProfileRegistrationController;
 use Illuminate\Http\Request;
@@ -34,6 +35,10 @@ Route::middleware(['throttle:api'])->group(function () {
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
+    Route::group(['prefix' => 'user'], function(){
+        Route::post('update-location', [LocationController::class, 'updateCurrentLocation']);
+    });
 
     Route::group(['prefix' => 'profile'], function(){
         Route::post('register', [ProfileRegistrationController::class, 'profileRegistration']);
