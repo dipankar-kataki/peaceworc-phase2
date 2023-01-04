@@ -27,6 +27,9 @@ class PostJobController extends Controller
             'end_time' => 'required',
             'amount' => 'required',
             'address' => 'required',
+            'short_address' => 'required',
+            'lat' => 'required',
+            'long' => 'required',
             'description' => 'required',
         ]);
 
@@ -69,6 +72,9 @@ class PostJobController extends Controller
                             'end_time' => $request->end_time,
                             'amount' => $request->amount,
                             'address' => $request->address,
+                            'short_address' => $request->short_address,
+                            'lat' => $request->lat,
+                            'long' => $request->long,
                             'description' => $request->description,
                             'medical_history' => json_encode($request->medical_history),
                             'experties' => json_encode($request->experties),
