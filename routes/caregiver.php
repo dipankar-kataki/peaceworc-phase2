@@ -26,11 +26,11 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::middleware(['throttle:api'])->group(function () {
+// Route::middleware(['throttle:api'])->group(function () {
     Route::post('signup', [SignUpController::class, 'signUp']);
     Route::post('login', [LoginController::class, 'login']);
     Route::post('check-email-exist', [SignUpController::class, 'checkEmailExists']);
-});
+// });
 
 
 
