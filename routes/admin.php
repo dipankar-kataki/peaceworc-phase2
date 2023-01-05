@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Agency\AgencyController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\LogOutController;
+use App\Http\Controllers\Admin\AuthorizeOfficer\AuthorizeOfficerController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,10 @@ Route::group(['middleware' => 'auth'] ,function(){
     Route::group([ 'prefix' => 'agency'], function(){
         Route::get('list/{id?}', [AgencyController::class, 'getList'])->name('admin.get.agency.list');
         Route::get('profile', [AgencyController::class, 'profile'])->name('admin.get.agency.profile');
+
+        Route::group(['prefix' => 'authorize-officer'], function(){
+            Route::get('list/{id?}', [AuthorizeOfficerController::class, 'getList'])->name('admin.get.authorize.officer.list');
+        });
     });
     Route::get('logout', [LogOutController::class, 'logout'])->name('admin.logout');
     

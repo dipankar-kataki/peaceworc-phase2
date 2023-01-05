@@ -2,6 +2,15 @@
 @section('title', ' Agency Complete Profile')
 @section('custom-style')
 @endsection
+    <style>
+        .avatar-lg img{
+            height: 100px;
+            width: 150px;
+            object-fit: cover;
+            object-position: top;
+        } 
+    </style>
+    
 @section('content')
 <div class="container-fluid mt-2">
     <div class="profile-foreground position-relative mx-n4 mt-n4">
@@ -107,29 +116,29 @@
 
                                 <div class="card">
                                     <div class="card-body">
-                                        <h5 class="card-title mb-3">Info</h5>
+                                        <h5 class="card-title mb-3">Owner Infomation</h5>
                                         <div class="table-responsive">
                                             <table class="table table-borderless mb-0">
                                                 <tbody>
                                                     <tr>
-                                                        <th class="ps-0" scope="row">Name :</th>
+                                                        <th class="ps-0" scope="row"> <i class="ri-user-line"></i> :</th>
                                                         <td class="text-muted">Anna Adame</td>
                                                     </tr>
                                                     <tr>
-                                                        <th class="ps-0" scope="row">Mobile :</th>
+                                                        <th class="ps-0" scope="row"><i class="ri-phone-line"></i> :</th>
                                                         <td class="text-muted">+(1) 987 6543</td>
                                                     </tr>
                                                     <tr>
-                                                        <th class="ps-0" scope="row">E-mail :</th>
+                                                        <th class="ps-0" scope="row"><i class="ri-mail-line"></i> :</th>
                                                         <td class="text-muted">daveadame@velzon.com</td>
                                                     </tr>
                                                     <tr>
-                                                        <th class="ps-0" scope="row">Location :</th>
+                                                        <th class="ps-0" scope="row"><i class="ri-user-location-line"></i> :</th>
                                                         <td class="text-muted">California, United States
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th class="ps-0" scope="row">Joining Date</th>
+                                                        <th class="ps-0" scope="row"><i class="ri-calendar-line"></i> :</th>
                                                         <td class="text-muted">24 Nov 2021</td>
                                                     </tr>
                                                 </tbody>

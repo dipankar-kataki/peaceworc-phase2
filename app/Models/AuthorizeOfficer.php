@@ -13,11 +13,23 @@ class AuthorizeOfficer extends Model
     protected $table = 'authorize_officers';
     protected $guarded = [];
 
+    public function agency(){
+        return $this->belongsTo(AgencyProfileRegistration::class, 'agency_id', 'user_id');
+    }
+
     public function user(){
         return $this->belongsTo(User::class, 'agency_id', 'id');
     }
 
-
+    public function getStatusAttribute($value){
+        if($value == 1){
+            return 'OPEN';
+        }else if($value == 2){
+            return 'SUSPENDED';
+        }else if($value == 3){
+            return 'DELETED';
+        }
+    }
 
     public function getRoleAttribute($value){
         
