@@ -18,7 +18,7 @@ class CreateAgencyPostJobsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('title',100);
             $table->string('care_type',50);
-            $table->string('care_items');
+            $table->longText('care_items');
             $table->string('date',50);
             $table->string('start_time',50);
             $table->string('end_time',50);
