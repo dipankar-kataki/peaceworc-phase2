@@ -28,13 +28,13 @@
             <!--end col-->
             <div class="col">
                 <div class="p-2">
-                    <h3 class="text-white mb-1">{{$agency_details->company_name}}  
-                        <i class=" gmdi-verified-r me-1 align-middle"></i>
+                    <h3 class="text-white mb-1">{{$agency_details->company_name}} 
+                        <i class='eos-icons text-success'>verified</i>
                     </h3>
                     {{-- <p class="text-white-75">Owner & Founder</p> --}}
                     <div class="hstack text-white-50 gap-1">
                         <div class="me-2">
-                            <i class="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle">
+                            <i class='eos-icons eos-36 me-2 text-white-75 align-middle'>corporate_fare</i>
                                 {{$agency_details->street}}, {{$agency_details->city_or_district}}, {{$agency_details->state}}, {{$agency_details->zip_code}}
                             </i>
                         </div>
@@ -122,24 +122,24 @@
                                                 <tbody>
                                                     <tr>
                                                         <th class="ps-0" scope="row"> <i class="ri-user-line"></i> :</th>
-                                                        <td class="text-muted">Anna Adame</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->name}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-phone-line"></i> :</th>
-                                                        <td class="text-muted">+(1) 987 6543</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->phone}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-mail-line"></i> :</th>
-                                                        <td class="text-muted">daveadame@velzon.com</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->email}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <th class="ps-0" scope="row"><i class="ri-user-location-line"></i> :</th>
-                                                        <td class="text-muted">California, United States
+                                                        <th class="ps-0" scope="row"><i class="ri-shield-user-line"></i> :</th>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->role}}
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-calendar-line"></i> :</th>
-                                                        <td class="text-muted">24 Nov 2021</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->created_at->format('M-d, Y')}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -329,8 +329,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <h5 class="card-title mb-3">About</h5>
-                                        <p>Hi I'm Anna Adame, It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is European languages are members of the same family.</p>
-                                        <p>You always want to make sure that your fonts work well together and try to limit the number of fonts you use to three or less. Experiment and play around with the fonts that you already have in the software you’re working with reputable font websites. This may be the most commonly encountered tip I received from the designers I spoke with. They highly encourage that you use different fonts in one design, but do not over-exaggerate and go overboard.</p>
+                                        <p>This section will be replaced by Agency About Us.</p>
                                         <div class="row">
                                             <div class="col-6 col-md-4">
                                                 <div class="d-flex mt-4">

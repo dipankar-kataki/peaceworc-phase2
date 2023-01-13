@@ -15219,7 +15219,7 @@ span.flatpickr-weekday {
     opacity: .9;
     background: #405189;
     background: -webkit-gradient(linear, left bottom, left top, from(#171e32), to(#405189));
-    background: linear-gradient(to top, #171e32, #405189)
+    background: linear-gradient(to top, #485c95, #050f26);
 }
 
 .profile-wid-bg .profile-wid-img {
