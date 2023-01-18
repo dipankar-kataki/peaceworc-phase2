@@ -8,6 +8,7 @@ use App\Mail\SendEmailVerificationOTPMail;
 use App\Models\AgencyProfileRegistration;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use App\Traits\PushNotification;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SignUpController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, PushNotification;
 
     public function checkEmailExists(Request $request){
         $validator = Validator::make($request->all(),[
@@ -55,7 +56,8 @@ class SignUpController extends Controller
             'name' => 'required|string|max:200',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|required_with:confirm_password|same:confirm_password',
-            'confirm_password' => 'required|min:6'
+            'confirm_password' => 'required|min:6',
+            // 'fcm_token' => 'required'
         ]);
 
         if($validator->fails()){
@@ -73,7 +75,8 @@ class SignUpController extends Controller
                         'email' => $request->email,
                         'email_verified_at' => date('Y-m-d H:i:s'),
                         'password' => Hash::make($request->password),
-                        'role' => Role::Agency_Owner
+                        'role' => Role::Agency_Owner,
+                        // 'fcm_token' => $request->fcm_token
                     ]);
     
                     if($create){
@@ -82,6 +85,16 @@ class SignUpController extends Controller
                             'user_id' => $user->id,
                             'company_name' => $request->company_name
                         ]);
+
+
+                        // if($user->fcm_token != null){
+                        //     $data=[];
+                        //     $data['message']= "Welcome Aboard! Thankyou For Joining Peaceworc.";
+                        //     $token = [];
+                        //     $token[] = $user->fcm_token;
+                        //     $this->sendNotification($token, $data);
+                        // }
+
                         $token = $create->createToken('auth_token')->plainTextToken;
                         return $this->success('Great! SignUp Completed Successfully', null, $token, 201);
                     }else{

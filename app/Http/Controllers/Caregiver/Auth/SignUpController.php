@@ -8,6 +8,7 @@ use App\Mail\SendEmailVerificationOTPMail;
 use App\Models\CaregiverProfileRegistration;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use App\Traits\PushNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SignUpController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, PushNotification;
 
 
     public function checkEmailExists(Request $request){
@@ -53,7 +54,8 @@ class SignUpController extends Controller
             'name' => 'required|string|max:200',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6|required_with:confirm_password|same:confirm_password',
-            'confirm_password' => 'required|min:6'
+            'confirm_password' => 'required|min:6',
+            'fcm_token' => 'required'
         ]);
 
         if($validator->fails()){
@@ -69,10 +71,22 @@ class SignUpController extends Controller
                         'name' => $request->name,
                         'email' => $request->email,
                         'password' => Hash::make($request->password),
-                        'role' => Role::Caregiver
+                        'role' => Role::Caregiver,
+                        'fcm_token' => $request->fcm_token
                     ]);
     
                     if($create){
+
+                        $user_details = User::where('id', $request->email)->first();
+                        if($user_details->fcm_token != null){
+                            $data=[];
+                            $data['message']= "Hello, ".$user_details->name.". Thankyou For Choosing Peaceworc. Welcome Aboard!";
+                            $token = [];
+                            $token[] = $user_details->fcm_token;
+                            $this->sendNotification($token, $data);
+                        }
+
+
                         $token = $create->createToken('auth_token')->plainTextToken;
                         return $this->success('Great! SignUp Completed Successfully', null, $token, 201);
                     }else{
