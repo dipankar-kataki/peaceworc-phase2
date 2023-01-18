@@ -77,7 +77,7 @@ class SignUpController extends Controller
     
                     if($create){
 
-                        $user_details = User::where('id', $request->email)->first();
+                        $user_details = User::where('email', $request->email)->first();
                         if($user_details->fcm_token != null){
                             $data=[];
                             $data['message']= "Hello, ".$user_details->name.". Thankyou For Choosing Peaceworc. Welcome Aboard!";
