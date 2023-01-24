@@ -9,6 +9,7 @@ use App\Models\CaregiverProfileRegistration;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use App\Traits\PushNotification;
+use App\Traits\WelcomeNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SignUpController extends Controller
 {
-    use ApiResponse, PushNotification;
+    use ApiResponse, WelcomeNotification;
 
 
     public function checkEmailExists(Request $request){
@@ -83,7 +84,7 @@ class SignUpController extends Controller
                             $data['message']= "Hello, ".$user_details->name.". Thankyou For Choosing Peaceworc. Welcome Aboard!";
                             $token = [];
                             $token[] = $user_details->fcm_token;
-                            $this->sendNotification($token, $data);
+                            $this->sendWelcomeNotification($token, $data);
                         }
 
 
@@ -93,7 +94,7 @@ class SignUpController extends Controller
                         return $this->error('Oops! SignUp Failed', null, null, 500);
                     }
                 }catch(\Exception $e){
-                    return $this->error('Opps! Something Went Wrong.'.$e->getMessage(), null, null, 500);
+                    return $this->error('Opps! Something Went Wrong.', null, null, 500);
                 }
             }
             
