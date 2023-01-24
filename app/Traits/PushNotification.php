@@ -6,7 +6,7 @@ trait PushNotification{
 
     protected function sendNotification(Array $token, Array $data){
 
-        $server_key = 'AAAAFZkv8Dw:APA91bH2u9SjQqjmMoPRZeLWzWE82Rrme0iAIZhqpsxFsNoAw1_dG2_yf2V7ngxi0VgXDlmtKLfqbXv4vlxj6ogzif_ziKW_wdlOKMZq9OdnhCQGW7NBq_h8_eNxRgOXwvlW6o1CYgRd';
+        $server_key = env('FIREBASE_SERVER_KEY');
             
         $msg = [
             'message'   => $data['message'],
