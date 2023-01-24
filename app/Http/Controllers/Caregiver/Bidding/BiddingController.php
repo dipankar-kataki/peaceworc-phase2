@@ -76,7 +76,7 @@ class BiddingController extends Controller
 
                         return $this->success('Great! Bid Successfully Recorded. ', null, null, 200);
                     }catch(\Exception $e){
-                        return $this->error('Oops! Something Went Wrong. Server Error. '.$e, null, null, 500);
+                        return $this->error('Oops! Something Went Wrong. Server Error. ', null, null, 500);
                     }
                 }
             }catch(\Exception $e){

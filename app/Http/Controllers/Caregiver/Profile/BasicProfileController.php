@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Caregiver\Profile;
 
 use App\Http\Controllers\Controller;
+use App\Models\CaregiverProfileRegistration;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -53,6 +54,15 @@ class BasicProfileController extends Controller
                 return $this->error('Oops! Something Went Wrong. Server Error.', null, null, 500);
             }
             
+        }
+    }
+
+    public function getDetails(){
+        try{
+            $get_details = CaregiverProfileRegistration::where('user_id', Auth::user()->id)->first();
+            return $this->success('Great! Profile Fetched Successfully.', $get_details, null, 200);
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong.', null, null, 500);
         }
     }
 }

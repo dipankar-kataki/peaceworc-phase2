@@ -6,7 +6,7 @@ trait PushNotification{
 
     protected function sendNotification(Array $token, Array $data){
 
-        $server_key = 'AAAAtDUEtQM:APA91bEMkFXn34gPBQy6l1Ys2y0KvHnOyTJmvFqW1gInxBMOSxGKc60Z1HYSPa2LBSGWefCaCqFkNHh29_YtwWXN2Rq_RqhCls0VzalwZ6l7RZORLdJrUU4ZFyp8jnzvkT0zD3D9BkAt';
+        $server_key = 'AAAAFZkv8Dw:APA91bH2u9SjQqjmMoPRZeLWzWE82Rrme0iAIZhqpsxFsNoAw1_dG2_yf2V7ngxi0VgXDlmtKLfqbXv4vlxj6ogzif_ziKW_wdlOKMZq9OdnhCQGW7NBq_h8_eNxRgOXwvlW6o1CYgRd';
             
         $msg = [
             'message'   => $data['message'],
@@ -24,7 +24,7 @@ trait PushNotification{
             (
                 'registration_ids' => $registrationIds, //  for  multiple users
                 'notification'  => $notify_data,
-                'data'=> $msg,
+                'data'=> [],
                 'priority'=> 'high'
             );
         }
@@ -34,7 +34,14 @@ trait PushNotification{
             (
                 'to' => $registrationIds[0], //  for  only one users
                 'notification'  => $notify_data,
-                'data'=> $msg,
+                'data'=> [
+                    'job_id' => $data['job_id'],
+                    'job_title' => $data['job_title'],
+                    'job_amount' => $data['job_amount'],
+                    'job_start_time' => $data['job_start_time'],
+                    'job_end_time' =>  $data['job_end_time'], 
+                    'notification_type' => $data['notification_type']
+                ],
                 'priority'=> 'high'
             );
         }

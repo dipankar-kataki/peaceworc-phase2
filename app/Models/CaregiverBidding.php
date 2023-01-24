@@ -11,4 +11,8 @@ class CaregiverBidding extends Model
 
     protected $table = 'caregiver_biddings';
     protected $guarded = [];
+
+    public function job(){
+        return $this->belongsTo(AgencyPostJob::class, 'job_id', 'id');
+    }
 }

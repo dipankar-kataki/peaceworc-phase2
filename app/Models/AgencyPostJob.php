@@ -74,9 +74,11 @@ class AgencyPostJob extends Model
         }else if($value == 6){
             return 'Bidding Started';
         }else if($value == 7){
-            return 'Quick Call';
+            return 'Bidding Ended. Waiting For Results.';
         }else if($value == 8){
-            return 'Bidding Ended. Job Will Be Awarded Soon.';
+            return 'Quick Call';
+        }else if($value == 9){
+            return 'OnHold.';
         }
     }
 

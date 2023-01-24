@@ -21,12 +21,7 @@ class ProfileRegistrationController extends Controller
             'dob' => 'required|date_format:m-d-Y',
             'gender' => 'required',
             'ssn' => 'required',
-            'experience' => 'required',
-            'job_type' => 'required',
-            'street' => 'required',
-            'city_or_district' => 'required',
-            'state' => 'required',
-            'zip_code' => 'required'
+            'full_address' => 'required',
         ]);
 
         if($validator->fails()){
@@ -54,6 +49,7 @@ class ProfileRegistrationController extends Controller
                         'dob' =>  Carbon::parse($request->dob)->format('Y-m-d'),
                         'gender' => $request->gender,
                         'ssn' => $request->ssn,
+                        'full_address' => $request->full_address,
                         'experience' => $request->experience,
                         'job_type' => $request->job_type,
                         'street' => $request->street,

@@ -27,8 +27,8 @@ class CreateCaregiverProfileRegistrationsTable extends Migration
             $table->string('city_or_district')->nullable();
             $table->string('state')->nullable();
             $table->integer('zip_code')->nullable();
-            $table->string('education')->nullable();
-            $table->string('certificate')->nullable();
+            $table->longText('education')->nullable();
+            $table->longText('certificate')->nullable();
             $table->timestamps();
         });
     }

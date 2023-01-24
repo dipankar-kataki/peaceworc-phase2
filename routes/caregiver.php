@@ -4,6 +4,7 @@ use App\Http\Controllers\Caregiver\Auth\LoginController;
 use App\Http\Controllers\Caregiver\Auth\LogOutController;
 use App\Http\Controllers\Caregiver\Auth\SignUpController;
 use App\Http\Controllers\Caregiver\Bidding\BiddingController;
+use App\Http\Controllers\Caregiver\Job\GetBiddingResultsController;
 use App\Http\Controllers\Caregiver\Job\JobController;
 use App\Http\Controllers\Caregiver\Location\LocationController;
 use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
@@ -42,6 +43,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::group(['prefix' => 'profile'], function(){
         Route::post('register', [ProfileRegistrationController::class, 'profileRegistration']);
+        Route::get('get-details', [BasicProfileController::class, 'getDetails']);
         Route::post('change-password', [BasicProfileController::class, 'changePassword']);
     });
 
@@ -56,6 +58,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::group(['prefix' => 'bidding'], function(){
             Route::post('submit-bid', [BiddingController::class, 'submitBid']);
+            Route::get('get-results', [GetBiddingResultsController::class, 'getBiddingResult']);
         });
     });
     Route::post('logout', [LogOutController::class, 'logout']);
