@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-trait PushNotification{
+trait FullScreenNotification{
 
     protected function sendNotification(Array $token, Array $data){
 
@@ -38,8 +38,11 @@ trait PushNotification{
                     'job_id' => $data['job_id'],
                     'job_title' => $data['job_title'],
                     'job_amount' => $data['job_amount'],
+                    'job_date' => $data['job_date'],
                     'job_start_time' => $data['job_start_time'],
                     'job_end_time' =>  $data['job_end_time'], 
+                    'care_type' =>  $data['care_type'],
+                    'care_items' =>  $data['care_items'],
                     'notification_type' => $data['notification_type']
                 ],
                 'priority'=> 'high'
