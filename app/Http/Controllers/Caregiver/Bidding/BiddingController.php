@@ -36,7 +36,8 @@ class BiddingController extends Controller
                         if($get_job->bidding_start_time != null && $get_job->bidding_end_time != null){
                             $create = CaregiverBidding::create([
                                 'user_id' => Auth::user()->id,
-                                'job_id' => $request->job_id
+                                'job_id' => $request->job_id,
+                                'status' => JobStatus::BiddingStarted
                             ]);
                         }else{
                             
@@ -61,7 +62,8 @@ class BiddingController extends Controller
     
                             $create = CaregiverBidding::create([
                                 'user_id' => Auth::user()->id,
-                                'job_id' => $request->job_id
+                                'job_id' => $request->job_id,
+                                'status' => JobStatus::BiddingStarted,
                             ]);
     
                             if($create){

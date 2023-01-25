@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('get-jobs', [JobController::class, 'getJobs']);
         Route::get('get-bidded-jobs', [JobController::class, 'getBiddedJobs']);
         Route::get('get-single-job-for-bidded', [JobController::class, 'getSingleJobForBidding']);
+        Route::get('get-all-my-bidded-jobs', [JobController::class, 'getAllMyBiddedJobs']);
 
         Route::get('quick-call', [JobController::class,'getQuickCallJobs']);
 
