@@ -4,17 +4,19 @@ namespace App\Http\Controllers\Caregiver\Registration;
 
 use App\Http\Controllers\Controller;
 use App\Models\CaregiverProfileRegistration;
+use App\Models\CaregiverStatusInformation;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileRegistrationController extends Controller
 {
     use ApiResponse;
 
-    public function profileRegistration(Request $request){
+    public function basicinformation(Request $request){
         $validator = Validator::make($request->all(), [
             'photo' => 'required|image|mimes:jpg,png,jpeg|max:1048',
             'phone' => 'required|numeric',
@@ -22,6 +24,7 @@ class ProfileRegistrationController extends Controller
             'gender' => 'required',
             'ssn' => 'required',
             'full_address' => 'required',
+            'short_address' => 'required'
         ]);
 
         if($validator->fails()){
@@ -50,17 +53,19 @@ class ProfileRegistrationController extends Controller
                         'gender' => $request->gender,
                         'ssn' => $request->ssn,
                         'full_address' => $request->full_address,
-                        'experience' => $request->experience,
-                        'job_type' => $request->job_type,
-                        'street' => $request->street,
-                        'city_or_district' => $request->city_or_district,
-                        'state' => $request->state,
-                        'zip_code' => $request->zip_code,
-                        'education' => json_encode($request->education),
-                        'certificate' => json_encode($request->certificate)
+                        'short_address' => $request->short_address
                     ]);
 
                     if($create){
+                        try{
+                            CaregiverStatusInformation::where('user_id', Auth::user()->id)->update([
+                                'user_id' => Auth::user()->id,
+                                'is_basic_info_added' => 1
+                            ]);
+                        }catch(\Exception $e){
+                            Log::error('Oops! Something Went Wrong. Registration Failed', $e->getMessage());
+                        }
+                        
                         return $this->success('Great! Registration Successfull.', null, null, 201);
                     }else{
                         return $this->error('Oops! Something Went Wrong. Registration Failed.', null, null, 500);
@@ -71,5 +76,10 @@ class ProfileRegistrationController extends Controller
             }
             
         }
+    }
+
+
+    public function optionalinformation(Request $request){
+
     }
 }

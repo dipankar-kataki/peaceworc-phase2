@@ -43,7 +43,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::group(['prefix' => 'profile'], function(){
-        Route::post('register', [ProfileRegistrationController::class, 'profileRegistration']);
+        Route::post('basicinformation', [ProfileRegistrationController::class, 'basicinformation']);
+        Route::post('optionalinformation', [ProfileRegistrationController::class, 'optionalinformation']);
         Route::get('get-details', [BasicProfileController::class, 'getDetails']);
         Route::post('change-password', [BasicProfileController::class, 'changePassword']);
     });
