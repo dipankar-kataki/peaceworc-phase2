@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Caregiver\Status;
 
 use App\Http\Controllers\Controller;
 use App\Models\CaregiverStatusInformation;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class StatusInformationController extends Controller
 {
+    use ApiResponse;
     public function profileCompletionStatus(){
         $status = CaregiverStatusInformation::where('user_id', Auth::user()->id)->first();
         if($status == null){

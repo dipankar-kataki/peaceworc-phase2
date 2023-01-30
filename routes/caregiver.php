@@ -10,6 +10,7 @@ use App\Http\Controllers\Caregiver\Job\QuickCallController;
 use App\Http\Controllers\Caregiver\Location\LocationController;
 use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
 use App\Http\Controllers\Caregiver\Registration\ProfileRegistrationController;
+use App\Http\Controllers\Caregiver\Status\StatusInformationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -50,7 +51,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
 
-    Route::group(['prefix' => 'information'], function(){
+    Route::group(['prefix' => 'status'], function(){
         Route::get('profile-completion-status', [StatusInformationController::class, 'profileCompletionStatus']);
     });
 
