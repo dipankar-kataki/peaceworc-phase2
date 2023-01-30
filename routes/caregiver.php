@@ -49,6 +49,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('change-password', [BasicProfileController::class, 'changePassword']);
     });
 
+
+    Route::group(['prefix' => 'information'], function(){
+        Route::get('profile-completion-status', [StatusInformationController::class, 'profileCompletionStatus']);
+    });
+
     
 
     Route::group(['prefix' => 'job'], function(){

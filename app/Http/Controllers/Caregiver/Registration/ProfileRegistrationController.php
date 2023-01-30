@@ -58,7 +58,7 @@ class ProfileRegistrationController extends Controller
 
                     if($create){
                         try{
-                            CaregiverStatusInformation::where('user_id', Auth::user()->id)->update([
+                            CaregiverStatusInformation::create([
                                 'user_id' => Auth::user()->id,
                                 'is_basic_info_added' => 1
                             ]);
@@ -66,7 +66,7 @@ class ProfileRegistrationController extends Controller
                             Log::error('Oops! Something Went Wrong. Registration Failed', $e->getMessage());
                         }
                         
-                        return $this->success('Great! Registration Successfull.', null, null, 201);
+                        return $this->success('Great! Basic Information Added Successfully.', null, null, 201);
                     }else{
                         return $this->error('Oops! Something Went Wrong. Registration Failed.', null, null, 500);
                     }
@@ -80,6 +80,24 @@ class ProfileRegistrationController extends Controller
 
 
     public function optionalinformation(Request $request){
+        try{
+            $update = CaregiverProfileRegistration::where('user_id', Auth::user()->id)->update([
+                'job_type' => $request->job_type,
+                'experience' => $request->experience
+            ]);
 
+            if($update){
+                try{
+                    CaregiverStatusInformation::where( 'user_id', Auth::user()->id,)->update([
+                        'is_optional_info_added' => 1
+                    ]);
+                }catch(\Exception $e){
+                    Log::error('Oops! Something Went Wrong. Registration Failed', $e->getMessage());
+                }
+            }
+            return $this->success('Great! Optional Information Added Successfully.', null, null, 201);
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong.', null, null, 500);
+        }
     }
 }
