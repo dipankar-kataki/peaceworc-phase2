@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Caregiver\Profile;
 
 use App\Http\Controllers\Controller;
+use App\Models\CaregiverCertificate;
+use App\Models\CaregiverEducation;
 use App\Models\CaregiverProfileRegistration;
 use App\Models\User;
 use App\Traits\ApiResponse;
@@ -59,10 +61,128 @@ class BasicProfileController extends Controller
 
     public function getDetails(){
         try{
-            $get_details = CaregiverProfileRegistration::where('user_id', Auth::user()->id)->first();
-            return $this->success('Great! Profile Fetched Successfully.', $get_details, null, 200);
+            $get_details = CaregiverProfileRegistration::with('user:id,email')
+                            ->where('user_id', Auth::user()->id)
+                            ->select('user_id','photo','bio','phone','dob','gender','experience','care_completed')
+                            ->first();
+            $get_education = CaregiverEducation::where('user_id', Auth::user()->id)->get();
+            $get_certificate = CaregiverEducation::where('user_id', Auth::user()->id)->get();
+
+            $details = [
+                'basic_info' => $get_details,
+                'education' => $get_education,
+                'certificate' => $get_certificate
+            ];
+            return $this->success('Great! Profile Fetched Successfully.', $details, null, 200);
         }catch(\Exception $e){
             return $this->error('Oops! Something Went Wrong.', null, null, 500);
+        }
+    }
+
+    public function addBio(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'bio' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+        }else{
+            try{
+                CaregiverProfileRegistration::where('user_id', Auth::user()->id)->update([
+                    'bio' => $request->bio
+                ]);
+                return $this->success('Great! Bio Added Successfully.', null, null, 201);
+            }catch(\Exception $e){
+                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            }
+        }
+        
+    }
+
+    public function addEducation(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'school_or_university' => 'required',
+            'degree' => 'required',
+            'start_year' => 'required',
+            'end_year' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+        }else{
+            try{
+                CaregiverEducation::create([
+                    'user_id' => Auth::user()->id,
+                    'school_or_university' => $request->school_or_university,
+                    'degree' => $request->degree,
+                    'start_year' => $request->start_year,
+                    'end_year' => $request->end_year
+                ]);
+                return $this->success('Great! Education Added Successfully.', null, null, 201);
+            }catch(\Exception $e){
+                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            }
+        }
+        
+    }
+
+    public function addCertificate(Request $request){
+        $validator = Validator::make($request->all(), [
+            'certificate_or_course' => 'required',
+            'start_year' => 'required',
+            'end_year' => 'required',
+            'document' => 'required|image|mimes:jpg,png,jpeg|max:1048',
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+        }else{
+            try{
+
+                if ($request->hasFile('document')) {
+                    $image = time() . '.' . $request->document->extension();
+                    $request->document->move(public_path('Caregiver/Uploads/Cerificate/'), $image);
+                    $imageName = 'Caregiver/Uploads/Cerificate/' . $image;
+                }
+
+                CaregiverCertificate::create([
+                    'user_id' => Auth::user()->id,
+                    'certificate_or_course' => $request->certificate_or_course,
+                    'start_year' => $request->start_year,
+                    'end_year' => $request->end_year,
+                    'document' => $imageName
+                ]);
+                return $this->success('Great! Certificate Added Successfully.', null, null, 201);
+            }catch(\Exception $e){
+                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            }
+        }
+    }
+
+    public function changePhoto(Request $request){
+        $validator = Validator::make($request->all(), [
+            'photo' => 'required|image|mimes:jpg,png,jpeg|max:1048',
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+        }else{
+            try{
+                if ($request->hasFile('photo')) {
+                    $image = time() . '.' . $request->photo->extension();
+                    $request->photo->move(public_path('Caregiver/Uploads/Profile/image/'), $image);
+                    $imageName = 'Caregiver/Uploads/Profile/image/' . $image;
+                }
+
+                CaregiverProfileRegistration::where('user_id', Auth::user()->id)->update([
+                    'photo' => $imageName
+                ]);
+                return $this->success('Great! Profile Photo Updated Successfully.', $imageName, null, 201);
+            }catch(\Exception $e){
+                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            }
         }
     }
 }

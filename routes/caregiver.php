@@ -48,6 +48,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('optional-information', [ProfileRegistrationController::class, 'optionalinformation']);
         Route::get('get-details', [BasicProfileController::class, 'getDetails']);
         Route::post('change-password', [BasicProfileController::class, 'changePassword']);
+
+        Route::post('add-bio', [BasicProfileController::class, 'addBio']);
+        Route::post('add-education', [BasicProfileController::class, 'addEducation']);
+        Route::post('add-certificate', [BasicProfileController::class, 'addCertificate']);
+
+        Route::post('change-photo', [BasicProfileController::class, 'changePhoto']);
     });
 
 
