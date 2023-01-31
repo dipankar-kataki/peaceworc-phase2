@@ -8,7 +8,6 @@ use App\Mail\SendEmailVerificationOTPMail;
 use App\Models\CaregiverProfileRegistration;
 use App\Models\User;
 use App\Traits\ApiResponse;
-use App\Traits\PushNotification;
 use App\Traits\WelcomeNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

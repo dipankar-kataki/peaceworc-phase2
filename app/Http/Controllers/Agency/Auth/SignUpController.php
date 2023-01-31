@@ -8,7 +8,6 @@ use App\Mail\SendEmailVerificationOTPMail;
 use App\Models\AgencyProfileRegistration;
 use App\Models\User;
 use App\Traits\ApiResponse;
-use App\Traits\PushNotification;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +19,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SignUpController extends Controller
 {
-    use ApiResponse, PushNotification;
+    use ApiResponse;
 
     public function checkEmailExists(Request $request){
         $validator = Validator::make($request->all(),[
