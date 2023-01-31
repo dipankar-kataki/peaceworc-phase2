@@ -27,7 +27,7 @@ class SignUpController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Opps! Validation Error. '.$validator->errors()->first(), null, null, 400);
+            return $this->error('Opps!'.$validator->errors()->first(), null, null, 400);
         }else{
             try{
                 // dispatch(function () {
@@ -59,7 +59,7 @@ class SignUpController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Opps! Validation Error. '.$validator->errors()->first(), null, null, 400);
+            return $this->error('Opps!'.$validator->errors()->first(), null, null, 400);
         }else{
             $otp = $request->otp;
             if(Cache::get('otp') != $otp){

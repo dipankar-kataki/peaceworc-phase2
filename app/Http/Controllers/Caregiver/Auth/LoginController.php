@@ -21,7 +21,7 @@ class LoginController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Opps! Validation Error. '.$validator->errors()->first(), null, null, 400);
+            return $this->error('Opps!'.$validator->errors()->first(), null, null, 400);
         }else{
             try{
                 if ( ! Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => Role::Caregiver]) ){
