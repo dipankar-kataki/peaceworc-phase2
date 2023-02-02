@@ -44,16 +44,29 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::group(['prefix' => 'profile'], function(){
-        Route::post('basic-information', [ProfileRegistrationController::class, 'basicinformation']);
-        Route::post('optional-information', [ProfileRegistrationController::class, 'optionalinformation']);
-        Route::get('get-details', [BasicProfileController::class, 'getDetails']);
-        Route::post('change-password', [BasicProfileController::class, 'changePassword']);
 
-        Route::post('add-bio', [BasicProfileController::class, 'addBio']);
-        Route::post('add-education', [BasicProfileController::class, 'addEducation']);
-        Route::post('add-certificate', [BasicProfileController::class, 'addCertificate']);
+        Route::get('get-details', [BasicProfileController::class, 'getDetails']);
+
+        Route::group(['prefix' => 'registration'], function(){
+            Route::post('basic-information', [ProfileRegistrationController::class, 'basicinformation']);
+            Route::post('optional-information', [ProfileRegistrationController::class, 'optionalinformation']);
+        });
+
+        Route::group(['prefix' => 'bio'], function(){
+            Route::post('add', [BasicProfileController::class, 'addBio']);
+        });
+
+        Route::group(['prefix' => 'education'],function(){
+            Route::post('add', [BasicProfileController::class, 'addEducation']);
+        });
+
+        Route::group(['prefix' => 'certificate'],function(){
+            Route::post('add', [BasicProfileController::class, 'addCertificate']);
+        });
 
         Route::post('change-photo', [BasicProfileController::class, 'changePhoto']);
+
+        Route::post('change-password', [BasicProfileController::class, 'changePassword']);
     });
 
 
