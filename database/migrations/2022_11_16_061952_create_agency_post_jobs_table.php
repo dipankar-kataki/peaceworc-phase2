@@ -23,12 +23,12 @@ class CreateAgencyPostJobsTable extends Migration
             $table->string('start_time',50);
             $table->string('end_time',50);
             $table->string('amount',50);
-            $table->string('address');
-            $table->string('description');
-            $table->string('medical_history')->nullable();
-            $table->string('experties')->nullable();
-            $table->string('other_requirements')->nullable();
-            $table->string('check_list')->nullable();
+            $table->longText('address');
+            $table->longText('description');
+            $table->longText('medical_history')->nullable();
+            $table->longText('experties')->nullable();
+            $table->longText('other_requirements')->nullable();
+            $table->longText('check_list')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
