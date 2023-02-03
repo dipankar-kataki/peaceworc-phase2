@@ -66,7 +66,7 @@ class BasicProfileController extends Controller
                             ->select('user_id','photo','bio','phone','dob','gender','experience','care_completed')
                             ->first();
             $get_education = CaregiverEducation::where('user_id', Auth::user()->id)->get();
-            $get_certificate = CaregiverEducation::where('user_id', Auth::user()->id)->get();
+            $get_certificate = CaregiverCertificate::where('user_id', Auth::user()->id)->get();
 
             $details = [
                 'basic_info' => $get_details,
