@@ -143,4 +143,28 @@ class AuthorizeOfficerController extends Controller
         
         
     }
+
+    public function editAuthorizeOfficer(Request $request){
+        if(!isset($_GET['user_id'])){
+            return $this->error('Oops! Something Went Wrong. Failed To Edit Authorize Officer.', null, null, 500);
+        }else{
+            if($_GET['user_id'] == null){
+                return $this->error('Oops! Something Went Wrong. Invalid Request', null, null, 500);
+            }else{
+                try{
+
+                    $auth_officer = AuthorizeOfficer::where('id',$_GET['user_id'])->first();
+                    $auth_officer->update([
+                        'name' => $request->name != null ? $request->name : $auth_officer->name,
+                        'email' => $request->email != null ? $request->email : $auth_officer->email,
+                        'phone' => $request->phone != null ? $request->phone : $auth_officer->phone,
+                        'role' => $request->role != null ? $request->role : $auth_officer->role,
+                    ]);
+                    return $this->success('Great! Authorize officer Updated Successfully.', null, null, 200);
+                }catch(\Exception $e){
+                    return $this->error('Oops! Failed To Edit Authorize Officer. Something Went Wrong.', null, null, 500);
+                }
+            }
+        }
+    }
 }

@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('create-officer', [AuthorizeOfficerController::class, 'createAuthorizeOfficer']);
         Route::get('get-officer', [AuthorizeOfficerController::class, 'authorizeOfficer']);
         Route::get('delete-officer', [AuthorizeOfficerController::class, 'deleteAuthorizeOfficer']);
+        Route::post('edit-officer', [AuthorizeOfficerController::class, 'editAuthorizeOfficer']);
     });
 
     Route::group(['prefix' => 'information'], function(){
