@@ -69,6 +69,7 @@ class QuickCallController extends Controller
                     try{
                         $get_jobs = AgencyPostJob::where('id', $_GET['id'])->where('status', JobStatus::QuickCall)->first();
                         $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $get_jobs->user_id)->first();
+                        $job_list = [];
                             $details = [
                                 'job_id' => $get_jobs->id,
                                 'company_name' => $job_owner->company_name,
@@ -95,8 +96,8 @@ class QuickCallController extends Controller
                                 'created_at' => $get_jobs->created_at->diffForHumans(),
                 
                             ];
-                
-                        return $this->success('Great! Job Fetched Successfully', $details, null, 200);
+                        array_push($job_list, $details);
+                        return $this->success('Great! Job Fetched Successfully', $job_list, null, 200);
                     }catch(\Exception $e){
                         return $this->error('Oops! Something Went Wrong.', null, null, 500);
                     }
