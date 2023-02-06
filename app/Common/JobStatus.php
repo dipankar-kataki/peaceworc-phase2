@@ -13,4 +13,6 @@ Class JobStatus{
     const BiddingEnded = 7;
     const QuickCall = 8;
     const OnHold = 9;
+    const JobAccepted = 10;
+    const JobCancelled = 11;
 }

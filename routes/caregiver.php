@@ -4,8 +4,10 @@ use App\Http\Controllers\Caregiver\Auth\LoginController;
 use App\Http\Controllers\Caregiver\Auth\LogOutController;
 use App\Http\Controllers\Caregiver\Auth\SignUpController;
 use App\Http\Controllers\Caregiver\Bidding\BiddingController;
+use App\Http\Controllers\Caregiver\Job\AcceptJobController;
 use App\Http\Controllers\Caregiver\Job\GetBiddingResultsController;
 use App\Http\Controllers\Caregiver\Job\JobController;
+use App\Http\Controllers\Caregiver\Job\OngoingJobController;
 use App\Http\Controllers\Caregiver\Job\QuickCallController;
 use App\Http\Controllers\Caregiver\Location\LocationController;
 use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
@@ -83,6 +85,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('get-all-my-bidded-jobs', [JobController::class, 'getAllMyBiddedJobs']);
 
         Route::get('quick-call', [QuickCallController::class,'getQuickCallJobs']);
+
+        Route::post('accept', [AcceptJobController::class, 'acceptJob']);
+        Route::get('ongoing-job', [OngoingJobController::class, 'ongoingJob']);
 
         Route::group(['prefix' => 'bidding'], function(){
             Route::post('submit-bid', [BiddingController::class, 'submitBid']);
