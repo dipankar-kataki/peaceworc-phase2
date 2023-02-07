@@ -15,4 +15,5 @@ Class JobStatus{
     const OnHold = 9;
     const JobAccepted = 10;
     const JobCancelled = 11;
+    const JobExpired = 12;
 }

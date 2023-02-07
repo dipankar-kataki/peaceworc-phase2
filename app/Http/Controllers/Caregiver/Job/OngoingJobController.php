@@ -29,6 +29,7 @@ class OngoingJobController extends Controller
         
         
                         $details = [
+                            'job_id' => $job->job_id,
                             'agency_name' => $agency->company_name,
                             'agency_photo' => $agency->photo,
                             'title' => $job->job->title,
@@ -75,6 +76,7 @@ class OngoingJobController extends Controller
                         }
         
                         $details = [
+                            'job_id' => $job->job_id,
                             'agency_name' => $agency->company_name,
                             'agency_photo' => $agency->photo,
                             'title' => $job->job->title,
