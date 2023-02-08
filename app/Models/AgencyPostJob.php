@@ -79,6 +79,10 @@ class AgencyPostJob extends Model
             return 'Quick Call';
         }else if($value == 9){
             return 'OnHold.';
+        }else if($value == 10){
+            return 'Upcoming.';
+        }else if($value == 11){
+            return 'Cancelled.';
         }
     }
 

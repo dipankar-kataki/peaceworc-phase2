@@ -23,21 +23,30 @@ class StartJobController extends Controller
         if($validator->fails()){
             return $this->error('Oops! Something Went Wrong. Failed To Start Job', null, null, 500);
         }else{
+        
             try{
-                $check_if_job_exists_inside_schedule = AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->where('status', JobStatus::JobAccepted)->exists();
-                if($check_if_job_exists_inside_schedule){
-                    AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->update([
-                        'status' => JobStatus::OnGoing
-                    ]);
 
-                    AgencyPostJob::where('id', $request->job_id)->update([
-                        'status' => JobStatus::OnGoing
-                    ]);
+                $check_if_job_is_ongoing = AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->where('status', JobStatus::OnGoing)->exists();
 
-                    return $this->success('Great! Job Started Successfully', null, null, 201);
+                if($check_if_job_is_ongoing ){
+                    return $this->error('Oops! Failed To Start Job. One job is already in an ongoing state', null, null, 500);
                 }else{
-                    return $this->error('Oops! Something Went Wrong. Failed To Start Job', null, null, 500);
+                    $check_if_job_exists_inside_schedule = AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->where('status', JobStatus::JobAccepted)->exists();
+                    if($check_if_job_exists_inside_schedule){
+                        AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->update([
+                            'status' => JobStatus::OnGoing
+                        ]);
+    
+                        AgencyPostJob::where('id', $request->job_id)->update([
+                            'status' => JobStatus::OnGoing
+                        ]);
+    
+                        return $this->success('Great! Job Started Successfully', null, null, 201);
+                    }else{
+                        return $this->error('Oops! Something Went Wrong. Failed To Start Job', null, null, 500);
+                    }
                 }
+                
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong. Failed To Start Job', null, null, 500);
             }

@@ -10,6 +10,7 @@ use App\Http\Controllers\Caregiver\Job\JobController;
 use App\Http\Controllers\Caregiver\Job\OngoingJobController;
 use App\Http\Controllers\Caregiver\Job\QuickCallController;
 use App\Http\Controllers\Caregiver\Job\StartJobController;
+use App\Http\Controllers\Caregiver\Job\UpcomingController;
 use App\Http\Controllers\Caregiver\Location\LocationController;
 use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
 use App\Http\Controllers\Caregiver\Registration\ProfileRegistrationController;
@@ -85,11 +86,26 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('get-single-job-for-bidded', [JobController::class, 'getSingleJobForBidding']);
         Route::get('get-all-my-bidded-jobs', [JobController::class, 'getAllMyBiddedJobs']);
 
-        Route::get('quick-call', [QuickCallController::class,'getQuickCallJobs']);
+        Route::group(['prefix' => 'quick-call'], function(){
+            Route::get('get', [QuickCallController::class,'getQuickCallJobs']);
+        });
 
-        Route::post('accept', [AcceptJobController::class, 'acceptJob']);
-        Route::get('ongoing-job', [OngoingJobController::class, 'ongoingJob']);
-        Route::post('start-job', [StartJobController::class, 'startJob']);
+        Route::group(['prefix' => 'accept-job'], function(){
+            Route::post('accept', [AcceptJobController::class, 'acceptJob']);
+        });
+
+        Route::group(['prefix' => 'upcoming'], function(){
+            Route::get('get', [UpcomingController::class, 'getUpcomingJob']);
+        });
+        
+        Route::group(['prefix' => 'ongoing'], function(){
+            Route::get('get', [OngoingJobController::class, 'ongoingJob']);
+        });
+       
+        Route::group(['prefix' => 'start-job'], function(){
+            Route::post('start', [StartJobController::class, 'startJob']);
+
+        });
 
         Route::group(['prefix' => 'bidding'], function(){
             Route::post('submit-bid', [BiddingController::class, 'submitBid']);
