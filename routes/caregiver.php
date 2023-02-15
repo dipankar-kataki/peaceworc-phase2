@@ -5,6 +5,7 @@ use App\Http\Controllers\Caregiver\Auth\LogOutController;
 use App\Http\Controllers\Caregiver\Auth\SignUpController;
 use App\Http\Controllers\Caregiver\Bidding\BiddingController;
 use App\Http\Controllers\Caregiver\Job\AcceptJobController;
+use App\Http\Controllers\Caregiver\Job\CompleteJobController;
 use App\Http\Controllers\Caregiver\Job\GetBiddingResultsController;
 use App\Http\Controllers\Caregiver\Job\JobController;
 use App\Http\Controllers\Caregiver\Job\OngoingJobController;
@@ -105,6 +106,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::group(['prefix' => 'start-job'], function(){
             Route::post('start', [StartJobController::class, 'startJob']);
 
+        });
+
+        Route::group(['prefix' => 'complete-job'], function(){
+            Route::post('complete', [CompleteJobController::class, 'completeJob']);
+            Route::get('get', [CompleteJobController::class, 'getCompleteJob']);
         });
 
         Route::group(['prefix' => 'bidding'], function(){

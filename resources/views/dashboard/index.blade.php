@@ -282,7 +282,7 @@
                                     data-colors='["--vz-light", "--vz-success", "--vz-primary"]'
                                     style="height: 269px" dir="ltr"></div>
 
-                                <div class="px-2 py-2 mt-1">
+                                {{-- <div class="px-2 py-2 mt-1">
                                     <p class="mb-1">Canada <span class="float-end">75%</span></p>
                                     <div class="progress mt-2" style="height: 6px;">
                                         <div class="progress-bar progress-bar-striped bg-primary"
@@ -309,7 +309,7 @@
                                             aria-valuenow="82" aria-valuemin="0"
                                             aria-valuemax="82"></div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <!-- end card body -->
                         </div>
