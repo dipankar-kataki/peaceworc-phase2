@@ -5,6 +5,11 @@ use App\Http\Controllers\Agency\Auth\LoginController;
 use App\Http\Controllers\Agency\Auth\LogOutController;
 use App\Http\Controllers\Agency\Auth\SignUpController;
 use App\Http\Controllers\Agency\AuthorizeOfficer\AuthorizeOfficerController;
+use App\Http\Controllers\Agency\Job\Accepted\OngoingJobController;
+use App\Http\Controllers\Agency\Job\AcceptedJob\JobOngoingController;
+use App\Http\Controllers\Agency\Job\AcceptedJob\UpcomingJobController;
+use App\Http\Controllers\Agency\Job\CareType\CareTypeController;
+use App\Http\Controllers\Agency\Job\CompletedJob\CompletedJobController;
 use App\Http\Controllers\Agency\Job\PostJobController;
 use App\Http\Controllers\Agency\Owner\OwnerProfileController;
 use App\Http\Controllers\Agency\Registration\ProfileRegistrationController;
@@ -41,6 +46,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('edit-phone', [OwnerProfileController::class, 'editPhone']);
         Route::post('change-password', [OwnerProfileController::class, 'changePassword']);
     });
+    
 
     Route::group(['prefix' => 'business-profile'], function(){
         Route::post('add-business-info', [ProfileRegistrationController::class, 'addBusinessInfo']);
@@ -59,11 +65,25 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'information'], function(){
         Route::get('status', [InformationStatusController::class, 'informationStatus']);
     });
+    
 
     Route::group(['prefix' => 'job'], function(){
         Route::post('create', [PostJobController::class, 'createJob']);
         Route::get('get-job', [PostJobController::class, 'getJob']);
         Route::get('delete-job', [PostJobController::class, 'deleteJob']);
+
+        Route::group(['prefix' => 'care-types'], function(){
+            Route::get('get', [CareTypeController::class, 'getCareTypes']);
+        });
+
+        Route::group(['prefix' => 'accepted-job'],function(){
+            Route::get('ongoing', [JobOngoingController::class, 'getOngoingJob']);
+            Route::get('upcoming', [UpcomingJobController::class, 'getUpcomingJob']);
+        });
+
+        Route::group(['prefix' => 'completed-job'], function(){
+            Route::get('get', [CompletedJobController::class, 'getCompletedJob']);
+        });
     });
     
     Route::post('logout', [LogOutController::class,'logout']);

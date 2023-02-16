@@ -16,6 +16,10 @@ class AcceptJob extends Model
         return $this->belongsTo(AgencyPostJob::class, 'job_id', 'id');
     }
 
+    public function user(){
+        $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
 
     public function getStatusAttribute($value){
         if($value == 0){

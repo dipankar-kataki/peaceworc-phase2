@@ -59,4 +59,8 @@ class User extends Authenticatable
     public function agencyProfile(){
         return $this->hasOne(AgencyProfileRegistration::class, 'user_id', 'id');
     }
+
+    public function caregiverProfile(){
+        return $this->hasOne(CaregiverProfileRegistration::class,'user_id');
+    }
 }
