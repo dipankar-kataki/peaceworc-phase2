@@ -19,7 +19,6 @@ class JobOngoingController extends Controller
         try{
             $get_upcoming_job = AgencyPostJob::where('user_id', Auth::user()->id)->where('status', JobStatus::OnGoing)->latest()->get();
             $all_details = [];
-            $details = [];
             foreach($get_upcoming_job as $job){
                 $check_accepted_by = AcceptJob::where('job_id', $job->id)->where('status', JobStatus::OnGoing)->latest()->get();
 
