@@ -29,7 +29,7 @@ class CompleteJobController extends Controller
 
                 $details = [
                     'job_id' => $job->job_id,
-                    'agency_name' => $agency->company_name,
+                    'agency_name' => ucwords($agency->company_name),
                     'agency_photo' => $agency->photo,
                     'agency_address' => $job->job->short_address,
                     'title' => $job->job->title,
@@ -57,7 +57,7 @@ class CompleteJobController extends Controller
                 
             return $this->success('Great! Job Fetched Successfully', $all_details, null, 200);
         }catch(\Exception $e){
-            return $this->error('Oops! Something Went Wrong. Failed To Fetch Job ', null, null, 500);
+            return $this->error('Oops! Something Went Wrong. Failed To Fetch Job '. $e->getMessage(), null, null, 500);
         }
        
     }

@@ -48,7 +48,7 @@ class UpcomingController extends Controller
             
                             $details = [
                                 'job_id' => $job->job_id,
-                                'agency_name' => $agency->company_name,
+                                'agency_name' => ucwords($agency->company_name),
                                 'agency_photo' => $agency->photo,
                                 'agency_address' => $job->job->short_address,
                                 'title' => $job->job->title,
@@ -97,7 +97,7 @@ class UpcomingController extends Controller
             
                             $details = [
                                 'job_id' => $get_job->job_id,
-                                'agency_name' => $agency->company_name,
+                                'agency_name' => ucwords($agency->company_name),
                                 'agency_photo' => $agency->photo,
                                 'agency_address' => $get_job->job->short_address,
                                 'title' => $get_job->job->title,

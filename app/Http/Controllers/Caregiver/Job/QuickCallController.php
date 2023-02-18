@@ -32,7 +32,7 @@ class QuickCallController extends Controller
                             $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $job->user_id)->first();
                             $details = [
                                 'job_id' => $job->id,
-                                'company_name' => $job_owner->company_name,
+                                'company_name' => ucwords($job_owner->company_name),
                                 'company_photo' => $job_owner->photo,
                                 'job_title' => $job->title,
                                 'care_type' => $job->care_type,
@@ -72,7 +72,7 @@ class QuickCallController extends Controller
                         $job_list = [];
                             $details = [
                                 'job_id' => $get_jobs->id,
-                                'company_name' => $job_owner->company_name,
+                                'company_name' => ucwords($job_owner->company_name),
                                 'company_photo' => $job_owner->photo,
                                 'job_title' => $get_jobs->title,
                                 'care_type' => $get_jobs->care_type,
