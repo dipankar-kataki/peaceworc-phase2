@@ -42,7 +42,7 @@ class SignUpController extends Controller
                 return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 200);
             }catch(\Exception $e){
                 // Log::error('Email Verification Mail Error', $e);
-                return $this->error('Oops!. Something Went Wrong.'. $e, null, null, 200);
+                return $this->error('Oops!. Something Went Wrong.', null, null, 200);
             }
             
         }
