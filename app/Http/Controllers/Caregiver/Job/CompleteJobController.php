@@ -19,7 +19,7 @@ class CompleteJobController extends Controller
 
     public function getCompleteJob(){
         try{
-            $get_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::Completed)->get();
+            $get_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::Completed)->latest()->get();
 
             $all_details = [];
             
@@ -50,10 +50,10 @@ class CompleteJobController extends Controller
                     'long' => $job->job->long,
                     'status' => $job->job->status,
                 ];
+                array_push($all_details, $details);
                 
             }
                 
-            array_push($all_details, $details);
                 
             return $this->success('Great! Job Fetched Successfully', $all_details, null, 200);
         }catch(\Exception $e){
