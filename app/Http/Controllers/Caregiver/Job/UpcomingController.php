@@ -69,7 +69,7 @@ class UpcomingController extends Controller
                        
                         return $this->success('Great! Job Fetched Successfully', $all_details, null, 200);
                     }catch(\Exception $e){
-                        return $this->error('Oops! Something Went Wrong. Failed To Fetch Job '.$e, null, null, 500);
+                        return $this->error('Oops! Something Went Wrong. Failed To Fetch Job ', null, null, 500);
                     }
                 }else{
                     try{
@@ -123,7 +123,7 @@ class UpcomingController extends Controller
 
                         return $this->success('Great! Job Fetched Successfully', $all_details, null, 200);
                     }catch(\Exception $e){
-                        return $this->error('Oops! Something Went Wrong. Failed To Fetch Job '.$e, null, null, 500);
+                        return $this->error('Oops! Something Went Wrong. Failed To Fetch Job ', null, null, 500);
                     }
                 }
             }

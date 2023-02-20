@@ -33,7 +33,7 @@ class UpcomingJobController extends Controller
                         'job_accepted_by' => [
                             'user_id' => $get_caregiver_details->id,
                             'name' => $get_caregiver_details->name,
-                            // 'photo' => $get_caregiver_details->caregiverProfile->photo
+                            'photo' => $get_caregiver_details->caregiverProfile->photo
                         ],
                         'title' => $job->title,
                         'care_type' => $job->care_type,
@@ -58,7 +58,7 @@ class UpcomingJobController extends Controller
             }
             return $this->success('Great! Upcoming Jobs Fetched Successfully.',  $all_details, null, 200);
         }catch(\Exception $e){
-            return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);
+            return $this->error('Oops! Something Went Wrong.', null, null, 500);
         }
         
     }
