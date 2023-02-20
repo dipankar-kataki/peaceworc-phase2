@@ -40,7 +40,7 @@ class AcceptJobController extends Controller
             }
             
         }catch(\Exception $e){
-            return $this->error('Oops! Something Went Wrong. Failed To Accept job.', null, null, 500);
+            return $this->error('Oops! Something Went Wrong. Failed To Accept job.'.$e, null, null, 500);
         }
            
     }
