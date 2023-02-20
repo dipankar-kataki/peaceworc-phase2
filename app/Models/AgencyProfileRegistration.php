@@ -19,7 +19,7 @@ class AgencyProfileRegistration extends Model
 
     public function getStatusAttribute($value){
         if($value == 1){
-            return 'OPEN';
+            return 'ACTIVE';
         }else if($value == 2){
             return 'SUSPENDED';
         }else if($value == 3){

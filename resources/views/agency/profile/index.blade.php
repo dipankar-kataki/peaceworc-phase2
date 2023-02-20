@@ -107,8 +107,8 @@
                                     <div class="card-body">
                                         <h5 class="card-title mb-5">Complete Your Profile</h5>
                                         <div class="progress animated-progress custom-progress progress-label">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="label">80%</div>
+                                            <div class="progress-bar bg-danger" role="progressbar" style="width: {{$completion_rate}}%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="label">{{$completion_rate}}%</div>
                                             </div>
                                         </div>
                                     </div>

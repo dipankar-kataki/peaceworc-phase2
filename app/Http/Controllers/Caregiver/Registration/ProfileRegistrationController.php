@@ -72,7 +72,7 @@ class ProfileRegistrationController extends Controller
                     }
                 }
             }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                return $this->error('Oops! Something Went Wrong.'.$e->getMessage(), null, null, 500);
             }
             
         }

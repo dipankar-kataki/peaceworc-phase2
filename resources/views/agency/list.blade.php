@@ -49,8 +49,8 @@
                                     <td>{{$item->tax_id_or_ein_id}}</td>
                                     <td>{{$item->created_at->format('M-d, Y')}}</td>
                                     <td>
-                                        @if ($item->status == 'OPEN')
-                                            <span class="badge badge-soft-success fs-14">OPEN</span>
+                                        @if ($item->status == 'ACTIVE')
+                                            <span class="badge badge-soft-success fs-14">ACTIVE</span>
                                         @elseif($item->status == 'SUSPENDED')
                                             <span class="badge badge-soft-warning fs-14">SUSPENDED</span>
                                         @elseif($item->status == 'DELETED')
@@ -62,7 +62,7 @@
                                                 <i class="ri-more-fill align-middle"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a href="{{route('admin.get.agency.list', ['id' => $item->id ])}}" class="dropdown-item"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> View Profile</a></li>
+                                                <li><a href="{{route('admin.get.agency.list', ['id' => $item->user_id ])}}" class="dropdown-item"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> View Profile</a></li>
                                                 <li>
                                                     <a class="dropdown-item remove-item-btn">
                                                         <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete
