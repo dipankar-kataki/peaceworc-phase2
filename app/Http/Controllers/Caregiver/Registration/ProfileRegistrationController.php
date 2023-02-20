@@ -49,7 +49,7 @@ class ProfileRegistrationController extends Controller
                         'user_id' => Auth::user()->id,
                         'photo' => $imageName,
                         'phone' => $request->phone,
-                        'dob' =>  Carbon::parse($request->dob)->format('Y-m-d'),
+                        'dob' =>  Carbon::createFromFormat('m-d-Y',$request->dob)->format('Y-m-d'),
                         'gender' => $request->gender,
                         'ssn' => $request->ssn,
                         'full_address' => $request->full_address,
