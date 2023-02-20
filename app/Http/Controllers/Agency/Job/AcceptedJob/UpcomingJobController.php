@@ -26,13 +26,14 @@ class UpcomingJobController extends Controller
                 foreach($check_accepted_by as $accepted_by){
 
                     $get_caregiver_details = User::with('caregiverProfile')->where('id', $accepted_by->user_id)->first();
+                    
 
                     $details = [
                         'job_id' => $job->id,
                         'job_accepted_by' => [
                             'user_id' => $get_caregiver_details->id,
                             'name' => $get_caregiver_details->name,
-                            'photo' => $get_caregiver_details->caregiverProfile->photo
+                            // 'photo' => $get_caregiver_details->caregiverProfile->photo
                         ],
                         'title' => $job->title,
                         'care_type' => $job->care_type,
