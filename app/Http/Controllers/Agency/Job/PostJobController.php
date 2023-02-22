@@ -84,7 +84,7 @@ class PostJobController extends Controller
                                 'experties' => json_encode($request->experties),
                                 'other_requirements' => json_encode($request->other_requirements),
                                 'check_list' => json_encode($request->check_list),
-                                'status' => $status
+                                'status' => $status,
                             ]);
 
                             return $this->success('Great! Job Posted Successfully', null, null, 201);
@@ -108,7 +108,8 @@ class PostJobController extends Controller
         }else{
             if($_GET['id'] == 0){
                 $job_details = AgencyPostJob::where('user_id', Auth::user()->id)
-                            ->where('status',JobStatus::Open)
+                            ->where('payment_status', 1)
+                            ->orWhere('status',JobStatus::Open)
                             ->orWhere('status', JobStatus::QuickCall)
                             ->orWhere('status', JobStatus::BiddingStarted)
                             ->orWhere('status', JobStatus::BiddingEnded)

@@ -12,6 +12,7 @@ use App\Http\Controllers\Agency\Job\CareType\CareTypeController;
 use App\Http\Controllers\Agency\Job\CompletedJob\CompletedJobController;
 use App\Http\Controllers\Agency\Job\PostJobController;
 use App\Http\Controllers\Agency\Owner\OwnerProfileController;
+use App\Http\Controllers\Agency\Payments\AgencyPaymentController;
 use App\Http\Controllers\Agency\Registration\ProfileRegistrationController;
 use App\Http\Controllers\Agency\Status\InformationStatusController;
 use Illuminate\Http\Request;
@@ -84,6 +85,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::group(['prefix' => 'completed-job'], function(){
             Route::get('get', [CompletedJobController::class, 'getCompletedJob']);
         });
+    });
+
+    Route::group(['prefix' => 'payment'], function(){
+        Route::post('save-payment-details', [AgencyPaymentController::class, 'savePaymentDetails']);
     });
     
     Route::post('logout', [LogOutController::class,'logout']);
