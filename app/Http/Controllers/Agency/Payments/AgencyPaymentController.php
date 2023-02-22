@@ -7,6 +7,7 @@ use App\Models\AgencyPayment;
 use App\Models\AgencyPostJob;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AgencyPaymentController extends Controller
@@ -15,7 +16,6 @@ class AgencyPaymentController extends Controller
 
     public function savePaymentDetails(Request $request){
         $validator = Validator::make($request->all(),[
-            'agency_id' => 'required',
             'job_id' => 'required',
             'amount' => 'required',
             'customer_id' => 'required',
@@ -40,7 +40,7 @@ class AgencyPaymentController extends Controller
 
 
                 $create = AgencyPayment::create([
-                    'agency_id' => $request->agency_id,
+                    'agency_id' => Auth::user()->id,
                     'job_id' => $request->job_id,
                     'amount' => $request->amount,
                     'customer_id' => $request->customer_id,

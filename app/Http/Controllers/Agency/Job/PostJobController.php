@@ -66,7 +66,7 @@ class PostJobController extends Controller
     
                         try{
                             
-                            AgencyPostJob::create([
+                            $create = AgencyPostJob::create([
                                 'user_id' => Auth::user()->id,
                                 'title' => $request->title,
                                 'care_type' => $request->care_type,
@@ -87,7 +87,14 @@ class PostJobController extends Controller
                                 'status' => $status,
                             ]);
 
-                            return $this->success('Great! Job Posted Successfully', null, null, 201);
+                            if($create){
+                                $get_job_details = AgencyPostJob::where('user_id', Auth::user()->id)->latest()->first();
+                                return $this->success('Great! Job Posted Successfully', $get_job_details, null, 200);
+
+                            }else{
+                                return $this->error('Oops! Something Went Wrong. Failed To Post Job.', null, null, 500);
+                            }
+
 
                         }catch(\Exception $e){
                             return $this->error('Oops! Something Went Wrong.', null, null, 500);
