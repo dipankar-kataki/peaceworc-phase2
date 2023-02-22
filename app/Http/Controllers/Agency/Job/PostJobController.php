@@ -116,10 +116,6 @@ class PostJobController extends Controller
             if($_GET['id'] == 0){
                 $job_details = AgencyPostJob::where('user_id', Auth::user()->id)
                             ->where('payment_status', 1)
-                            ->orWhere('status',JobStatus::Open)
-                            ->orWhere('status', JobStatus::QuickCall)
-                            ->orWhere('status', JobStatus::BiddingStarted)
-                            ->orWhere('status', JobStatus::BiddingEnded)
                             ->latest()->get();
                 return $this->success('Great! Job Fetched Successfully', $job_details, null, 200);
             }else{

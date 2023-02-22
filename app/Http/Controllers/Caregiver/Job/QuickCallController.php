@@ -24,7 +24,7 @@ class QuickCallController extends Controller
                 if($_GET['id'] == 0){
 
                     try{
-                        $get_jobs = AgencyPostJob::where('status', JobStatus::QuickCall)->latest()->get();
+                        $get_jobs = AgencyPostJob::where('status', JobStatus::QuickCall)->where('payment_status', 1)->latest()->get();
     
                         $get_job_details = [];
                 

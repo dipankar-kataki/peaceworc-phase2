@@ -21,7 +21,7 @@ class JobController extends Controller
             return $this->error('Oops! Failed To Fetch Job', null, null, 500);
         }else{
             if($_GET['id'] == 0){
-                $get_jobs = AgencyPostJob::where('status', JobStatus::Open)->latest()->get();
+                $get_jobs = AgencyPostJob::where('status', JobStatus::Open)->where('payment_status', 1)->latest()->get();
                 $get_job_details = [];
                 foreach($get_jobs as $job){
                     $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $job->user_id)->first();
