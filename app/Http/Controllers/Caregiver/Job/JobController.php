@@ -229,13 +229,11 @@ class JobController extends Controller
     
                         ];
     
-                       
+                        array_push($get_job_details, $details);
                     }
 
-                    array_push($get_job_details, $details);
+                    
                 }
-
-               
 
                 return $this->success('Great! Job Fetched Successfully', array_reverse($get_job_details), null, 200);
             }else{
@@ -270,6 +268,7 @@ class JobController extends Controller
                         'created_at' => $get_jobs->created_at->diffForHumans(),
 
                     ];
+
                     array_push($get_job_details, $details);
 
                 return $this->success('Great! Job Fetched Successfully', $get_job_details, null, 200);
