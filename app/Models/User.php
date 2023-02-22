@@ -63,4 +63,36 @@ class User extends Authenticatable
     public function caregiverProfile(){
         return $this->hasOne(CaregiverProfileRegistration::class,'user_id');
     }
+
+    public function covid(){
+        return $this->hasMany(CovidDocument::class);
+    }
+
+    public function childAbuse(){
+        return $this->hasMany(ChildAbuseDocument::class);
+    }
+
+    public function criminal(){
+        return $this->hasMany(CriminalDocument::class);
+    }
+
+    public function driving(){
+        return $this->hasMany(DrivingDocument::class);
+    }
+
+    public function employment(){
+        return $this->hasMany(EmploymentEligibilityDocument::class);
+    }
+
+    public function identification(){
+        return $this->hasMany(IdentificationDocument::class);
+    }
+
+    public function tuberculosis(){
+        return $this->hasMany(TuberculosisDocument::class);
+    }
+
+    public function w4_form(){
+        return $this->hasMany(W4Document::class);
+    }
 }

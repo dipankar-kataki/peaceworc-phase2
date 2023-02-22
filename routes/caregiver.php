@@ -4,6 +4,7 @@ use App\Http\Controllers\Caregiver\Auth\LoginController;
 use App\Http\Controllers\Caregiver\Auth\LogOutController;
 use App\Http\Controllers\Caregiver\Auth\SignUpController;
 use App\Http\Controllers\Caregiver\Bidding\BiddingController;
+use App\Http\Controllers\Caregiver\Document\DocumentUploadController;
 use App\Http\Controllers\Caregiver\Job\AcceptJobController;
 use App\Http\Controllers\Caregiver\Job\CompleteJobController;
 use App\Http\Controllers\Caregiver\Job\GetBiddingResultsController;
@@ -79,8 +80,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('profile-completion-status', [StatusInformationController::class, 'profileCompletionStatus']);
     });
 
-    
-
     Route::group(['prefix' => 'job'], function(){
         Route::get('get-jobs', [JobController::class, 'getJobs']);
         Route::get('get-bidded-jobs', [JobController::class, 'getBiddedJobs']);
@@ -118,5 +117,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('get-results', [GetBiddingResultsController::class, 'getBiddingResult']);
         });
     });
+
+    Route::group(['prefix' => 'document'], function(){
+        Route::post('upload', [DocumentUploadController::class, 'uploadDocument']);
+    });
+
+
     Route::post('logout', [LogOutController::class, 'logout']);
 });
