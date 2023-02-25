@@ -104,7 +104,7 @@ class AgencyPaymentController extends Controller
                         //     'payment_status' => 1
                         // ]);
                         
-                        return $this->success('Great! Payment details saved successfully.', $request->payment_status, null, 201);
+                        return $this->success('Great! Payment details saved successfully.', null, null, 201);
                         // return response()->json(['message' => 'Payment Successfull']);
                     // }
                     // else{
