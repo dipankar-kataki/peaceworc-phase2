@@ -69,4 +69,8 @@ class AgencyPaymentController extends Controller
             }
         }
     }
+
+    public function updateStatus(Request $request){
+        return $this->success('Payment details saved successfully', $request->all(), null, 200);
+    }
 }
