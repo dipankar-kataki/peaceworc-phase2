@@ -100,7 +100,7 @@ class AgencyPaymentController extends Controller
                 // if($create){
                     // if($request->payment_status == 1){
 
-                        AgencyPostJob::where('id', 16)->update([
+                        AgencyPostJob::where('id', $request->job_id)->update([
                             'payment_status' => 1
                         ]);
                         
