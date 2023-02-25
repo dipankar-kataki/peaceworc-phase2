@@ -100,12 +100,12 @@ class AgencyPaymentController extends Controller
                 // if($create){
                     if($request->payment_status == 1){
 
-                        // AgencyPostJob::where('id', $request->job_id)->update([
-                        //     'payment_status' => $request->payment_status
-                        // ]);
+                        AgencyPostJob::where('id', $request->job_id)->update([
+                            'payment_status' => $request->payment_status
+                        ]);
                         
-                        return $this->success('Great! Payment details saved successfully.', $request->payment_status, null, 201);
-                        // return response()->json(['message' => 'Payment Successfull']);
+                        // return $this->success('Great! Payment details saved successfully.', $request->payment_status, null, 201);
+                        return response()->json(['message' => 'Payment Successfull']);
                     }
                     // else{
                     //     return $this->success('Payment details saved successfully', null, null, 201);
