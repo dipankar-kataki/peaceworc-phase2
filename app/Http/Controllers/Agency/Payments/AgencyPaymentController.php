@@ -71,20 +71,20 @@ class AgencyPaymentController extends Controller
     // }
 
     public function updateStatus(Request $request){
-        $validator = Validator::make($request->all(),[
-            'job_id' => 'required',
-            // 'amount' => 'required',
-            // 'customer_id' => 'required',
-            // 'caregiver_charge' => 'required',
-            // 'peaceworc_percentage' => 'required',
-            // 'peaceworc_charge' => 'required',
-            'payment_status' => 'required'
-        ]);
+        // $validator = Validator::make($request->all(),[
+        //     'job_id' => 'required',
+        //     // 'amount' => 'required',
+        //     // 'customer_id' => 'required',
+        //     // 'caregiver_charge' => 'required',
+        //     // 'peaceworc_percentage' => 'required',
+        //     // 'peaceworc_charge' => 'required',
+        //     'payment_status' => 'required'
+        // ]);
 
-        if($validator->fails()){
-            $this->error('Oops! Failed To Save Payment Details'.$validator->errors()->first(), null, null, 500);
-        }else{
-            try{
+        // if($validator->fails()){
+        //     $this->error('Oops! Failed To Save Payment Details'.$validator->errors()->first(), null, null, 500);
+        // }else{
+        //     try{
 
                 // $create = AgencyPayment::create([
                 //     'agency_id' => Auth::user()->id,
@@ -98,23 +98,23 @@ class AgencyPaymentController extends Controller
                 // ]);
 
                 // if($create){
-                    if($request->payment_status == 1){
+                    // if($request->payment_status == 1){
 
-                        AgencyPostJob::where('id', $request->job_id)->update([
-                            'payment_status' => $request->payment_status
-                        ]);
+                        // AgencyPostJob::where('id', 16)->update([
+                        //     'payment_status' => 1
+                        // ]);
                         
                         // return $this->success('Great! Payment details saved successfully.', $request->payment_status, null, 201);
                         return response()->json(['message' => 'Payment Successfull']);
-                    }
+                    // }
                     // else{
                     //     return $this->success('Payment details saved successfully', null, null, 201);
                     //     // return response()->json(['message' => 'Payment Successfull']);
                     // }
                 // }
-            }catch(\Exception $e){
-                $this->error('Oops! Something Went Wrong. Failed To Save Payment Details', null, null, 500);
-            }
-        }
+            // }catch(\Exception $e){
+            //     $this->error('Oops! Something Went Wrong. Failed To Save Payment Details', null, null, 500);
+            // }
+        // }
     }
 }
