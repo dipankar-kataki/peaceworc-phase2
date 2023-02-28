@@ -141,23 +141,23 @@
                                                 <tbody>
                                                     <tr>
                                                         <th class="ps-0" scope="row"> <i class="ri-user-line"></i> :</th>
-                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->name}}</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->name ?? 'Name Missing'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-phone-line"></i> :</th>
-                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->phone}}</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->phone ?? 'Phone Number Missing'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-mail-line"></i> :</th>
-                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->email}}</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->email ?? 'Email Missing'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-shield-user-line"></i> :</th>
-                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->role}}</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->role ?? 'Role Missing'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-calendar-line"></i> :</th>
-                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->created_at->format('M-d, Y')}}</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->created_at->format('M-d, Y') ?? 'Joined Date Missing'}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
