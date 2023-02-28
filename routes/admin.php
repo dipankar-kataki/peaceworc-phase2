@@ -26,7 +26,8 @@ Route::group(['middleware' => 'auth'] ,function(){
     Route::get('dashboard', [DashboardController::class, 'viewDashboard'])->name('admin.dashboard');
 
     Route::group([ 'prefix' => 'agency'], function(){
-        Route::get('list/{id?}', [AgencyController::class, 'getList'])->name('admin.get.agency.list');
+        Route::get('list', [AgencyController::class, 'getList'])->name('admin.get.agency.list');
+        Route::get('details/{id}', [AgencyController::class, 'getAgencyDetails'])->name('admin.get.agency.details');
         Route::get('profile', [AgencyController::class, 'profile'])->name('admin.get.agency.profile');
 
         Route::group(['prefix' => 'authorize-officer'], function(){
