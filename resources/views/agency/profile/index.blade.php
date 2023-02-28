@@ -348,6 +348,13 @@
                                                             <p class="mb-2">Role :
                                                                 <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$officer->role ??  'Role Missing'}}</span>
                                                             </p>
+                                                            <p class="mb-2">Status :
+                                                                @if($officer->status == 'OPEN')
+                                                                    <span class="text-success mb-0 fs-12" style="font-weight:500;">ACTIVE</span>
+                                                                @else
+                                                                    <span class="text-danger mb-0 fs-12" style="font-weight:500;">SUSPENDED</span>
+                                                                @endif
+                                                            </p>
                                                             
                                                         </div>
                                                     </div>
