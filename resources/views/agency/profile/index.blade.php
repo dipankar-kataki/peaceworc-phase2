@@ -22,14 +22,28 @@
         <div class="row g-4">
             <div class="col-auto">
                 <div class="avatar-lg">
-                    <img src="{{asset($agency_details->photo)}}" alt="user-img" class="img-thumbnail rounded-circle" />
+                    <img src="{{asset($agency_details->photo)}}" alt="user-img" class="img-thumbnail rounded-circle" height="100" width="100"/>
                 </div>
             </div>
             <!--end col-->
             <div class="col">
                 <div class="p-2">
                     <h3 class="text-white mb-1">{{$agency_details->company_name}} 
-                        <i class='eos-icons text-success'>verified</i>
+                        @if($is_profile_approved == 1)
+                            <i class='eos-icons text-success' title="Profile Approved">verified</i>
+                           <!-- Dropdown Menu Item Color -->
+                            <div class="btn-group fw-bold">
+                                <span class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></span>
+                                <div class="dropdown-menu dropdownmenu-primary">
+                                    <a class="dropdown-item" href="#">
+                                        <Button class="btn btn-sm btn-default text-danger fw-bold" title="Click To Suspend/Block Agency">Suspend Agency</Button>
+                                    </a>
+                                </div>
+                            </div>
+                        @else
+                            <i class='eos-icons text-warning' title="Profile Approved Pending">warning</i>
+                        @endif
+                       
                     </h3>
                     {{-- <p class="text-white-75">Owner & Founder</p> --}}
                     <div class="hstack text-white-50 gap-1">
@@ -38,9 +52,11 @@
                                 {{$agency_details->street}}, {{$agency_details->city_or_district}}, {{$agency_details->state}}, {{$agency_details->zip_code}}
                             </i>
                         </div>
-                        {{-- <div>
-                            <i class="ri-building-line me-1 text-white-75 fs-16 align-middle"></i>Themesbrand
-                        </div> --}}
+                    </div>
+                    <div class="mt-3">
+                        @if($is_profile_approved != 1)
+                            <Button class="btn btn-sm btn-warning text-black fw-bold" title="Click To Approve Agency">Approval Pending</Button>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -105,7 +121,7 @@
                             <div class="col-xxl-3">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h5 class="card-title mb-5">Complete Your Profile</h5>
+                                        <h5 class="card-title mb-2">Profile Completion Status</h5>
                                         <div class="progress animated-progress custom-progress progress-label">
                                             <div class="progress-bar bg-danger" role="progressbar" style="width: {{$completion_rate}}%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
                                                 <div class="label">{{$completion_rate}}%</div>
@@ -147,214 +163,131 @@
                                     </div><!-- end card body -->
                                 </div><!-- end card -->
 
-                                {{-- <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-4">Portfolio</h5>
-                                        <div class="d-flex flex-wrap gap-2">
-                                            <div>
-                                                <a href="javascript:void(0);" class="avatar-xs d-block">
-                                                    <span class="avatar-title rounded-circle fs-16 bg-dark text-light">
-                                                        <i class="ri-github-fill"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <a href="javascript:void(0);" class="avatar-xs d-block">
-                                                    <span class="avatar-title rounded-circle fs-16 bg-primary">
-                                                        <i class="ri-global-fill"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <a href="javascript:void(0);" class="avatar-xs d-block">
-                                                    <span class="avatar-title rounded-circle fs-16 bg-success">
-                                                        <i class="ri-dribbble-fill"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <a href="javascript:void(0);" class="avatar-xs d-block">
-                                                    <span class="avatar-title rounded-circle fs-16 bg-danger">
-                                                        <i class="ri-pinterest-fill"></i>
-                                                    </span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div><!-- end card body -->
-                                </div><!-- end card --> --}}
-
-                                {{-- <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-4">Skills</h5>
-                                        <div class="d-flex flex-wrap gap-2 fs-15">
-                                            <a href="javascript:void(0);" class="badge badge-soft-primary">Photoshop</a>
-                                            <a href="javascript:void(0);" class="badge badge-soft-primary">illustrator</a>
-                                            <a href="javascript:void(0);" class="badge badge-soft-primary">HTML</a>
-                                            <a href="javascript:void(0);" class="badge badge-soft-primary">CSS</a>
-                                            <a href="javascript:void(0);" class="badge badge-soft-primary">Javascript</a>
-                                            <a href="javascript:void(0);" class="badge badge-soft-primary">Php</a>
-                                            <a href="javascript:void(0);" class="badge badge-soft-primary">Python</a>
-                                        </div>
-                                    </div><!-- end card body -->
-                                </div><!-- end card -->
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center mb-4">
-                                            <div class="flex-grow-1">
-                                                <h5 class="card-title mb-0">Suggestions</h5>
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <div class="dropdown">
-                                                    <a href="#" role="button" id="dropdownMenuLink2" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="ri-more-2-fill fs-14"></i>
-                                                    </a>
-
-                                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink2">
-                                                        <li><a class="dropdown-item" href="#">View</a></li>
-                                                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                        <li><a class="dropdown-item" href="#">Delete</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="d-flex align-items-center py-3">
-                                                <div class="avatar-xs flex-shrink-0 me-3">
-                                                    <img src="assets/images/users/avatar-3.jpg" alt="" class="img-fluid rounded-circle" />
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div>
-                                                        <h5 class="fs-14 mb-1">Esther James</h5>
-                                                        <p class="fs-13 text-muted mb-0">Frontend Developer</p>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0 ms-2">
-                                                    <button type="button" class="btn btn-sm btn-outline-success"><i class="ri-user-add-line align-middle"></i></button>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center py-3">
-                                                <div class="avatar-xs flex-shrink-0 me-3">
-                                                    <img src="assets/images/users/avatar-4.jpg" alt="" class="img-fluid rounded-circle" />
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div>
-                                                        <h5 class="fs-14 mb-1">Jacqueline Steve</h5>
-                                                        <p class="fs-13 text-muted mb-0">UI/UX Designer</p>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0 ms-2">
-                                                    <button type="button" class="btn btn-sm btn-outline-success"><i class="ri-user-add-line align-middle"></i></button>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center py-3">
-                                                <div class="avatar-xs flex-shrink-0 me-3">
-                                                    <img src="assets/images/users/avatar-5.jpg" alt="" class="img-fluid rounded-circle" />
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <div>
-                                                        <h5 class="fs-14 mb-1">George Whalen</h5>
-                                                        <p class="fs-13 text-muted mb-0">Backend Developer</p>
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0 ms-2">
-                                                    <button type="button" class="btn btn-sm btn-outline-success"><i class="ri-user-add-line align-middle"></i></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><!-- end card body -->
-                                </div>
-                                <!--end card-->
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center mb-4">
-                                            <div class="flex-grow-1">
-                                                <h5 class="card-title mb-0">Popular Posts</h5>
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <div class="dropdown">
-                                                    <a href="#" role="button" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="ri-more-2-fill fs-14"></i>
-                                                    </a>
-
-                                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink1">
-                                                        <li><a class="dropdown-item" href="#">View</a></li>
-                                                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                        <li><a class="dropdown-item" href="#">Delete</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex mb-4">
-                                            <div class="flex-shrink-0">
-                                                <img src="assets/images/small/img-4.jpg" alt="" height="50" class="rounded" />
-                                            </div>
-                                            <div class="flex-grow-1 ms-3 overflow-hidden">
-                                                <a href="javascript:void(0);">
-                                                    <h6 class="text-truncate fs-14">Design your apps in your own way</h6>
-                                                </a>
-                                                <p class="text-muted mb-0">15 Dec 2021</p>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex mb-4">
-                                            <div class="flex-shrink-0">
-                                                <img src="assets/images/small/img-5.jpg" alt="" height="50" class="rounded" />
-                                            </div>
-                                            <div class="flex-grow-1 ms-3 overflow-hidden">
-                                                <a href="javascript:void(0);">
-                                                    <h6 class="text-truncate fs-14">Smartest Applications for Business</h6>
-                                                </a>
-                                                <p class="text-muted mb-0">28 Nov 2021</p>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex">
-                                            <div class="flex-shrink-0">
-                                                <img src="assets/images/small/img-6.jpg" alt="" height="50" class="rounded" />
-                                            </div>
-                                            <div class="flex-grow-1 ms-3 overflow-hidden">
-                                                <a href="javascript:void(0);">
-                                                    <h6 class="text-truncate fs-14">How to get creative in your work</h6>
-                                                </a>
-                                                <p class="text-muted mb-0">21 Nov 2021</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end card-body-->
-                                </div> --}}
-                                <!--end card-->
                             </div>
                             <!--end col-->
                             <div class="col-xxl-9">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h5 class="card-title mb-3">About</h5>
-                                        <p>This section will be replaced by Agency About Us.</p>
+                                        <h5 class="card-title mb-3">Agency Details</h5>
                                         <div class="row">
-                                            <div class="col-6 col-md-4">
+                                            <div class="col-12">
+                                                <p class="mb-1" style="font-weight:500">Company Bio :</p>
+                                                <div class="d-flex mt-2 text-align-justify">
+                                                    <p class="px-3">
+                                                        {{$agency_details->about_company ??  'Company Bio Missing'}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                        </div>
+                                        <!--end row-->
+                                        <div class="row">
+                                            <p class="mb-1" style="font-weight:500">Basic Information :</p>
+                                            <div class="col-md-3">
                                                 <div class="d-flex mt-4">
                                                     <div class="flex-shrink-0 avatar-xs align-self-center me-3">
                                                         <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                            <i class="ri-user-2-fill"></i>
+                                                            <i class='eos-icons-outlined'>mark_email_read</i>
                                                         </div>
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1">Designation :</p>
-                                                        <h6 class="text-truncate mb-0">Lead Designer / Developer</h6>
+                                                        <p class="mb-1">Email :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->email ??  'Email Id Missing'}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-4">
+                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
+                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
+                                                            <i class='eos-icons-outlined'>phone_android</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Phone Number :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->phone ??  'Phone Number Missing'}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-4">
+                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
+                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
+                                                            <i class='eos-icons-outlined'>landscape</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Legal Structure :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->legal_structure ??  'Legal Structure Missing'}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-4">
+                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
+                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
+                                                            <i class='eos-icons-outlined'>paid</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Organization Type :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->organization_type ??  'Organization Type Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>
                                             <!--end col-->
-                                            <div class="col-6 col-md-4">
+                                        </div>
+                                        <!--end row-->
+                                        <div class="row">
+                                            <div class="col-md-3">
                                                 <div class="d-flex mt-4">
                                                     <div class="flex-shrink-0 avatar-xs align-self-center me-3">
                                                         <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                            <i class="ri-global-line"></i>
+                                                            <i class='eos-icons-outlined'>mark_email_read</i>
                                                         </div>
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1">Website :</p>
-                                                        <a href="#" class="fw-semibold">www.velzon.com</a>
+                                                        <p class="mb-1">Email :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->email ??  'Email Id Missing'}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-4">
+                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
+                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
+                                                            <i class='eos-icons-outlined'>phone_android</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Phone Number :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->phone ??  'Phone Number Missing'}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-4">
+                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
+                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
+                                                            <i class='eos-icons-outlined'>landscape</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Legal Structure :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->legal_structure ??  'Legal Structure Missing'}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-4">
+                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
+                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
+                                                            <i class='eos-icons-outlined'>paid</i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Organization Type :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->organization_type ??  'Organization Type Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>

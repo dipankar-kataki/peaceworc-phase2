@@ -20,6 +20,12 @@ use Illuminate\Support\Facades\Validator;
 class DocumentUploadController extends Controller
 {
     use ApiResponse;
+
+    public function getDocument(){
+
+        $details = User::where('id', auth('sanctum')->user()->id)->with('covid','childAbuse','criminal','driving','employment','identification','tuberculosis','w4_form')->first();
+        return $this->success('Document fetched successfully.',  $details, 'null', 200);
+    }
     public function uploadDocument(Request $request){
         $validator = Validator::make($request->all(),[
             'documentCategory' => 'required',

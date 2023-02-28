@@ -88,7 +88,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::group(['prefix' => 'payment'], function(){
-        Route::post('save-payment-details', [AgencyPaymentController::class, 'savePaymentDetails']);
         Route::post('update-status', [AgencyPaymentController::class, 'updateStatus']);
     });
     
