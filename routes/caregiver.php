@@ -121,6 +121,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'document'], function(){
         Route::post('upload', [DocumentUploadController::class, 'uploadDocument']);
         Route::get('get', [DocumentUploadController::class, 'getDocument']);
+        Route::post('delete', [DocumentUploadController::class, 'deleteDocument']);
+        Route::post('update-status', [DocumentUploadController::class, 'updateStatus']);
     });
 
 

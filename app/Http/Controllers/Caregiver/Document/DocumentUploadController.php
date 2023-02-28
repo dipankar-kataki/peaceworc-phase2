@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Caregiver\Document;
 
 use App\Http\Controllers\Controller;
+use App\Models\CaregiverStatusInformation;
 use App\Models\ChildAbuseDocument;
 use App\Models\CovidDocument;
 use App\Models\CriminalDocument;
@@ -118,7 +119,7 @@ class DocumentUploadController extends Controller
                         'expiry_date' => $request->expiry_date
                     ]);
                 }else {
-                    return $this->error('Whoops!, Documents upload failed', null, 'null', 400);
+                    return $this->error('Oops! Documents upload failed', null, 'null', 400);
                 }
                 
                 $details = User::where('id', Auth::user()->id)->with('covid','childAbuse','criminal','driving','employment','identification','tuberculosis','w4_form')->first();
@@ -128,6 +129,71 @@ class DocumentUploadController extends Controller
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong. Failed To Upload Document.', null, null, 500);
             }
+        }
+    }
+
+    public function deleteDocument(Request $request){
+        
+        $validator = Validator::make($request->all(),[
+            'documentCategory' => 'required',
+            'document_id' => 'required'
+        ]);
+        if($validator->fails()){
+            return $this->error('Oops! Failed To Delete Document. '.$validator->errors()->first(), null, null, 400);
+        }else{
+            try{
+                if($request->documentCategory == 'covid'){
+                    CovidDocument::where('id', $request->document_id)->where('user_id', Auth::user()->id)->update([
+                        'status' => 0
+                    ]);
+                }else if($request->documentCategory == 'childAbuse'){
+                    ChildAbuseDocument::where('id', $request->document_id)->where('user_id', Auth::user()->id)->update([
+                        'status' => 0
+                    ]);
+                }else if($request->documentCategory == 'criminal'){
+                    CriminalDocument::where('id', $request->document_id)->where('user_id', Auth::user()->id)->update([
+                        'status' => 0
+                    ]);
+                }else if($request->documentCategory == 'driving'){
+                    DrivingDocument::where('id', $request->document_id)->where('user_id', Auth::user()->id)->update([
+                        'status' => 0
+                    ]);
+                }else if($request->documentCategory == 'employment'){
+                    EmploymentEligibilityDocument::where('id', $request->document_id)->where('user_id', Auth::user()->id)->update([
+                        'status' => 0
+                    ]);
+                }else if($request->documentCategory == 'identification'){
+                    IdentificationDocument::where('id', $request->document_id)->where('user_id', Auth::user()->id)->update([
+                        'status' => 0
+                    ]);
+                }else if($request->documentCategory == 'tuberculosis'){
+                    TuberculosisDocument::where('id', $request->document_id)->where('user_id', Auth::user()->id)->update([
+                        'status' => 0
+                    ]);
+                }else if($request->documentCategory == 'w4_form'){
+                    W4Document::where('id', $request->document_id)->where('user_id', Auth::user()->id)->update([
+                        'status' => 0
+                    ]);
+                }else {
+                    return $this->error('Oops! Failed To Delete Document', null, 'null', 400);
+                }
+
+                return $this->success('Great! Document Deleted successfully.',  null, 'null', 201);
+            }catch(\Exception $e){
+                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            }
+        }
+        
+    }
+
+    public function updateStatus(Request $request){
+        try{
+            CaregiverStatusInformation::where('user_id', Auth::user()->id)->update([
+                'is_document_uploaded' => 1
+            ]);
+            return $this->success('Status Updated successfully.',  null, 'null', 201);
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong.', null, null, 500);
         }
     }
 }
