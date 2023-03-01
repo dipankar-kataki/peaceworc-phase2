@@ -36,7 +36,7 @@
                                 <span class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></span>
                                 <div class="dropdown-menu dropdownmenu-primary">
                                     <a class="dropdown-item" href="#">
-                                        <Button class="btn btn-sm btn-default text-danger fw-bold" title="Click To Suspend/Block Agency">Suspend Agency</Button>
+                                        <Button class="btn btn-sm btn-default text-danger fw-bold" title="Click To Suspend/Block Agency" id="blockAgencyBtn">Block/Suspend Agency</Button>
                                     </a>
                                 </div>
                             </div>
@@ -1323,4 +1323,24 @@
 @endsection
 
 @section('custom-scripts')
+    <script>
+        const blockAgencyBtn = document.getElementById('blockAgencyBtn');
+        blockAgencyBtn.addEventListener('click', () => {
+            fetch('',{
+                method : "POST",
+                headers : {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then((response) => {
+                return response.json()
+            }).then((res) => {
+                if (res.status === 201) {
+                    console.log("Post successfully created!")
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+        });
+    </script>
 @endsection

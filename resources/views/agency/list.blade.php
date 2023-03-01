@@ -65,7 +65,7 @@
                                                 <li><a href="{{route('admin.get.agency.details', ['id' => encrypt($item->user_id) ] )}}" class="dropdown-item"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> View Profile</a></li>
                                                 <li>
                                                     <a class="dropdown-item remove-item-btn">
-                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete
+                                                        <i class="ri-user-settings-fill align-bottom me-2 text-muted"></i> Block/Suspend
                                                     </a>
                                                 </li>
                                             </ul>

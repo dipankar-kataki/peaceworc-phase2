@@ -65,34 +65,34 @@ class User extends Authenticatable
     }
 
     public function covid(){
-        return $this->hasMany(CovidDocument::class);
+        return $this->hasMany(CovidDocument::class)->where('status', 1);
     }
 
     public function childAbuse(){
-        return $this->hasMany(ChildAbuseDocument::class);
+        return $this->hasMany(ChildAbuseDocument::class)->where('status', 1);
     }
 
     public function criminal(){
-        return $this->hasMany(CriminalDocument::class);
+        return $this->hasMany(CriminalDocument::class)->where('status', 1);
     }
 
     public function driving(){
-        return $this->hasMany(DrivingDocument::class);
+        return $this->hasMany(DrivingDocument::class)->where('status', 1);
     }
 
     public function employment(){
-        return $this->hasMany(EmploymentEligibilityDocument::class);
+        return $this->hasMany(EmploymentEligibilityDocument::class)->where('status', 1);
     }
 
     public function identification(){
-        return $this->hasMany(IdentificationDocument::class);
+        return $this->hasMany(IdentificationDocument::class)->where('status', 1);
     }
 
     public function tuberculosis(){
-        return $this->hasMany(TuberculosisDocument::class);
+        return $this->hasMany(TuberculosisDocument::class)->where('status', 1);
     }
 
     public function w4_form(){
-        return $this->hasMany(W4Document::class);
+        return $this->hasMany(W4Document::class)->where('status', 1);
     }
 }
