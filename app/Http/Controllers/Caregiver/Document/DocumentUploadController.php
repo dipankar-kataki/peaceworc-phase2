@@ -188,6 +188,19 @@ class DocumentUploadController extends Controller
 
     public function updateStatus(Request $request){
         try{
+            $covid_count = CovidDocument::where('user_id', Auth::user()->id)->count();
+            $child_count = ChildAbuseDocument::where('user_id', Auth::user()->id)->count();
+            $criminal_count = CriminalDocument::where('user_id', Auth::user()->id)->count();
+            $driving_count = DrivingDocument::where('user_id', Auth::user()->id)->count();
+            $employment_count = EmploymentEligibilityDocument::where('user_id', Auth::user()->id)->count();
+            $identification_count = IdentificationDocument::where('user_id', Auth::user()->id)->count();
+            $tuberculosis_count = TuberculosisDocument::where('user_id', Auth::user()->id)->count();
+            $w4_count = W4Document::where('user_id', Auth::user()->id)->count();
+
+            if($covid_count == 0 || $child_count == 0 || $criminal_count == 0 || $driving_count == 0 || $employment_count == 0 || $identification_count == 0 || $tuberculosis_count == 0 || $w4_count == 0){
+                return $this->error('Oops! Failed To Update Status. Please Upload All Documents.', null, null, 400);  
+            }
+
             CaregiverStatusInformation::where('user_id', Auth::user()->id)->update([
                 'is_documents_uploaded' => 1
             ]);
