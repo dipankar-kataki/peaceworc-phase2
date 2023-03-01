@@ -36,7 +36,7 @@
                                 <span class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></span>
                                 <div class="dropdown-menu dropdownmenu-primary">
                                     <a class="dropdown-item" href="#">
-                                        <Button class="btn btn-sm btn-default text-danger fw-bold" title="Click To Suspend/Block Agency" id="blockAgencyBtn">Block/Suspend Agency</Button>
+                                        <Button class="btn btn-sm btn-default text-danger fw-bold" title="Click To Suspend/Block Agency" id="updateApprovalStatus" value="0">Block/Suspend Agency</Button>
                                     </a>
                                 </div>
                             </div>
@@ -68,13 +68,13 @@
                 <div class="row text text-white-50 text-center">
                     <div class="col-lg-6 col-4">
                         <div class="p-2">
-                            <h4 class="text-white mb-1">24.3K</h4>
+                            <h4 class="text-white mb-1">0</h4>
                             <p class="fs-14 mb-0">Rating</p>
                         </div>
                     </div>
                     <div class="col-lg-6 col-4">
                         <div class="p-2">
-                            <h4 class="text-white mb-1">1.3K</h4>
+                            <h4 class="text-white mb-1">0</h4>
                             <p class="fs-14 mb-0">Reviews</p>
                         </div>
                     </div>
@@ -1324,20 +1324,26 @@
 
 @section('custom-scripts')
     <script>
-        const blockAgencyBtn = document.getElementById('blockAgencyBtn');
-        blockAgencyBtn.addEventListener('click', () => {
-            fetch('',{
+        const updateApprovalStatus = document.getElementById('updateApprovalStatus');
+        updateApprovalStatus.addEventListener('click', () => {
+
+            fetch('{{route("agency.access.update.status")}}',{
                 method : "POST",
+                body :{
+                    status : updateApprovalStatus.value
+                } ,
                 headers : {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN' : '{{csrf_token()}}'
                 }
             }).then((response) => {
-                return response.json()
+                console.log('Response===>',response.json())
+                return response
             }).then((res) => {
-                if (res.status === 201) {
-                    console.log("Post successfully created!")
-                }
+                // if (res.status === 201) {
+                    console.log("Post successfully created! ===>", res.message)
+                // }
             }).catch((error) => {
                 console.log(error)
             })

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Agency\Access\AccessController;
 use App\Http\Controllers\Admin\Agency\AgencyController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\LogOutController;
@@ -25,10 +26,15 @@ Route::group(['middleware' => 'auth'] ,function(){
 
     Route::get('dashboard', [DashboardController::class, 'viewDashboard'])->name('admin.dashboard');
 
+
     Route::group([ 'prefix' => 'agency'], function(){
         Route::get('list', [AgencyController::class, 'getList'])->name('admin.get.agency.list');
         Route::get('details/{id}', [AgencyController::class, 'getAgencyDetails'])->name('admin.get.agency.details');
         Route::get('profile', [AgencyController::class, 'profile'])->name('admin.get.agency.profile');
+
+        Route::group(['prefix' => 'access'], function(){
+            Route::post('update-status', [AccessController::class, 'updateStatus'])->name('agency.access.update.status');
+        });
 
         Route::group(['prefix' => 'authorize-officer'], function(){
             Route::get('list/{id?}', [AuthorizeOfficerController::class, 'getList'])->name('admin.get.authorize.officer.list');

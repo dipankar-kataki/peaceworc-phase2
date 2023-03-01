@@ -49,7 +49,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('admin.get.authorize.officer.list')}}" class="{{Request::segment(3) == 'authorize-officer' ? 'nav-link menu-link active' : 'nav-link menu-link'}}"> Authorize Officer List</a>
+                                <a href="{{route('admin.get.authorize.officer.list')}}" class="{{Request::segment(3) == 'authorize-officer' ? 'nav-link menu-link active' : 'nav-link menu-link'}}">Jobs Posted</a>
                             </li>
                         </ul>
                     </div>

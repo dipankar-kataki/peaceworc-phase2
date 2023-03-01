@@ -189,11 +189,11 @@ class DocumentUploadController extends Controller
     public function updateStatus(Request $request){
         try{
             CaregiverStatusInformation::where('user_id', Auth::user()->id)->update([
-                'is_document_uploaded' => 1
+                'is_documents_uploaded' => 1
             ]);
             return $this->success('Great! Status Updated successfully.',  null, 'null', 201);
         }catch(\Exception $e){
-            return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);
         }
     }
 }
