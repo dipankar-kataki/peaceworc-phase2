@@ -21,7 +21,8 @@ class CaregiverProfileRegistration extends Model
         if($value == null){
             return 0;
         }
-        return Carbon::parse($value)->age;
+
+        return $value;
     }
 
     public function user(){
