@@ -16,7 +16,7 @@ class ProfileRegistrationController extends Controller
 {
     use ApiResponse;
 
-    public function basicinformation(Request $request){
+    public function basicInformation(Request $request){
         $validator = Validator::make($request->all(), [
             'photo' => 'required|image|mimes:jpg,png,jpeg|max:1048',
             'phone' => 'required|numeric',
@@ -75,6 +75,19 @@ class ProfileRegistrationController extends Controller
                 return $this->error('Oops! Something Went Wrong.'.$e->getMessage(), null, null, 500);
             }
             
+        }
+    }
+
+    public function getRegistrationDetails(){
+        try{
+            $get_registration_details = CaregiverProfileRegistration::where('user_id', Auth::user()->id)->first();
+            if($get_registration_details != null){
+                return $this->success('Great! Registration Details Fetched Successfully.', null, null, 200);
+            }else{
+                return $this->error('Oops! Failed To Fetch Details.', null, null, 400);
+            }
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong.', null, null, 500);
         }
     }
 

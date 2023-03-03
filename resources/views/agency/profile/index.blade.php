@@ -1327,26 +1327,35 @@
         const updateApprovalStatus = document.getElementById('updateApprovalStatus');
         updateApprovalStatus.addEventListener('click', () => {
 
-            fetch('{{route("agency.access.update.status")}}',{
-                method : "POST",
-                body :{
-                    status : updateApprovalStatus.value
-                } ,
-                headers : {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN' : '{{csrf_token()}}'
-                }
-            }).then((response) => {
-                console.log('Response===>',response.json())
-                return response
-            }).then((res) => {
-                // if (res.status === 201) {
-                    console.log("Post successfully created! ===>", res.message)
-                // }
-            }).catch((error) => {
-                console.log(error)
-            })
+            updateApprovalStatus.setAttribute('disabled', true);
+            updateApprovalStatus.innerHTML = 'Please Wait...';
+
+            let status = { 'status' : updateApprovalStatus.value};
+
+            const xhr = new XMLHttpRequest();
+
+            xhr.open('POST', "{{route('agency.access.update.status')}}");
+                xhr.setRequestHeader('X-CSRF-TOKEN', '{{csrf_token()}}');
+
+                xhr.addEventListener('load', () => {
+                    if(xhr.status == 200 && xhr.readyState === 4){
+
+                        const res = JSON.parse(xhr.responseText)
+                        console.log(res);
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops!',
+                            text: 'Something Went Wrong.',
+                        })
+
+                        updateApprovalStatus.removeAttribute('disabled');
+                        updateApprovalStatus.innerHTML = 'Block/Suspend Agency';
+                    }
+                });
+                
+                xhr.send(status);
+            
         });
     </script>
 @endsection

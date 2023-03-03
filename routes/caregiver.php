@@ -54,8 +54,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('get-details', [BasicProfileController::class, 'getDetails']);
 
         Route::group(['prefix' => 'registration'], function(){
-            Route::post('basic-information', [ProfileRegistrationController::class, 'basicinformation']);
+            Route::post('basic-information', [ProfileRegistrationController::class, 'basicInformation']);
             Route::post('optional-information', [ProfileRegistrationController::class, 'optionalinformation']);
+            Route::get('get-registration-details', [ProfileRegistrationController::class, 'getRegistrationDetails']);
         });
 
         Route::group(['prefix' => 'bio'], function(){
