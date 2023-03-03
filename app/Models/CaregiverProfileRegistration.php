@@ -14,7 +14,7 @@ class CaregiverProfileRegistration extends Model
     protected $guarded = [];
 
     public function getDobAttribute($value){
-        return Carbon::parse($value)->age;
+        return Carbon::parse($value)->format('m-d-Y');
     }
 
     public function getCareCompletedAttribute($value){
