@@ -82,7 +82,7 @@ class ProfileRegistrationController extends Controller
         try{
             $get_registration_details = CaregiverProfileRegistration::where('user_id', Auth::user()->id)->first();
             if($get_registration_details != null){
-                return $this->success('Great! Registration Details Fetched Successfully.', null, null, 200);
+                return $this->success('Great! Registration Details Fetched Successfully.', $get_registration_details, null, 200);
             }else{
                 return $this->error('Oops! Failed To Fetch Details.', null, null, 400);
             }
