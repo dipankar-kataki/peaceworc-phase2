@@ -18,7 +18,7 @@ class UpcomingJobController extends Controller
     use ApiResponse;
     public function getUpcomingJob(){
         try{
-            $get_upcoming_job = AgencyPostJob::where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->latest()->get();
+            $get_upcoming_job = AgencyPostJob::where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->latest()->paginate('5');
             $all_details = [];
             foreach($get_upcoming_job as $job){
                 $check_accepted_by = AcceptJob::where('job_id', $job->id)->where('status', JobStatus::JobAccepted)->latest()->get();

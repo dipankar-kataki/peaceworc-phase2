@@ -19,7 +19,7 @@ class CompleteJobController extends Controller
 
     public function getCompleteJob(){
         try{
-            $get_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::Completed)->latest()->get();
+            $get_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::Completed)->latest()->paginate('5');
 
             $all_details = [];
             
