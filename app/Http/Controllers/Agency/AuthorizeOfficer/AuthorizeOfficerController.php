@@ -107,9 +107,6 @@ class AuthorizeOfficerController extends Controller
     
                     if($create){
                         $authorizeOfficerDetails = AuthorizeOfficer::where('agency_id', Auth::user()->id)->latest()->get();
-                        AgencyInformationStatus::where('user_id', Auth::user()->id)->update([
-                            'is_authorize_info_added' => 1
-                        ]);
                         return $this->success('Great! Authorize Officer Added Successfully.', $authorizeOfficerDetails, null, 201);
                     }else{
                         return $this->error('Oops! Failed To Add Authorize Officer.', null, null, 500);
@@ -166,5 +163,25 @@ class AuthorizeOfficerController extends Controller
                 }
             }
         }
+    }
+
+    public function updateStatus(){
+        try{
+
+            $check_agency_auth_officer_added = AuthorizeOfficer::where('agency_id', Auth::user()->id)->exists();
+
+            if($check_agency_auth_officer_added){
+                AgencyInformationStatus::where('user_id', Auth::user()->id)->update([
+                    'is_authorize_info_added' => 1
+                ]);
+                return $this->success('Great! Authorize Officer Added Successfully.', null, null, 201);
+            }else{
+                return $this->error('Oops! Failed To Add Authorize Officer. Something Went Wrong.', null, null, 400);
+            }
+            
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong.', null, null, 500);
+        }
+        
     }
 }
