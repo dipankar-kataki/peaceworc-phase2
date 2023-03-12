@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\CaregiverCertificate;
 use App\Models\CaregiverEducation;
 use App\Models\CaregiverProfileRegistration;
+use App\Models\Flag;
+use App\Models\Reward;
+use App\Models\Strike;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -67,15 +70,29 @@ class BasicProfileController extends Controller
                             ->first();
             $get_education = CaregiverEducation::where('user_id', Auth::user()->id)->get();
             $get_certificate = CaregiverCertificate::where('user_id', Auth::user()->id)->get();
+            
+            $rewards = Reward::where('user_id', Auth::user()->id)->first();
+            if($rewards == null){
+              $rewards = 0;
+            }else{
+               $rewards =  $rewards->total_rewards;
+            }
+
+            $strikes = Strike::where('user_id', Auth::user()->id)->count();
+
+            $flags = Flag::where('user_id', Auth::user()->id)->count();
 
             $details = [
                 'basic_info' => $get_details,
+                'rewards' => $rewards,
+                'strikes' => $strikes,
+                'flags' => $flags,
                 'education' => $get_education,
                 'certificate' => $get_certificate
             ];
             return $this->success('Great! Profile Fetched Successfully.', $details, null, 200);
         }catch(\Exception $e){
-            return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);
         }
     }
 
