@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::group(['prefix' => 'certificate'],function(){
             Route::post('add', [BasicProfileController::class, 'addCertificate']);
+            Route::post('edit', [BasicProfileController::class, 'editCertificate']);
         });
 
         Route::post('change-photo', [BasicProfileController::class, 'changePhoto']);
