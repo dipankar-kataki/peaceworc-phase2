@@ -117,6 +117,7 @@ class BasicProfileController extends Controller
         
     }
 
+
     public function addEducation(Request $request){
 
         $validator = Validator::make($request->all(), [
@@ -143,6 +144,33 @@ class BasicProfileController extends Controller
             }
         }
         
+    }
+
+    public function editEducation(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'edu_id' => 'required',
+            'school_or_university' => 'required',
+            'degree' => 'required',
+            'start_year' => 'required',
+            'end_year' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+        }else{
+            try{
+                CaregiverEducation::where('id', $request->edu_id)->update([
+                    'school_or_university' => $request->school_or_university,
+                    'degree' => $request->degree,
+                    'start_year' => $request->start_year,
+                    'end_year' => $request->end_year
+                ]);
+                return $this->success('Great! Education Updated Successfully.', null, null, 201);
+            }catch(\Exception $e){
+                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            }
+        }
     }
 
     public function addCertificate(Request $request){

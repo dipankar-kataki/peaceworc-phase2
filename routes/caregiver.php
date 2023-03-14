@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::group(['prefix' => 'education'],function(){
             Route::post('add', [BasicProfileController::class, 'addEducation']);
+            Route::post('edit', [BasicProfileController::class, 'editEducation']);
         });
 
         Route::group(['prefix' => 'certificate'],function(){
