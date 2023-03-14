@@ -59,6 +59,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('get-registration-details', [ProfileRegistrationController::class, 'getRegistrationDetails']);
         });
 
+        Route::post('edit-phone-number', [BasicProfileController::class, 'editPhoneNumber']);
+
         Route::group(['prefix' => 'bio'], function(){
             Route::post('add', [BasicProfileController::class, 'addBio']);
         });

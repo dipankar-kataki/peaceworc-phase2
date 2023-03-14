@@ -271,4 +271,23 @@ class BasicProfileController extends Controller
             }
         }
     }
+
+    public function editPhoneNumber(Request $request){
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required|numeric',
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+        }else{
+            try{
+                CaregiverProfileRegistration::where('user_id', Auth::user()->id)->update([
+                    'phone' => $request->phone,
+                ]);
+                return $this->success('Great! Phone Number Successfully.', null, null, 201);
+            }catch(\Exception $e){
+                return $this->error('Oops! Something Went Wrong. Failed To Update Phone Number.', null, null, 500);
+            }
+        }
+    }
 }

@@ -176,7 +176,7 @@ class AuthorizeOfficerController extends Controller
                 ]);
                 return $this->success('Great! Authorize Officer Added Successfully.', null, null, 201);
             }else{
-                return $this->error('Oops! Failed To Add Authorize Officer. Something Went Wrong.', null, null, 400);
+                return $this->error('Oops! Please Add At least One Authorize Officer.', null, null, 400);
             }
             
         }catch(\Exception $e){

@@ -42,7 +42,6 @@ class ProfileRegistrationController extends Controller
                     }
 
                     $update = CaregiverProfileRegistration::where('user_id', Auth::user()->id)->update([
-                        'user_id' => Auth::user()->id,
                         'photo' => $imageName,
                         'phone' => $request->phone,
                         'dob' =>  Carbon::createFromFormat('m-d-Y',$request->dob)->format('Y-m-d'),
