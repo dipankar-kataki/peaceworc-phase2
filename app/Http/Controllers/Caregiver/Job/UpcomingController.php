@@ -110,7 +110,7 @@ class UpcomingController extends Controller
                                 'short_address' => $get_job->job->short_address,
                                 'description' => $get_job->job->description,
                                 'medical_history' => $get_job->job->medical_history,
-                                'experties' => $get_job->job->experties,
+                                'expertise' => $get_job->job->expertise,
                                 'other_requirements' => $get_job->job->other_requirements,
                                 'check_list' => $get_job->job->check_list,
                                 'lat' => $get_job->job->lat,

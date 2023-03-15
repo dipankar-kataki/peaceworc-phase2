@@ -34,7 +34,7 @@ class AgencyPostJob extends Model
         }
     }
 
-    public function getExpertiesAttribute($value){
+    public function getExpertiseAttribute($value){
         if(empty(json_decode($value))){
             return [];
         }else{

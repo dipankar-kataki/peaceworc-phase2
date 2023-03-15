@@ -44,7 +44,7 @@ class JobOngoingController extends Controller
                         'short_address' => $job->short_address, 
                         'description' => $job->description,
                         'medical_history' =>  $job->medical_history,
-                        'experties' => $job->medical_history,
+                        'expertise' => $job->medical_history,
                         'other_requirements' => $job->other_requirements,
                         'check_list' => $job->check_list,
                         'status' => $job->status,

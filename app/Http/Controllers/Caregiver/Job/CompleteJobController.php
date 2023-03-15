@@ -43,7 +43,7 @@ class CompleteJobController extends Controller
                     'short_address' => $job->job->short_address,
                     'description' => $job->job->description,
                     'medical_history' => $job->job->medical_history,
-                    'experties' => $job->job->experties,
+                    'expertise' => $job->job->expertise,
                     'other_requirements' => $job->job->other_requirements,
                     'check_list' => $job->job->check_list,
                     'lat' => $job->job->lat,

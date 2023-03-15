@@ -26,7 +26,7 @@ class CreateAgencyPostJobsTable extends Migration
             $table->longText('address');
             $table->longText('description');
             $table->longText('medical_history')->nullable();
-            $table->longText('experties')->nullable();
+            $table->longText('expertise')->nullable();
             $table->longText('other_requirements')->nullable();
             $table->longText('check_list')->nullable();
             $table->timestamps();

@@ -81,7 +81,7 @@ class PostJobController extends Controller
                                 'long' => $request->long,
                                 'description' => $request->description,
                                 'medical_history' => json_encode($request->medical_history),
-                                'experties' => json_encode($request->experties),
+                                'expertise' => json_encode($request->expertise),
                                 'other_requirements' => json_encode($request->other_requirements),
                                 'check_list' => json_encode($request->check_list),
                                 'status' => $status,
