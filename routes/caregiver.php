@@ -61,6 +61,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::post('edit-phone-number', [BasicProfileController::class, 'editPhoneNumber']);
 
+        Route::post('edit-experience', [BasicProfileController::class, 'editExperience']);
+
         Route::group(['prefix' => 'bio'], function(){
             Route::post('add', [BasicProfileController::class, 'addBio']);
         });

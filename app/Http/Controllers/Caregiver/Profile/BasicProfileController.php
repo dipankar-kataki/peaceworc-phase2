@@ -103,7 +103,7 @@ class BasicProfileController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
                 CaregiverProfileRegistration::where('user_id', Auth::user()->id)->update([
@@ -128,7 +128,7 @@ class BasicProfileController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
                 CaregiverEducation::create([
@@ -153,7 +153,7 @@ class BasicProfileController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
 
@@ -186,7 +186,7 @@ class BasicProfileController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
 
@@ -216,7 +216,7 @@ class BasicProfileController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
 
@@ -253,7 +253,7 @@ class BasicProfileController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
                 if ($request->hasFile('photo')) {
@@ -278,7 +278,7 @@ class BasicProfileController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Oops! '.$validator->errors()->first(), null, null, 500);
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
                 CaregiverProfileRegistration::where('user_id', Auth::user()->id)->update([
@@ -290,4 +290,23 @@ class BasicProfileController extends Controller
             }
         }
     }
+
+    public function editExperience(Request $request){
+        $validator = Validator::make($request->all(), [
+            'experience' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
+        }else{
+            try{
+                CaregiverProfileRegistration::where('user_id', Auth::user()->id)->update([
+                    'experience' => $request->experience,
+                ]);
+                return $this->success('Great! Caregiver Experience Updated Successfully.', null, null, 201);
+            }catch(\Exception $e){
+                return $this->error('Oops! Something Went Wrong. Failed To Update Caregiver Experience.', null, null, 500);
+            }
+        }
+    }   
 }
