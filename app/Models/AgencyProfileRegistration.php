@@ -29,7 +29,7 @@ class AgencyProfileRegistration extends Model
         }
     }
 
-    public function profileStatus(){
+    public function profileCompletionStatus(){
         return $this->hasOne(AgencyInformationStatus::class, 'user_id', 'user_id');
     }
 
