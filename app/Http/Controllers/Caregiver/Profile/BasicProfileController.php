@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CaregiverCertificate;
 use App\Models\CaregiverEducation;
 use App\Models\CaregiverProfileRegistration;
+use App\Models\CaregiverStatusInformation;
 use App\Models\Flag;
 use App\Models\Reward;
 use App\Models\Strike;
@@ -70,6 +71,12 @@ class BasicProfileController extends Controller
                             ->first();
             $get_education = CaregiverEducation::where('user_id', Auth::user()->id)->get();
             $get_certificate = CaregiverCertificate::where('user_id', Auth::user()->id)->get();
+            $get_profile_status = CaregiverStatusInformation::where('user_id', Auth::user()->id)
+                                ->select('is_basic_info_added', 'is_optional_info_added', 'is_documents_uploaded', 'is_profile_approved')
+                                ->first();
+            if($get_profile_status == null){
+                $get_profile_status = null;
+            }
             
             $rewards = Reward::where('user_id', Auth::user()->id)->first();
             if($rewards == null){
@@ -83,6 +90,7 @@ class BasicProfileController extends Controller
             $flags = Flag::where('user_id', Auth::user()->id)->count();
 
             $details = [
+                'profile_completion_status' => $get_profile_status,
                 'basic_info' => $get_details,
                 'rewards' => $rewards,
                 'strikes' => $strikes,

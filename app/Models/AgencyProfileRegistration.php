@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class AgencyProfileRegistration extends Model
 {
@@ -12,6 +13,7 @@ class AgencyProfileRegistration extends Model
 
     protected $table = 'agency_profile_registrations';
     protected $guarded = [];
+
 
     public function user(){
         return $this->belongsTo(User::class);
@@ -26,5 +28,11 @@ class AgencyProfileRegistration extends Model
             return 'DELETED';
         }
     }
+
+    public function profileStatus(){
+        return $this->hasOne(AgencyInformationStatus::class, 'user_id', 'user_id');
+    }
+
+    
 
 }
