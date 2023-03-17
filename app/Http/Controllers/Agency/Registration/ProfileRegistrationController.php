@@ -21,10 +21,12 @@ class ProfileRegistrationController extends Controller
             'email' => 'required|email',
             'phone' => 'required',
             'tax_id_or_ein_id' => 'required | max:9',
+            'appartment_or_unit' => 'required',
             'street' => 'required',
             'city_or_district' => 'required',
             'state' => 'required',
-            'zip_code' => 'required'
+            'zip_code' => 'required',
+            'country' => 'required',
         ]);
 
         if($validator->fails()){
@@ -54,10 +56,13 @@ class ProfileRegistrationController extends Controller
                         'email' => $request->email,
                         'phone' => $request->phone,
                         'tax_id_or_ein_id' => $request->tax_id_or_ein_id,
+                        'appartment_or_unit' => $request->appartment_or_unit,
+                        'floor_no' => $request->floor_no,
                         'street' => $request->street,
                         'city_or_district' => $request->city_or_district,
                         'state' => $request->state,
                         'zip_code' => $request->zip_code,
+                        'country' => $request->country,
                     ]);
 
                     if($create){
@@ -130,12 +135,14 @@ class ProfileRegistrationController extends Controller
                     $request->photo->move(public_path('Agency/Uploads/Profile/image/'), $image);
                     $imageName = 'Agency/Uploads/Profile/image/' . $image;
                 }
-                    
+                
                 $update = AgencyProfileRegistration::where('user_id', Auth::user()->id)->update([
                     'photo' => $request->photo == null ? $getAgencyProfileDetails->photo :  $imageName,
                     'phone' => $request->phone == null ? $getAgencyProfileDetails->phone :  $request->phone,
                     'legal_structure' => $request->legal_structure == null ? $getAgencyProfileDetails->legal_structure :  $request->legal_structure,
                     'organization_type' => $request->organization_type == null ? $getAgencyProfileDetails->organization_type :  $request->organization_type,
+                    'appartment_or_unit' => $request->appartment_or_unit == null ? $getAgencyProfileDetails->appartment_or_unit :  $request->appartment_or_unit,
+                    'floor_no' => $request->floor_no == null ? $getAgencyProfileDetails->floor_no :  $request->floor_no,
                     'street' => $request->street == null ? $getAgencyProfileDetails->street :  $request->street,
                     'city_or_district' => $request->city_or_district == null ? $getAgencyProfileDetails->city_or_district :  $request->city_or_district,
                     'state' => $request->state == null ? $getAgencyProfileDetails->state :  $request->state,

@@ -24,7 +24,13 @@ class ProfileRegistrationController extends Controller
             'gender' => 'required',
             'ssn' => 'required',
             'full_address' => 'required',
-            'short_address' => 'required'
+            'short_address' => 'required',
+            'street' => 'required',
+            'appartment_or_unit' => 'required',
+            'city_or_district' => 'required',
+            'state' => 'required',
+            'zip_code' => 'required',
+            'country' => 'required',
         ]);
 
         if($validator->fails()){
@@ -48,7 +54,14 @@ class ProfileRegistrationController extends Controller
                         'gender' => $request->gender,
                         'ssn' => $request->ssn,
                         'full_address' => $request->full_address,
-                        'short_address' => $request->short_address
+                        'short_address' => $request->short_address,
+                        'street' => $request->street,
+                        'appartment_or_unit' => $request->appartment_or_unit,
+                        'floor_no' => $request->floor_no,
+                        'city_or_district' => $request->city_or_district,
+                        'state' => $request->state,
+                        'zip_code' => $request->zip_code,
+                        'country' => $request->country,
                     ]);
 
                     if($update){
@@ -79,7 +92,14 @@ class ProfileRegistrationController extends Controller
                             'gender' => $request->gender,
                             'ssn' => $request->ssn,
                             'full_address' => $request->full_address,
-                            'short_address' => $request->short_address
+                            'short_address' => $request->short_address,
+                            'street' => $request->street,
+                            'appartment_or_unit' => $request->appartment_or_unit,
+                            'floor_no' => $request->floor_no,
+                            'city_or_district' => $request->city_or_district,
+                            'state' => $request->state,
+                            'zip_code' => $request->zip_code,
+                            'country' => $request->country,
                         ]);
     
                         if($create){
