@@ -14498,7 +14498,7 @@ span.flatpickr-weekday {
     content: "";
     position: absolute;
     width: 2px;
-    background: var(--vz-card-bg-custom);
+    background: var(--vz-border-color);
     top: 57px;
     bottom: 166px;
     left: 50%;
@@ -14636,6 +14636,7 @@ span.flatpickr-weekday {
     left: 40px;
     margin-left: -1px;
     background: var(--vz-card-bg-custom)
+    /* background: #c5d7f5 */
 }
 
 .timeline-2 .timeline-year {
@@ -14662,7 +14663,7 @@ span.flatpickr-weekday {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
-    text-align: center
+    text-align: center;
 }
 
 .timeline-2 .timeline-year p span {
