@@ -178,7 +178,7 @@
 
                             setTimeout(() => {
                                 signInBtn.innerHTML = 'Login Successfull';
-                            }, 500);
+                            }, 300);
 
                             setTimeout(() => {
                                 signInBtn.innerHTML = 'Redirecting....';
