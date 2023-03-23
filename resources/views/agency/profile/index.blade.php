@@ -33,10 +33,10 @@
                             <i class='eos-icons text-success' title="Profile Approved">verified</i>
                            <!-- Dropdown Menu Item Color -->
                             <div class="btn-group fw-bold">
-                                <span class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></span>
+                                <span class="dropdown-toggle" data-bs-toggle="dropdown" id="profileDropdownBtn" aria-expanded="false"></span>
                                 <div class="dropdown-menu dropdownmenu-primary">
                                     <a class="dropdown-item" href="#">
-                                        <Button class="btn btn-sm btn-default text-danger fw-bold" title="Click To Suspend/Block Agency" id="updateApprovalStatus" value="0">Block/Suspend Agency</Button>
+                                        <Button class="btn btn-sm btn-default text-danger fw-bold updateApprovalStatus" title="Click To Block Agency" data-id="{{$agency_details->user_id}}" value="0">Block Agency</Button>
                                     </a>
                                 </div>
                             </div>
@@ -57,8 +57,8 @@
                         </div>
                     </div>
                     <div class="mt-3">
-                        @if($is_profile_approved != 1)
-                            <Button class="btn btn-sm btn-warning text-black fw-bold" title="Click To Approve Agency">Approval Pending</Button>
+                        @if($is_profile_approved == 0)
+                            <Button class="btn btn-sm btn-warning text-black fw-bold updateApprovalStatus" title="Click To Approve Agency" data-id={{$agency_details->user_id}} value="1">Approval Pending</Button>
                         @endif
                     </div>
                 </div>
@@ -334,7 +334,7 @@
                                 <h5 class="card-title mb-3">Authorized Officer Details</h5>
                                 <div class="row">
                                     @foreach ($authorize_officer as $key => $officer)
-                                        <div class="col-md-4 col-sm-6 col-12">
+                                        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                                             <div class="d-flex mt-2">
                                                 <div class="flex-shrink-0 avatar-xs align-self-top me-3">
                                                     <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
@@ -359,25 +359,11 @@
                                                     </p>
                                                     <p class="mb-2">Status :
                                                         @if($officer->status == 'OPEN')
-                                                            <span class="text-success mb-0 fs-12" style="font-weight:500;">ACTIVE</span>
-                                                            <div class="btn-group fw-bold">
-                                                                <span class="btn btn-sm btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Block Officer</span>
-                                                                <div class="dropdown-menu dropdownmenu-primary">
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <Button class="btn btn-sm btn-default text-danger fw-bold" title="Click To Suspend/Block Authorized Officer" id="updateApprovalStatus" value="0">Block/Suspend Authorized Officer</Button>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
+                                                            <span class="text-success mb-0 fs-12" style="font-weight:500;">ACTIVE</span><br>
+                                                            <Button class="btn btn-sm btn-danger text-black mt-3 fw-bold updateAuthOfficerStatus" title="Click To Suspend/Block Authorized Officer"  data-id="{{$officer->id}}" value="0">Block Officer</Button>
                                                         @else
-                                                            <span class="text-danger mb-0 fs-12" style="font-weight:500;">SUSPENDED</span>
-                                                            <div class="btn-group fw-bold">
-                                                                <span class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Unblock Officer</span>
-                                                                <div class="dropdown-menu dropdownmenu-primary">
-                                                                    <a class="dropdown-item" href="#">
-                                                                        <Button class="btn btn-sm btn-default text-black fw-bold" title="Click To Unblock Authorized Officer" id="updateApprovalStatus" value="1">Unblock Authorized Officer</Button>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
+                                                            <span class="text-danger mb-0 fs-12" style="font-weight:500;">SUSPENDED</span><br>
+                                                            <Button class="btn btn-sm btn-success text-black mt-3 fw-bold updateAuthOfficerStatus" title="Click To Unblock Authorized Officer"  data-id="{{$officer->id}}" value="1">Unblock Officer</Button>
                                                         @endif
                                                     </p>
                                                     
@@ -698,38 +684,92 @@
 
 @section('custom-scripts')
     <script>
-        const updateApprovalStatus = document.getElementById('updateApprovalStatus');
-        updateApprovalStatus.addEventListener('click', () => {
 
-            updateApprovalStatus.setAttribute('disabled', true);
-            updateApprovalStatus.innerHTML = 'Please Wait...';
+        $('.updateApprovalStatus').on('click', function(){
 
-            let status = { 'status' : updateApprovalStatus.value};
+            $(this).attr('disabled', true);
+            $(this).text('Please Wait...');
 
-            const xhr = new XMLHttpRequest();
+            $('#profileDropdownBtn').text('Please Wait...')
+            $('#profileDropdownBtn').css('font-size', '15px')
 
-            xhr.open('POST', "{{route('agency.access.update.status')}}");
-                xhr.setRequestHeader('X-CSRF-TOKEN', '{{csrf_token()}}');
+            let that = $(this);
+            $.ajax({
+                url:"{{route('agency.access.update.status')}}",
+                type:"POST",
+                data:{
+                    id: that.data('id'),
+                    access : that.val(), 
+                    updatingFor : 'agency',
+                    _token : "{{csrf_token()}}"
+                },
+                success:function(data){
 
-                xhr.addEventListener('load', () => {
-                    if(xhr.status == 200 && xhr.readyState === 4){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Great!',
+                        text: data.message,
+                        confirmButtonText : 'Ok'
+                    }).then( (res) => {
+                        if(res.isConfirmed == true){
+                            location.reload(true);
+                        }
+                    })
+                },error:function(xhr, status, error){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: 'Something Went Wrong.',
+                    })
 
-                        const res = JSON.parse(xhr.responseText)
-                        console.log(res);
-                    }else{
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops!',
-                            text: 'Something Went Wrong.',
-                        })
+                    that.attr('disabled', false);
+                    that.text('Block Agency');
+                }
+            });
 
-                        updateApprovalStatus.removeAttribute('disabled');
-                        updateApprovalStatus.innerHTML = 'Block/Suspend Agency';
-                    }
-                });
-                
-                xhr.send(status);
-            
+        });
+    </script>
+    <script>
+
+        $('.updateAuthOfficerStatus').on('click', function(){
+
+            $(this).attr('disabled', true);
+            $(this).text('Please Wait...');
+
+            let that =  $(this);
+
+            $.ajax({
+                url:"{{route('agency.access.update.status')}}",
+                type:"POST",
+                data:{
+                    id : $(this).data('id'),
+                    access : $(this).val(), 
+                    updatingFor : 'authOfficer',
+                    _token : "{{csrf_token()}}"
+                },
+                success:function(data){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Great!',
+                        text: data.message,
+                        confirmButtonText : 'Ok'
+                    }).then( (res) => {
+                        if(res.isConfirmed == true){
+                            location.reload(true);
+                        }
+                    })
+                },error:function(xhr, status, error){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: 'Something Went Wrong.',
+                    })
+
+                    that.attr('disabled', false);
+                    that.text(data.btnText);
+                }
+            });
+
         });
     </script>
 @endsection
