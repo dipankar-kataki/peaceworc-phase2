@@ -182,7 +182,7 @@
 
                             setTimeout(() => {
                                 signInBtn.innerHTML = 'Redirecting....';
-                            }, 700);
+                            }, 500);
 
                             setTimeout(() => {
                                 window.location.replace(res.url);

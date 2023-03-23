@@ -21,7 +21,7 @@ class LoginController extends Controller
         }else{
             try{
                 if (!Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => Role::Admin])) {
-                    return response()->json(['message' => 'Login Failed. Credentials Didnot Match With Our Records.', 'status' => 0]);
+                    return response()->json(['message' => 'Login Failed. Credentials did not match with our records.', 'status' => 0]);
                 }else{
                     return response()->json(['message' => 'Login Successful', 'url' => "/admin/dashboard",'status' => 1]);
                 }
