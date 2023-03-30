@@ -133,7 +133,9 @@ class PostJobController extends Controller
                 return $this->success('Great! Job Fetched Successfully', $job_details, null, 200);
             }else{
                 $job_details = AgencyPostJob::where('user_id', Auth::user()->id)->where('id', $_GET['id'])->first();
-                return $this->success('Great! Job Fetched Successfully', $job_details, null, 200);
+                $details = [];
+                array_push($details, $job_details);
+                return $this->success('Great! Job Fetched Successfully', $details, null, 200);
             }
            
         }
