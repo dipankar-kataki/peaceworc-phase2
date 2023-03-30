@@ -78,7 +78,7 @@ class ProfileRegistrationController extends Controller
                         return $this->error('Oops! Failed To Add Business information. Something Went Wrong.', null, null, 500);
                     }
                 }catch(\Exception $e){
-                    return $this->error('Oops! Failed To Add Business information. Something Went Wrong.'., null, null, 500);
+                    return $this->error('Oops! Failed To Add Business information. Something Went Wrong.', null, null, 500);
                 }
             }
             
