@@ -29,7 +29,6 @@ class PostJobController extends Controller
             'address' => 'required',
             'short_address' => 'required',
             'street' => 'required',
-            'appartment_or_unit' => 'required',
             'city' => 'required',
             'state' => 'required',
             'zip_code' => 'required',
