@@ -63,15 +63,22 @@ class ProfileRegistrationController extends Controller
                         'zip_code' => $request->zip_code,
                         'country' => $request->country,
                     ]);
-                    AgencyInformationStatus::create([
-                        'user_id' => Auth::user()->id,
-                        'is_business_info_complete' => 1
-                    ]);
-                       
-                    return $this->success('Great! Business information Added Successfully.', null, null, 201 );
-                    
+
+                    if($create){
+                        try{
+                            AgencyInformationStatus::create([
+                                'user_id' => Auth::user()->id,
+                                'is_business_info_complete' => 1
+                            ]);
+                        }catch(\Exception $e){
+                            Log::error('Not Able To Update Registration Complete Status ====>',$e);
+                        }
+                        return $this->success('Great! Business information Added Successfully.', null, null, 201 );
+                    }else{
+                        return $this->error('Oops! Failed To Add Business information. Something Went Wrong.', null, null, 500);
+                    }
                 }catch(\Exception $e){
-                    return $this->error('Oops! Failed To Add Business information. Something Went Wrong.'.$e, null, null, 500);
+                    return $this->error('Oops! Failed To Add Business information. Something Went Wrong.'., null, null, 500);
                 }
             }
             
