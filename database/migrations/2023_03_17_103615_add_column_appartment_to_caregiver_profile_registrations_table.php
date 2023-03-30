@@ -14,7 +14,7 @@ class AddColumnAppartmentToCaregiverProfileRegistrationsTable extends Migration
     public function up()
     {
         Schema::table('caregiver_profile_registrations', function (Blueprint $table) {
-            $table->string('appartment_or_unit')->after('street');
+            $table->string('appartment_or_unit')->after('street')->nullable();
             $table->string('floor_no')->after('appartment_or_unit')->nullable();
             $table->string('country')->after('zip_code');
         });

@@ -26,7 +26,6 @@ class ProfileRegistrationController extends Controller
             'full_address' => 'required',
             'short_address' => 'required',
             'street' => 'required',
-            'appartment_or_unit' => 'required',
             'city_or_district' => 'required',
             'state' => 'required',
             'zip_code' => 'required',

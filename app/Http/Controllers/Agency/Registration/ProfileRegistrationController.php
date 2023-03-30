@@ -21,7 +21,6 @@ class ProfileRegistrationController extends Controller
             'email' => 'required|email',
             'phone' => 'required',
             'tax_id_or_ein_id' => 'required | max:9',
-            'appartment_or_unit' => 'required',
             'street' => 'required',
             'city_or_district' => 'required',
             'state' => 'required',
