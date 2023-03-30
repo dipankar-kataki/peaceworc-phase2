@@ -52,7 +52,7 @@ class AuthorizeOfficerController extends Controller
             
             return $this->success('Great! Authorize Officer Details Fetched Successfully.', $officers, null, 200);
         }catch(\Exception $e){
-            return $this->error($e, null, null, 500);
+            return $this->error('Oops! Something Went Wrong.', null, null, 500);
         }
     }
 
