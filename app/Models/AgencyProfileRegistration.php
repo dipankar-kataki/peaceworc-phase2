@@ -33,6 +33,10 @@ class AgencyProfileRegistration extends Model
         return $this->hasOne(AgencyInformationStatus::class, 'user_id', 'user_id');
     }
 
+    // public function jobs_posted(){
+    //     return $this->hasMany(AgencyPostJob::class, 'user_id', 'user_id')->count();
+    // }
+
     
 
 }
