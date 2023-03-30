@@ -132,14 +132,25 @@ class PostJobController extends Controller
                             ->latest()->paginate('5');
                 return $this->success('Great! Job Fetched Successfully', $job_details, null, 200);
             }else{
-                $job_details = AgencyPostJob::where('user_id', Auth::user()->id)->where('id', $_GET['id'])->first();
-                $details = [];
-                array_push($details, $job_details);
-                return $this->success('Great! Job Fetched Successfully', $details, null, 200);
+                return $this->error('Oops! No Jobs Found.',null, null, 200);
             }
            
         }
         
+    }
+
+    public function getSingleJob(){
+        if(!isset($_GET['id'])){
+            return $this->error('Oops! Something Went Wrong. Failed To Fetch Job.', null, null, 500);
+        }else{
+            if($_GET['id'] == 0){
+                return $this->error('Oops! No Jobs Found.', null, null, 200);
+            }else{
+                $job_details = AgencyPostJob::where('user_id', Auth::user()->id)->where('id', $_GET['id'])->first();
+                return $this->success('Great! Job Fetched Successfully', $job_details, null, 200);
+            }
+           
+        }
     }
 
     public function deleteJob(){
