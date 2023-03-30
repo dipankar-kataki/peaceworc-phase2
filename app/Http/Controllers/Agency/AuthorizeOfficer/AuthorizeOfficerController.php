@@ -27,7 +27,7 @@ class AuthorizeOfficerController extends Controller
                 'agency_id' => $ownerOfficer->id,
                 'name' => $ownerOfficer->name,
                 'email' => $ownerOfficer->email,
-                'phone' => $ownerOfficer->agencyProfile->phone,
+                'phone' => $ownerOfficer->agencyProfile->phone ?? null,
                 'role' => $ownerOfficer->role
             ];
 
