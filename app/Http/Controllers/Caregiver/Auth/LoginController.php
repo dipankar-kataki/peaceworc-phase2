@@ -34,7 +34,7 @@ class LoginController extends Controller
                     $user = User::where('email', $request->email)->firstOrFail();
 
                     $auth_token =  $user->createToken('auth_token')->plainTextToken;
-                    $data = [
+                    $user_data = [
                         'name' => $user->name,
                         'email' => $user->email
                     ];
@@ -64,7 +64,7 @@ class LoginController extends Controller
                         $this->sendWelcomeNotification($token, $data);
                     }
 
-                    return $this->success('Great! Login Successful', $data, $auth_token, 200);
+                    return $this->success('Great! Login Successful', $user_data, $auth_token, 200);
                 }
             }catch(\Exception $e){
                 Log::error('Not Able To Login ====>', $e);
