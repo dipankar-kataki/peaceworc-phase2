@@ -30,7 +30,9 @@ class LoginController extends Controller
                 if ( ! Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => Role::Caregiver]) ){
                     return $this->error('Invalid credentials. User unauthorized',null, 'null', 401);
                 }else{
+                    
                     $user = User::where('email', $request->email)->firstOrFail();
+
                     $auth_token =  $user->createToken('auth_token')->plainTextToken;
                     $data = [
                         'name' => $user->name,
