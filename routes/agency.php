@@ -32,8 +32,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['throttle:limited-request'])->group(function () {
     Route::post('signup', [SignUpController::class, 'signUp']);
     Route::post('login', [LoginController::class, 'login']);
+    Route::post('resend-otp', [SignUpController::class, 'resendOtp']);
+    Route::post('verify-otp', [SignUpController::class, 'verifyOtp']);
     Route::post('send-forgot-password-mail', [ForgotPasswordController::class, 'sendForgotPasswordMail']);
-    Route::post('check-email-exist', [SignUpController::class, 'checkEmailExists']);
     
 });
 

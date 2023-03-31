@@ -8,6 +8,8 @@ use App\Mail\SendEmailVerificationOTPMail;
 use App\Models\AgencyProfileRegistration;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use App\Traits\WelcomeNotification;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,11 +21,103 @@ use Illuminate\Support\Facades\Validator;
 
 class SignUpController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, WelcomeNotification;
 
-    public function checkEmailExists(Request $request){
+
+    public function signUp(Request $request){
+
         $validator = Validator::make($request->all(),[
+            'company_name' => 'required|string',
+            'name' => 'required|string|max:200',
             'email' => 'required|email|unique:users',
+            'password' => 'required|min:6|required_with:confirm_password|same:confirm_password',
+            'confirm_password' => 'required|min:6',
+            'fcm_token' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops!'.$validator->errors()->first(), null, null, 400);
+        }else{
+            try{
+
+                $otp = rand(100000, 999999);
+                
+                $create = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'role' => Role::Agency_Owner,
+                    'otp' =>  $otp,
+                    'otp_validity' => date('Y-m-d h:i:s'),
+                    'fcm_token' => $request->fcm_token
+                ]);
+
+                if($create){
+                    $user = User::where('email', $request->email)->first();
+                    AgencyProfileRegistration::create([
+                        'user_id' => $user->id,
+                        'company_name' => $request->company_name
+                    ]);
+
+
+                    Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));
+
+                    if($user->fcm_token != null){
+                        $data=[];
+                        $data['message']= "Welcome Aboard! Thankyou For Joining Peaceworc.";
+                        $token = [];
+                        $token[] = $user->fcm_token;
+                
+                        $this->sendWelcomeNotification($token, $data);
+                    }
+
+                    return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 201);
+                }else{
+                    return $this->error('Oops! SignUp Failed.', null, null, 500);
+                }
+            }catch(\Exception $e){
+                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            }
+        }
+    }
+
+    public function resendOtp(Request $request){
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|email',
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Opps!'.$validator->errors()->first(), null, null, 400);
+        }else{
+            $is_email_exists = User::where('email', $request->email)->exists();
+            if(!$is_email_exists){
+                return $this->error('Opps! Failed To Sent OTP. Invalid Email Id.', null, null, 400);
+            }else{
+                try{
+                    $otp = rand(100000, 999999);
+
+                    User::where('email', $request->email)->update([
+                        'otp' =>  $otp,
+                        'otp_validity' => date('Y-m-d h:i:s')
+                    ]);
+
+                    Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));
+
+                    return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 201);
+                    
+                }catch(\Exception $e){
+                    return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                }
+                
+            }
+        }
+    }
+
+
+    public function verifyOtp(Request $request){
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|email',
+            'otp' => 'required'
         ]);
 
         if($validator->fails()){
@@ -31,79 +125,48 @@ class SignUpController extends Controller
         }else{
             try{
 
-                // dispatch(function () {
-                    $email = $request->email;
-                    $otp = rand(100000, 999999);
-                    Cache::put('otp', $otp, now()->addMinutes(3));
 
-                    Mail::to($email)->send(new SendEmailVerificationOTPMail($otp));
-                // })->afterResponse();
-    
-                return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 200);
-            }catch(\Exception $e){
-                // Log::error('Email Verification Mail Error', $e);
-                return $this->error('Oops!. Something Went Wrong.', null, null, 200);
-            }
-            
-        }
-    }
+                $get_user_details = User::where('email', $request->email)->first();
+                if($get_user_details == null){
+                    return $this->success('Oops! Invalid Email Id. OTP not verified', null, null, 400);
+                }else{
 
-    public function signUp(Request $request){
-        $validator = Validator::make($request->all(),[
-            'otp' => 'required', 
-            'company_name' => 'required|string',
-            'name' => 'required|string|max:200',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|required_with:confirm_password|same:confirm_password',
-            'confirm_password' => 'required|min:6',
-            // 'fcm_token' => 'required'
-        ]);
-
-        if($validator->fails()){
-            return $this->error('Opps!'.$validator->errors()->first(), null, null, 400);
-        }else{
-
-            $otp = $request->otp;
-            if(Cache::get('otp') != $otp){
-                return $this->error('Opps! Invalid OTP. Signup Failed', null, null, 400);
-            }else{
-                Cache::forget('otp');
-                try{
-                    $create = User::create([
-                        'name' => $request->name,
-                        'email' => $request->email,
-                        'email_verified_at' => date('Y-m-d H:i:s'),
-                        'password' => Hash::make($request->password),
-                        'role' => Role::Agency_Owner,
-                        // 'fcm_token' => $request->fcm_token
-                    ]);
-    
-                    if($create){
-                        $user = User::where('email', $request->email)->first();
-                        AgencyProfileRegistration::create([
-                            'user_id' => $user->id,
-                            'company_name' => $request->company_name
-                        ]);
-
-
-                        // if($user->fcm_token != null){
-                        //     $data=[];
-                        //     $data['message']= "Welcome Aboard! Thankyou For Joining Peaceworc.";
-                        //     $token = [];
-                        //     $token[] = $user->fcm_token;
-                        //     $this->sendNotification($token, $data);
-                        // }
-
-                        $token = $create->createToken('auth_token')->plainTextToken;
-                        return $this->success('Great! SignUp Completed Successfully', null, $token, 201);
+                    if($get_user_details->otp != $request->otp){
+                        return $this->error('Oops! Invalid OTP.', null, null, 400);
                     }else{
-                        return $this->error('Oops! SignUp Failed', null, null, 500);
+    
+                        $otp_validity_time =  $get_user_details->otp_validity;
+    
+                        $current_time = Carbon::now();
+    
+                        $time_diff_in_minutes = $current_time->diffInMinutes($otp_validity_time);
+
+                        if( $time_diff_in_minutes > 3){
+                            return $this->error('Oops! OTP Expired.', null, null, 400);
+                        }else{
+
+                            User::where('email', $request->email)->update([
+                                'is_otp_verified' => 1,
+                                'is_agreed_to_terms' => 1,
+                                'email_verified_at' => date('Y-m-d h:i:s')
+                            ]);
+
+                            $user = User::where('email', $request->email)->first();
+
+                            $token = $user->createToken('auth_token')->plainTextToken;
+
+                            return $this->success('Great! OTP Verified. SignUp Successful.', null, $token, 201);
+
+                        }
                     }
-                }catch(\Exception $e){
-                    return $this->error('Opps! Something Went Wrong.', null, null, 500);
                 }
+
+            }catch(\Exception $e){
+                return $this->error('Oops!. Something Went Wrong.', null, null, 500);
             }
             
         }
     }
+
+    
 }
