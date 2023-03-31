@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AppDeviceToken;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use App\Traits\WelcomeNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, WelcomeNotification;
     public function login(Request $request){
         $validator = Validator::make($request->all(),[
             'email' => 'required|email',
