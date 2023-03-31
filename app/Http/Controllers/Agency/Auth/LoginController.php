@@ -58,7 +58,7 @@ class LoginController extends Controller
                             $this->sendWelcomeNotification($token, $data);
                         }else{
 
-                            $create = AppDeviceToken::create([
+                            AppDeviceToken::create([
                                 'user_id' => Auth::user()->id,
                                 'fcm_token' => $request->fcm_token,
                                 'role' => $user->role
@@ -67,7 +67,7 @@ class LoginController extends Controller
                             $data=[];
                             $data['message']= "Welcome Back! ".$user->name;
                             $token = [];
-                            $token[] = $create->fcm_token;
+                            $token[] = $request->fcm_token;
                     
                             $this->sendWelcomeNotification($token, $data);
                         }
@@ -79,7 +79,7 @@ class LoginController extends Controller
 
                 
             }catch(\Exception $e){
-                return $this->error('Opps! Something Went Wrong.'.$e->getMessage(), null, null, 500);
+                return $this->error('Opps! Something Went Wrong.', null, null, 500);
             }
         }
     }
