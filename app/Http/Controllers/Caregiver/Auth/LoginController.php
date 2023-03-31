@@ -39,7 +39,7 @@ class LoginController extends Controller
 
                     $check_app_device_token_exists = AppDeviceToken::where('fcm_token', $request->fcm_token)->first();
 
-                    if($check_app_device_token_exists->fcm_token != null){
+                    if($check_app_device_token_exists){
                         $data=[];
                         $data['message']= "Welcome Back!. ".$user->name;
                         $token = [];
