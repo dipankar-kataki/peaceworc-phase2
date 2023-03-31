@@ -15,7 +15,7 @@ class AddColumnStreetNameToAgencyPostJobsTable extends Migration
     {
         Schema::table('agency_post_jobs', function (Blueprint $table) {
             $table->string('street')->after('short_address');
-            $table->string('appartment_or_unit')->after('street');
+            $table->string('appartment_or_unit')->after('street')->nullable();
             $table->string('floor_no')->after('appartment_or_unit')->nullable();
             $table->string('city')->after('floor_no');
             $table->string('state')->after('city');
