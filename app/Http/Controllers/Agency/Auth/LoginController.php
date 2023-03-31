@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Agency\Auth;
 
 use App\Common\Role;
 use App\Http\Controllers\Controller;
+use App\Models\AppDeviceToken;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -15,9 +16,11 @@ class LoginController extends Controller
 {
     use ApiResponse;
     public function login(Request $request){
+
         $validator = Validator::make($request->all(),[
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
+            'fcm_token' => 'required'
         ]);
 
         if($validator->fails()){
@@ -36,13 +39,39 @@ class LoginController extends Controller
                         return $this->error('Invalid credentials. User unauthorized',null, 'null', 401);
                     }else{
                         $user = User::where('email', $request->email)->firstOrFail();
-                        $token =  $user->createToken('auth_token')->plainTextToken;
+                        $auth_token =  $user->createToken('auth_token')->plainTextToken;
                         $data = [
                             'name' => $user->name,
                             'email' => $user->email
                         ];
+
+                        $check_app_device_token_exists = AppDeviceToken::where('fcm_token', $request->fcm_token)->first();
+
+                        if($check_app_device_token_exists->fcm_token != null){
+                            $data=[];
+                            $data['message']= "Welcome Back! ".$user->name;
+                            $token = [];
+                            $token[] = $check_app_device_token_exists->fcm_token;
+                    
+                            $this->sendWelcomeNotification($token, $data);
+                        }else{
+
+                            $create = AppDeviceToken::create([
+                                'user_id' => Auth::user()->id,
+                                'fcm_token' => $request->fcm_token,
+                                'role' => $user->role
+                            ]);
+
+                            $data=[];
+                            $data['message']= "Welcome Back! ".$user->name;
+                            $token = [];
+                            $token[] = $create->fcm_token;
+                    
+                            $this->sendWelcomeNotification($token, $data);
+                        }
+                        
     
-                        return $this->success('Great! Login Successful', $data, $token, 200);
+                        return $this->success('Great! Login Successful', $data, $auth_token, 200);
                     }
                 }
 

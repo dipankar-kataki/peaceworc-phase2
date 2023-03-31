@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Caregiver\Auth;
 use App\Common\Role;
 use App\Http\Controllers\Controller;
 use App\Mail\SendEmailVerificationOTPMail;
+use App\Models\AppDeviceToken;
 use App\Models\CaregiverProfileRegistration;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use App\Traits\WelcomeNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -60,12 +62,17 @@ class SignUpController extends Controller
                         'password' => Hash::make($request->password),
                         'role' => Role::Caregiver,
                         'otp' =>  $otp,
-                        'otp_validity' => date('Y-m-d h:i:s'),
-                        'fcm_token' => $request->fcm_token
+                        'otp_validity' => date('Y-m-d h:i:s')
                     ]);
     
                     if($create){
-    
+                        
+                        AppDeviceToken::create([
+                            'user_id' => $create->id,
+                            'fcm_token' => $request->fcm_token,
+                            'role' => $create->role
+                        ]);
+
                         Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));
                         return $this->success('Great! Email Verification OTP Sent Successfully', null, null, 201);
                     }else{
@@ -137,24 +144,27 @@ class SignUpController extends Controller
                             return $this->error('Oops! OTP Expired.', null, null, 400);
                         }else{
 
-                            User::where('email', $request->email)->update([
+
+                            $get_user_details->update([
                                 'is_otp_verified' => 1,
                                 'is_agreed_to_terms' => 1,
                                 'email_verified_at' => date('Y-m-d h:i:s')
                             ]);
 
-                            if($get_user_details->fcm_token != null){
+                            $app_device_token = AppDeviceToken::where('user_id', $get_user_details->id)->first();
+
+                            if($app_device_token->fcm_token != null){
                                 $data=[];
                                 $data['message']= "Welcome Aboard! Thankyou For Joining Peaceworc.";
                                 $token = [];
-                                $token[] = $get_user_details->fcm_token;
+                                $token[] = $app_device_token->fcm_token;
                         
                                 $this->sendWelcomeNotification($token, $data);
                             }
 
-                            $token = $get_user_details->createToken('auth_token')->plainTextToken;
+                            $auth_token = $get_user_details->createToken('auth_token')->plainTextToken;
                             
-                            return $this->success('Great! OTP Verified. SignUp Successful.', null, $token, 201);
+                            return $this->success('Great! OTP Verified. SignUp Successful.', null, $auth_token, 201);
 
                         }
                 }

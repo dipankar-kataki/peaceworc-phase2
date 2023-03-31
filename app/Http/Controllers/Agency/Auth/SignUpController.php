@@ -6,6 +6,7 @@ use App\Common\Role;
 use App\Http\Controllers\Controller;
 use App\Mail\SendEmailVerificationOTPMail;
 use App\Models\AgencyProfileRegistration;
+use App\Models\AppDeviceToken;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use App\Traits\WelcomeNotification;
@@ -51,6 +52,7 @@ class SignUpController extends Controller
                             'otp' =>  $otp,
                             'otp_validity' => date('Y-m-d h:i:s')
                         ]);
+
                         Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));
                         return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 201);
                     }else{
@@ -65,10 +67,15 @@ class SignUpController extends Controller
                         'role' => Role::Agency_Owner,
                         'otp' =>  $otp,
                         'otp_validity' => date('Y-m-d h:i:s'),
-                        'fcm_token' => $request->fcm_token
                     ]);
     
                     if($create){
+
+                        AppDeviceToken::create([
+                            'user_id' => $create->id,
+                            'fcm_token' => $request->fcm_token,
+                            'role' => $create->role
+                        ]);
 
                         Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));
 
@@ -160,19 +167,20 @@ class SignUpController extends Controller
                                 'company_name' => $request->company_name
                             ]);
 
+                            $app_device_token = AppDeviceToken::where('user_id', $get_user_details->id)->first();
 
-                            if($get_user_details->fcm_token != null){
+                            if($app_device_token->fcm_token != null){
                                 $data=[];
                                 $data['message']= "Welcome Aboard! Thankyou For Joining Peaceworc.";
                                 $token = [];
-                                $token[] = $get_user_details->fcm_token;
+                                $token[] = $app_device_token->fcm_token;
                         
                                 $this->sendWelcomeNotification($token, $data);
                             }
 
-                            $token = $get_user_details->createToken('auth_token')->plainTextToken;
+                            $auth_token = $get_user_details->createToken('auth_token')->plainTextToken;
 
-                            return $this->success('Great! OTP Verified. SignUp Successful.', null, $token, 201);
+                            return $this->success('Great! OTP Verified. SignUp Successful.', null, $auth_token, 201);
 
                         }
                     }
