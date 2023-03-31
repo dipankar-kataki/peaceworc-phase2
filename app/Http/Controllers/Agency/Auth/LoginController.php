@@ -79,7 +79,7 @@ class LoginController extends Controller
 
                 
             }catch(\Exception $e){
-                return $this->error('Opps! Something Went Wrong.', null, null, 500);
+                return $this->error('Opps! Something Went Wrong.'.$e->getMessage(), null, null, 500);
             }
         }
     }
