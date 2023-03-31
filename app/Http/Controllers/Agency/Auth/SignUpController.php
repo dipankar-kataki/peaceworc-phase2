@@ -29,7 +29,7 @@ class SignUpController extends Controller
         $validator = Validator::make($request->all(),[
             'company_name' => 'required|string',
             'name' => 'required|string|max:200',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
             'password' => 'required|min:6|required_with:confirm_password|same:confirm_password',
             'confirm_password' => 'required|min:6',
             'fcm_token' => 'required'
@@ -41,42 +41,45 @@ class SignUpController extends Controller
             try{
 
                 $otp = rand(100000, 999999);
-                
-                $create = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'role' => Role::Agency_Owner,
-                    'otp' =>  $otp,
-                    'otp_validity' => date('Y-m-d h:i:s'),
-                    'fcm_token' => $request->fcm_token
-                ]);
 
-                if($create){
-                    $user = User::where('email', $request->email)->first();
-                    AgencyProfileRegistration::create([
-                        'user_id' => $user->id,
-                        'company_name' => $request->company_name
-                    ]);
+                $user = User::where('email', $request->email)->first();
 
+                if( $user != null){
 
-                    Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));
-
-                    if($user->fcm_token != null){
-                        $data=[];
-                        $data['message']= "Welcome Aboard! Thankyou For Joining Peaceworc.";
-                        $token = [];
-                        $token[] = $user->fcm_token;
-                
-                        $this->sendWelcomeNotification($token, $data);
+                    if($user->is_otp_verified == 0){
+                        User::where('email', $request->email)->update([
+                            'otp' =>  $otp,
+                            'otp_validity' => date('Y-m-d h:i:s')
+                        ]);
+                        Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));
+                        return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 201);
+                    }else{
+                        return $this->error('Oops! User Already Registered. ', null, null, 400);
                     }
-
-                    return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 201);
                 }else{
-                    return $this->error('Oops! SignUp Failed.', null, null, 500);
+
+                    $create = User::create([
+                        'name' => $request->name,
+                        'email' => $request->email,
+                        'password' => Hash::make($request->password),
+                        'role' => Role::Agency_Owner,
+                        'otp' =>  $otp,
+                        'otp_validity' => date('Y-m-d h:i:s'),
+                        'fcm_token' => $request->fcm_token
+                    ]);
+    
+                    if($create){
+
+                        Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));
+
+                        return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 201);
+
+                    }else{
+                        return $this->error('Oops! SignUp Failed.', null, null, 500);
+                    }
                 }
             }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);
             }
         }
     }
@@ -117,7 +120,8 @@ class SignUpController extends Controller
     public function verifyOtp(Request $request){
         $validator = Validator::make($request->all(),[
             'email' => 'required|email',
-            'otp' => 'required'
+            'otp' => 'required',
+            'company_name' => 'required'
         ]);
 
         if($validator->fails()){
@@ -151,9 +155,22 @@ class SignUpController extends Controller
                                 'email_verified_at' => date('Y-m-d h:i:s')
                             ]);
 
-                            $user = User::where('email', $request->email)->first();
+                            AgencyProfileRegistration::create([
+                                'user_id' => $get_user_details->id,
+                                'company_name' => $request->company_name
+                            ]);
 
-                            $token = $user->createToken('auth_token')->plainTextToken;
+
+                            if($get_user_details->fcm_token != null){
+                                $data=[];
+                                $data['message']= "Welcome Aboard! Thankyou For Joining Peaceworc.";
+                                $token = [];
+                                $token[] = $get_user_details->fcm_token;
+                        
+                                $this->sendWelcomeNotification($token, $data);
+                            }
+
+                            $token = $get_user_details->createToken('auth_token')->plainTextToken;
 
                             return $this->success('Great! OTP Verified. SignUp Successful.', null, $token, 201);
 
@@ -162,7 +179,7 @@ class SignUpController extends Controller
                 }
 
             }catch(\Exception $e){
-                return $this->error('Oops!. Something Went Wrong.', null, null, 500);
+                return $this->error('Oops!. Something Went Wrong.'.$e, null, null, 500);
             }
             
         }
