@@ -47,15 +47,15 @@ class LoginController extends Controller
                             'email' => $user->email
                         ];
 
-                        $check_app_device_token_exists = AppDeviceToken::where('fcm_token', $request->fcm_token)->first();
+                        $check_app_device_token_exists = AppDeviceToken::pluck('fcm_token')->get();
 
-                        if($check_app_device_token_exists){
+                        if(! $check_app_device_token_exists->isEmpty()){
 
                             $data=[];
                             $data['message']= "Welcome Back! ".$user->name;
                             $token = [];
-                            $token[] = $check_app_device_token_exists->fcm_token;
-                    
+                            $token[] = $check_app_device_token_exists;
+
                             $this->sendWelcomeNotification($token, $data);
                         }else{
 

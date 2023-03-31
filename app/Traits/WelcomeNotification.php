@@ -16,7 +16,7 @@ trait WelcomeNotification{
             'body' => $data['message'],
             'title' => 'Peaceworc'
         ];
-
+        
         $registrationIds = $token;
             
         if(count($token) > 1){
