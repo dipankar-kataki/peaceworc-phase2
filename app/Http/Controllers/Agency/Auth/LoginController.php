@@ -60,7 +60,7 @@ class LoginController extends Controller
 
                             AppDeviceToken::create([
                                 'user_id' => Auth::user()->id,
-                                'fcm_token' => $request->fcm_token,
+                                'fcm_token' => 1,
                                 'role' => $user->role
                             ]);
 
