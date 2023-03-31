@@ -38,6 +38,7 @@ class LoginController extends Controller
                     if ( ! Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => Role::Agency_Owner]) ){
                         return $this->error('Invalid credentials. User unauthorized',null, 'null', 401);
                     }else{
+
                         $user = User::where('email', $request->email)->firstOrFail();
                         $auth_token =  $user->createToken('auth_token')->plainTextToken;
                         $data = [
@@ -77,7 +78,7 @@ class LoginController extends Controller
 
                 
             }catch(\Exception $e){
-                return $this->error('Opps! Something Went Wrong.', null, null, 500);
+                return $this->error('Opps! Something Went Wrong.'.$e->getMessage(), null, null, 500);
             }
         }
     }
