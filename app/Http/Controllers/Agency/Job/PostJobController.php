@@ -127,11 +127,11 @@ class PostJobController extends Controller
         }else{
             if($_GET['id'] == 0){
                 $job_details = AgencyPostJob::where('user_id', Auth::user()->id)
-                            ->orWhere('status', JobStatus::Open)
+                            ->where('payment_status', 1)
+                            ->Where('status', JobStatus::Open)
                             ->orWhere('status', JobStatus::BiddingStarted)
                             ->orWhere('status', JobStatus::BiddingEnded)
                             ->orWhere('status', JobStatus::QuickCall)
-                            ->where('payment_status', 1)
                             ->latest()->paginate('5');
                 return $this->success('Great! Job Fetched Successfully', $job_details, null, 200);
             }else{
