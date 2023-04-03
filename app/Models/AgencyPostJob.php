@@ -60,29 +60,29 @@ class AgencyPostJob extends Model
 
     public function getStatusAttribute($value){
         if($value == 0){
-            return 'Job Not Posted';
+            return 'NOT POSTED';
         }else if($value == 1){
-            return 'Open Job';
+            return 'OPEN';
         }else if($value == 2){
-            return 'Ongoing Job';
+            return 'ONGOING';
         }else if($value == 3){
-            return 'Job Completed';
+            return 'COMPLETED';
         }else if($value == 4){
-            return 'Job Closed';
+            return 'CLOSED';
         }else if($value == 5){
-            return 'Pending For Approval';
+            return 'PENDING';
         }else if($value == 6){
-            return 'Bidding Started';
+            return 'BIDDING STARTED';
         }else if($value == 7){
-            return 'Bidding Ended. Waiting For Results.';
+            return 'BIDDING ENDED';
         }else if($value == 8){
-            return 'Quick Call';
+            return 'QUICK CALL';
         }else if($value == 9){
-            return 'OnHold.';
+            return 'ON HOLD';
         }else if($value == 10){
-            return 'Upcoming.';
+            return 'UPCOMING';
         }else if($value == 11){
-            return 'Cancelled.';
+            return 'CANCELLED';
         }
     }
 
