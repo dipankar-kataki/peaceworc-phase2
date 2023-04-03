@@ -70,7 +70,7 @@ class SignUpController extends Controller
                         AppDeviceToken::create([
                             'user_id' => $create->id,
                             'fcm_token' => $request->fcm_token,
-                            'role' => $create->role
+                            'role' => Role::Caregiver,
                         ]);
 
                         Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));

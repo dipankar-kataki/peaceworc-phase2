@@ -137,3 +137,64 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('logout', [LogOutController::class, 'logout']);
 });
+
+Route::post('check-notification', function(){
+   
+
+    $token = 'eFzpDxSrQtO0IY9ZqJ3Z3_:APA91bHoEBGqPtshiLp23Q9vneYRElws6OSpGB4o0-ThmWasGVXuc_vX6zV2Vqpd6f8jdkooFWcDwFgdkD4dECvMBO6vsj5TBM74Nh7LCteZzvIUXJ1ksqV0MjlzqQD84KIt9M1V_UM9';
+
+
+    $server_key = env('FIREBASE_SERVER_KEY');
+            
+    $msg = [
+        'message'   => '',
+    ];
+
+    $notify_data = [
+        'body' => 'WelcomE Back Bro',
+        'title' => 'Peaceworc'
+    ];
+
+    $registrationIds = $token;
+        
+    // if(count($token) > 1){
+    //     $fields = array
+    //     (
+    //         'registration_ids' => $registrationIds, //  for  multiple users
+    //         'notification'  => $notify_data,
+    //         'data'=> [],
+    //         'priority'=> 'high'
+    //     );
+    // }
+    // else{
+        
+        $fields = array
+        (
+            'to' => $registrationIds, //  for  only one users
+            'notification'  => $notify_data,
+            'data'=> [
+                'message' => 'WelcomE back Fatele' 
+            ],
+            'priority'=> 'high'
+        );
+    // }
+        
+    $headers[] = 'Content-Type: application/json';
+    $headers[] = 'Authorization: key='. $server_key;
+
+    $ch = curl_init();
+    curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+    curl_setopt( $ch,CURLOPT_POST, true );
+    curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+    curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+    curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+    curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+    $result = curl_exec($ch );
+    if ($result === FALSE) 
+    {
+        die('FCM Send Error: ' . curl_error($ch));
+    }
+    curl_close( $ch );
+    return $result;
+
+});

@@ -55,9 +55,24 @@ class User extends Authenticatable
 
 
     public function getRoleAttribute($value){
-        if($value == 3){
-            return 'Owner';
+        
+        if($value == 1){
+            return 'Admin';
         }
+        if($value == 2){
+            return 'Caregiver';
+        }
+        if($value == 3){
+            return 'Agency_Owner';
+        }
+        if($value == 4){
+            return 'Agency_Admin';
+        }
+        if($value == 5){
+            return 'Agency_Operator';
+        }
+
+       
     }
 
     public function agencyProfile(){

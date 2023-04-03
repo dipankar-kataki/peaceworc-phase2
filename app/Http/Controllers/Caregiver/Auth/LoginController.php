@@ -34,6 +34,7 @@ class LoginController extends Controller
                     $user = User::where('email', $request->email)->firstOrFail();
 
                     $auth_token =  $user->createToken('auth_token')->plainTextToken;
+                    
                     $user_data = [
                         'name' => $user->name,
                         'email' => $user->email
@@ -41,14 +42,19 @@ class LoginController extends Controller
 
                     $check_app_device_token_exists = AppDeviceToken::where('fcm_token', $request->fcm_token)->first();
 
-                    if($check_app_device_token_exists){
+                    if($check_app_device_token_exists != null){
                         
                         $message = "Welcome Back! ".$user->name;
                         $token = $check_app_device_token_exists->fcm_token;
-                
-                        $this->sendWelcomeNotification($token, $message);
+                        
+                       return  $this->sendWelcomeNotification($token, $message);
+
                     }else{
 
+                        if($user->role == 'Caregiver'){
+                            $user->role = 2;
+                        }
+                        
                         AppDeviceToken::create([
                             'user_id' => Auth::user()->id,
                             'fcm_token' => $request->fcm_token,
@@ -61,7 +67,7 @@ class LoginController extends Controller
                         $this->sendWelcomeNotification($token, $message);
                     }
 
-                    return $this->success('Great! Login Successful', $user_data, $auth_token, 200);
+                    return $this->success('Great! Login Successful', $user, $auth_token, 200);
                 }
             }catch(\Exception $e){
                 Log::error('Not Able To Login ====>', $e);

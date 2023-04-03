@@ -57,6 +57,16 @@ class LoginController extends Controller
                             $this->sendWelcomeNotification($token, $message);
                         }else{
 
+                            if($user->role == 'Agency_Owner'){
+                                $user->role = 3;
+                            }
+                            if($user->role == 'Agency_Admin'){
+                                $user->role = 4;
+                            }
+                            if($user->role == 'Agency_Operator'){
+                                $user->role = 5;
+                            }
+
                             AppDeviceToken::create([
                                 'user_id' => Auth::user()->id,
                                 'fcm_token' => $request->fcm_token,
