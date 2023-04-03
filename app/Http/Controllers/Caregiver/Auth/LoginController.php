@@ -67,7 +67,7 @@ class LoginController extends Controller
                         $this->sendWelcomeNotification($token, $message);
                     }
 
-                    return $this->success('Great! Login Successful', $user, $auth_token, 200);
+                    return $this->success('Great! Login Successful', $user_data, $auth_token, 200);
                 }
             }catch(\Exception $e){
                 Log::error('Not Able To Login ====>', $e);
