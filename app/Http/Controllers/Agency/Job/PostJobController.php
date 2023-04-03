@@ -128,7 +128,7 @@ class PostJobController extends Controller
             if($_GET['id'] == 0){
                 $job_details = AgencyPostJob::where('user_id', Auth::user()->id)
                             ->where('payment_status', 1)
-                            ->Where('status', JobStatus::Open)
+                            ->where('status', JobStatus::Open)
                             ->orWhere('status', JobStatus::BiddingStarted)
                             ->orWhere('status', JobStatus::BiddingEnded)
                             ->orWhere('status', JobStatus::QuickCall)
