@@ -47,7 +47,7 @@ class LoginController extends Controller
                         $message = "Welcome Back! ".$user->name;
                         $token = $check_app_device_token_exists->fcm_token;
                         
-                       return  $this->sendWelcomeNotification($token, $message);
+                        $this->sendWelcomeNotification($token, $message);
 
                     }else{
 
