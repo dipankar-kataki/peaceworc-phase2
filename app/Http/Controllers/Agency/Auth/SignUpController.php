@@ -170,12 +170,11 @@ class SignUpController extends Controller
                             $app_device_token = AppDeviceToken::where('user_id', $get_user_details->id)->first();
 
                             if($app_device_token->fcm_token != null){
-                                $data=[];
-                                $data['message']= "Welcome Aboard! Thankyou For Joining Peaceworc.";
-                                $token = [];
-                                $token[] = $app_device_token->fcm_token;
+
+                                $message = "Welcome Aboard! Thankyou For Joining Peaceworc.";
+                                $token = $app_device_token->fcm_token;
                         
-                                $this->sendWelcomeNotification($token, $data);
+                                $this->sendWelcomeNotification($token, $message);
                             }
 
                             $auth_token = $get_user_details->createToken('auth_token')->plainTextToken;
