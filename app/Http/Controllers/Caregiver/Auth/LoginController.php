@@ -42,12 +42,11 @@ class LoginController extends Controller
                     $check_app_device_token_exists = AppDeviceToken::where('fcm_token', $request->fcm_token)->first();
 
                     if($check_app_device_token_exists){
-                        $data=[];
-                        $data['message']= "Welcome Back!. ".$user->name;
-                        $token = [];
-                        $token[] = $check_app_device_token_exists->fcm_token;
+                        
+                        $message = "Welcome Back! ".$user->name;
+                        $token = $check_app_device_token_exists->fcm_token;
                 
-                        $this->sendWelcomeNotification($token, $data);
+                        $this->sendWelcomeNotification($token, $message);
                     }else{
 
                         AppDeviceToken::create([
@@ -56,12 +55,10 @@ class LoginController extends Controller
                             'role' => $user->role
                         ]);
 
-                        $data=[];
-                        $data['message']= "Welcome Back! ".$user->name;
-                        $token = [];
-                        $token[] = $request->fcm_token;
+                        $message = "Welcome Back! ".$user->name;
+                        $token = $request->fcm_token;
                 
-                        $this->sendWelcomeNotification($token, $data);
+                        $this->sendWelcomeNotification($token, $message);
                     }
 
                     return $this->success('Great! Login Successful', $user_data, $auth_token, 200);

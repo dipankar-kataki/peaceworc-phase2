@@ -4,40 +4,40 @@ namespace App\Traits;
 
 trait WelcomeNotification{
 
-    protected function sendWelcomeNotification(Array $token, Array $data){
+    protected function sendWelcomeNotification(String $token, String $message){
 
         $server_key = env('FIREBASE_SERVER_KEY');
             
-        $msg = [
-            'message'   => $data['message'],
-        ];
+        // $msg = [
+        //     'message'   => $data['message'],
+        // ];
 
         $notify_data = [
-            'body' => $data['message'],
+            'body' => $message,
             'title' => 'Peaceworc'
         ];
 
         $registrationIds = $token;
             
-        if(count($token) > 1){
-            $fields = array
-            (
-                'registration_ids' => $registrationIds, //  for  multiple users
-                'notification'  => $notify_data,
-                'data'=> [],
-                'priority'=> 'high'
-            );
-        }
-        else{
+        // if(count($token) > 1){
+        //     $fields = array
+        //     (
+        //         'registration_ids' => $registrationIds, //  for  multiple users
+        //         'notification'  => $notify_data,
+        //         'data'=> [],
+        //         'priority'=> 'high'
+        //     );
+        // }
+        // else{
             
             $fields = array
             (
-                'to' => $registrationIds[0], //  for  only one users
+                'to' => $registrationIds, //  for  only one users
                 'notification'  => $notify_data,
                 'data'=> [],
                 'priority'=> 'high'
             );
-        }
+        // }
             
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'Authorization: key='. $server_key;
