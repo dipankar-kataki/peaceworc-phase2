@@ -19,7 +19,7 @@ class CreateAgencyPostJobsTable extends Migration
             $table->string('title',100);
             $table->string('care_type',50);
             $table->longText('care_items');
-            $table->string('date',50);
+            $table->string('start_date',50);
             $table->string('start_time',50);
             $table->string('end_time',50);
             $table->string('amount',50);

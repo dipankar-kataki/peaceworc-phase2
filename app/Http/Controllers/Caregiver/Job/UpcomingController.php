@@ -54,8 +54,9 @@ class UpcomingController extends Controller
                                 'title' => $job->job->title,
                                 'care_type' => $job->job->care_type,
                                 'care_items' => $job->job->care_items,
-                                'date' => Carbon::parse($job->job->date)->format('m-d-Y'),
+                                'start_date' => Carbon::parse($job->job->start_date)->format('m-d-Y'),
                                 'start_time' => $job->job->start_time,
+                                'end_date' => Carbon::parse($job->job->end_date)->format('m-d-Y'),
                                 'end_time' => $job->job->end_time,
                                 'amount' => $job->job->amount,
                                 'lat' => $job->job->lat,
@@ -80,7 +81,7 @@ class UpcomingController extends Controller
             
             
                 
-                            $full_job_date_time = Carbon::parse($get_job->job->date.''.$get_job->job->start_time);
+                            $full_job_date_time = Carbon::parse($get_job->job->start_date.''.$get_job->job->start_time);
                             $current_time = Carbon::now();
             
                             $to = Carbon::createFromFormat('Y-m-d H:s:i', $current_time);
@@ -102,8 +103,9 @@ class UpcomingController extends Controller
                                 'title' => $get_job->job->title,
                                 'care_type' => $get_job->job->care_type,
                                 'care_items' => $get_job->job->care_items,
-                                'date' => Carbon::parse($get_job->job->date)->format('m-d-Y'),
+                                'start_date' => Carbon::parse($get_job->job->start_date)->format('m-d-Y'),
                                 'start_time' => $get_job->job->start_time,
+                                'end_date' => Carbon::parse($get_job->job->end_date)->format('m-d-Y'),
                                 'end_time' => $get_job->job->end_time,
                                 'amount' => $get_job->job->amount,
                                 'address' => $get_job->job->amount,

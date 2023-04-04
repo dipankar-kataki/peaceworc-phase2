@@ -35,8 +35,9 @@ class GetBiddingResultsController extends Controller
                 $data['job_id'] = $get_bidded_jobs->job_id;
                 $data['job_title'] = $get_bidded_jobs->job->title;
                 $data['job_amount'] = $get_bidded_jobs->job->amount;
-                $data['job_date'] = Carbon::parse($get_bidded_jobs->job->date)->format('M-d, Y');
+                $data['job_start_date'] = Carbon::parse($get_bidded_jobs->job->start_date)->format('M-d, Y');
                 $data['job_start_time'] = $get_bidded_jobs->job->amount;
+                $data['job_end_date'] = Carbon::parse($get_bidded_jobs->job->end_date)->format('M-d, Y');
                 $data['job_end_time'] = $get_bidded_jobs->job->end_time;
                 $data['care_type'] = $get_bidded_jobs->job->care_type;
                 $data['care_items'] = $get_bidded_jobs->job->care_items;

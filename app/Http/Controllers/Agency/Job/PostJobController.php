@@ -22,8 +22,9 @@ class PostJobController extends Controller
             'title' => 'required | string',
             'care_type' => 'required | string',
             'care_items' => 'required',
-            'date' => 'required|date_format:m-d-Y',
+            'start_date' => 'required|date_format:m-d-Y',
             'start_time' => 'required',
+            'end_date' => 'required|date_format:m-d-Y',
             'end_time' => 'required',
             'amount' => 'required',
             'address' => 'required',
@@ -50,7 +51,7 @@ class PostJobController extends Controller
                     if($get_status->is_business_info_complete == 0 ||  $get_status->is_authorize_info_added == 0){
                         return $this->error('Oops! The Agency Profile Has To Be Completed First Before Posting A Job.', null, null, 400);
                     }else{
-                            $job_date = DateTime::createFromFormat("m-d-Y" , $request->date);
+                            $job_date = DateTime::createFromFormat("m-d-Y" , $request->start_date);
     
                             $full_job_date_time = Carbon::parse($job_date->format('Y-m-d').''.$request->start_time);
                             $current_time = Carbon::now();
@@ -76,8 +77,9 @@ class PostJobController extends Controller
                                 'title' => $request->title,
                                 'care_type' => $request->care_type,
                                 'care_items' => json_encode($request->care_items),
-                                'date' => $job_date->format('Y-m-d'),
+                                'start_date' => $job_date->format('Y-m-d'),
                                 'start_time' => $request->start_time,
+                                'end_date' => $job_date->format('Y-m-d'),
                                 'end_time' => $request->end_time,
                                 'amount' => $request->amount,
                                 'address' => $request->address,
