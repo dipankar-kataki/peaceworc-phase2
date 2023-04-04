@@ -280,41 +280,17 @@ class BasicProfileController extends Controller
         }
     }
 
-    public function editPhoneNumber(Request $request){
-        $validator = Validator::make($request->all(), [
-            'phone' => 'required|numeric',
-        ]);
+    public function editPhoneOrExperience(Request $request){
+        try{
+            $get_phone_or_exp_details = CaregiverProfileRegistration::where('user_id', Auth::user()->id)->first();
 
-        if($validator->fails()){
-            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
-        }else{
-            try{
-                CaregiverProfileRegistration::where('user_id', Auth::user()->id)->update([
-                    'phone' => $request->phone,
-                ]);
-                return $this->success('Great! Phone Number Successfully.', null, null, 201);
-            }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong. Failed To Update Phone Number.', null, null, 500);
-            }
+            CaregiverProfileRegistration::where('user_id', Auth::user()->id)->update([
+                'phone' => $request->phone ?? $get_phone_or_exp_details->phone,
+                'experience' => $request->experience ?? $get_phone_or_exp_details->experience,
+            ]);
+            return $this->success('Great! Details Updated Successfully.', null, null, 201);
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong. Failed To Update Details.', null, null, 500);
         }
-    }
-
-    public function editExperience(Request $request){
-        $validator = Validator::make($request->all(), [
-            'experience' => 'required',
-        ]);
-
-        if($validator->fails()){
-            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
-        }else{
-            try{
-                CaregiverProfileRegistration::where('user_id', Auth::user()->id)->update([
-                    'experience' => $request->experience,
-                ]);
-                return $this->success('Great! Caregiver Experience Updated Successfully.', null, null, 201);
-            }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong. Failed To Update Caregiver Experience.', null, null, 500);
-            }
-        }
-    }   
+    }  
 }
