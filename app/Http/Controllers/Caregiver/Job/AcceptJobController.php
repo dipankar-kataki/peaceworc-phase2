@@ -17,10 +17,10 @@ class AcceptJobController extends Controller
     public function acceptJob(Request $request){
         
         try{
-            $check_if_status_exists = CaregiverStatusInformation::where('user_id',Auth::user()->id )->first();
-            if($check_if_status_exists != null){
-                if($check_if_status_exists){
-                    if($check_if_status_exists->is_basic_info_added == 0 || $check_if_status_exists->is_documents_uploaded == 0){
+            $check_if_profile_completion_status_exists = CaregiverStatusInformation::where('user_id',Auth::user()->id )->first();
+            if($check_if_profile_completion_status_exists != null){
+                if($check_if_profile_completion_status_exists){
+                    if($check_if_profile_completion_status_exists->is_basic_info_added == 0 || $check_if_profile_completion_status_exists->is_documents_uploaded == 0){
                         return $this->error('Oops! Profile Incomplete. Failed To Accept job.', null, null, 500);
                     }else{
                         $create = AcceptJob::create([
