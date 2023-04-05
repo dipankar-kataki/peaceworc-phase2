@@ -22,14 +22,18 @@
         <div class="row g-4">
             <div class="col-auto">
                 <div class="avatar-lg">
-                    <img src="{{asset($agency_details->photo)}}" alt="user-img" class="img-thumbnail rounded-circle" height="100" width="100"/>
+                    @if ( $agency_details->photo === null)
+                        <img src="{{asset('assets/images/companies/company_image.jpg')}}" alt="user-img" class="img-thumbnail rounded-circle" height="100" width="100"/>
+                    @else
+                        <img src="{{asset($agency_details->photo)}}" alt="user-img" class="img-thumbnail rounded-circle" height="100" width="100"/>
+                    @endif
                 </div>
             </div>
             <!--end col-->
             <div class="col">
                 <div class="p-2">
                     <h3 class="text-white mb-1">{{$agency_details->company_name}} 
-                        @if($is_profile_approved == 1)
+                        @if($is_profile_approved === 1)
                             <i class='eos-icons text-success' title="Profile Approved">verified</i>
                            <!-- Dropdown Menu Item Color -->
                             <div class="btn-group fw-bold">
@@ -49,16 +53,23 @@
                     <div class="hstack text-white-50 gap-1">
                         <div class="me-2">
                             <i class='eos-icons eos-36 me-2 text-white-75 align-middle mb-2'>corporate_fare</i>
-                                {{$agency_details->street}}, {{$agency_details->city_or_district}}, {{$agency_details->state}}, {{$agency_details->zip_code}}
+                                @if ($agency_details->zip_code === null)
+                                    <span>Not Available</span>
+                                @else
+                                    {{$agency_details->street}}, {{$agency_details->city_or_district}}, {{$agency_details->state}}, {{$agency_details->zip_code}}                                  
+                                @endif
                             </i><br>
                             <i class='eos-icons eos-36 me-2 text-white-75 align-middle'>schedule</i>
-                                Joined-on : {{$agency_details->created_at}}
+                                Joined-on : {{$agency_details->created_at->format('M-d, Y h:i A')}}
                             </i>
                         </div>
                     </div>
                     <div class="mt-3">
-                        @if($is_profile_approved == 0)
+                        @if($is_profile_approved === 0)
                             <Button class="btn btn-sm btn-warning text-black fw-bold updateApprovalStatus" title="Click To Approve Agency" data-id={{$agency_details->user_id}} value="1">Approval Pending</Button>
+                        @endif
+                        @if($is_profile_approved === 'missing')
+                            <Button class="btn btn-sm btn-warning text-black fw-bold">Profile Incomplete !!!</Button>
                         @endif
                     </div>
                 </div>
@@ -68,14 +79,14 @@
                 <div class="row text text-white-50 text-center">
                     <div class="col-lg-6 col-4">
                         <div class="p-2">
-                            <h4 class="text-white mb-1">0</h4>
-                            <p class="fs-14 mb-0">Rating</p>
+                            <h4 class="text-white mb-1 fs-14">3.4 <i class='ri-star-fill text-warning fs-12'></i></h4>
+                            <p class="fs-15 mb-0">Rating</p>
                         </div>
                     </div>
                     <div class="col-lg-6 col-4">
                         <div class="p-2">
-                            <h4 class="text-white mb-1">0</h4>
-                            <p class="fs-14 mb-0">Reviews</p>
+                            <h4 class="text-white mb-1 fs-14">25</h4>
+                            <a href="javascript:void(0)" style="color:rgba(255,255,255,.5) !important;" class="fs-15 mb-0">Reviews</a>
                         </div>
                     </div>
                 </div>
@@ -358,7 +369,7 @@
                                                         <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$officer->role ??  'Role Missing'}}</span>
                                                     </p>
                                                     <p class="mb-2">Status :
-                                                        @if($officer->status == 'OPEN')
+                                                        @if($officer->status === 'OPEN')
                                                             <span class="text-success mb-0 fs-12" style="font-weight:500;">ACTIVE</span><br>
                                                             <Button class="btn btn-sm btn-danger text-black mt-3 fw-bold updateAuthOfficerStatus" title="Click To Suspend/Block Authorized Officer"  data-id="{{$officer->id}}" value="0">Block Officer</Button>
                                                         @else
@@ -611,7 +622,7 @@
                                             <div class="timeline">
                                                 @forelse ($reviews as $key => $item)
                                                 
-                                                    @if ($key % 2 == 0)
+                                                    @if ($key % 2 === 0)
                                                         <div class="timeline-item left">
                                                             <i class="icon ri-calendar-line"></i>
                                                             <div class="date">{{ Carbon\Carbon::parse($item->created_at)->format('d M Y') }}</div>
@@ -711,7 +722,7 @@
                         text: data.message,
                         confirmButtonText : 'Ok'
                     }).then( (res) => {
-                        if(res.isConfirmed == true){
+                        if(res.isConfirmed === true){
                             location.reload(true);
                         }
                     })
@@ -754,7 +765,7 @@
                         text: data.message,
                         confirmButtonText : 'Ok'
                     }).then( (res) => {
-                        if(res.isConfirmed == true){
+                        if(res.isConfirmed === true){
                             location.reload(true);
                         }
                     })

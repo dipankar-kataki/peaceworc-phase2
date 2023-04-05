@@ -27,7 +27,7 @@ class AgencyController extends Controller
 
             $completion_rate = 10;
             $agency_profile_completion_status = AgencyInformationStatus::where('user_id', $id)->first();
-            if($agency_profile_completion_status){
+            if($agency_profile_completion_status != null){
                 if($agency_profile_completion_status->is_business_info_complete == 1){
                     $completion_rate = $completion_rate+30;
                 }
@@ -49,13 +49,13 @@ class AgencyController extends Controller
                 [
                     'agency_details' => $agency_details,
                     'completion_rate' => $completion_rate, 
-                    'is_profile_approved' => $agency_profile_completion_status->is_profile_approved,
+                    'is_profile_approved' => $agency_profile_completion_status->is_profile_approved ?? 'missing',
                     'authorize_officer' => $authorize_officer,
                     'reviews' => $reviews
                 ]
             );
         }catch(\Exception $e){
-           echo 'Oops! Something Went Wrong';
+           echo 'Oops! Something Went Wrong'.$e;
         }
         
     }

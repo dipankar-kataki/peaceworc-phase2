@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <table id="agency_list" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
                         <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th scope="col" style="width: 10px;">
                                     <div class="form-check">
                                         <input class="form-check-input fs-15" type="checkbox" id="checkAll" value="option">
@@ -33,20 +33,26 @@
                         <tbody>
 
                             @foreach ($agency_list as $key => $item)
-                                <tr>
+                                <tr class="text-center">
                                     <th scope="row">
                                         <div class="form-check">
                                             <input class="form-check-input fs-15" type="checkbox" name="checkAll" value="option1">
                                         </div>
                                     </th>
                                     <td>{{$key + 1}}</td>
-                                    <td>
-                                        <img class="image avatar-xs rounded-circle" src="{{asset($item->photo)}}" alt="agency logo">
+                                    <td class="d-flex flex-row justify-content-center">
+                                        @if ( $item->photo === null)
+                                            <span class="avatar-title rounded-circle fs-17 bg-dark text-light" style="height:40px; width:40px;">
+                                                <i class="ri-building-line"></i>
+                                            </span>
+                                        @else
+                                            <img class="image avatar-xs rounded-circle" src="{{asset($item->photo)}}" alt="agency logo">                                            
+                                        @endif
                                     </td>
                                     <td>{{$item->company_name}}</td>
-                                    <td>{{$item->email}}</td>
-                                    <td>{{$item->phone}}</td>
-                                    <td>{{$item->tax_id_or_ein_id}}</td>
+                                    <td>{{$item->email ?? 'Not Found'}}</td>
+                                    <td>{{$item->phone ?? 'Not Found'}}</td>
+                                    <td>{{$item->tax_id_or_ein_id ?? 'Not Found'}}</td>
                                     <td>{{$item->created_at->format('M-d, Y')}}</td>
                                     <td>
                                         @if ($item->status == 'ACTIVE')
