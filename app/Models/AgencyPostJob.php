@@ -87,6 +87,10 @@ class AgencyPostJob extends Model
             return 'Upcoming';
         }else if($value == 11){
             return 'Cancelled';
+        }else if($value == 12){
+            return 'Expired';
+        }else if($value == 13){
+            return 'Deleted';
         }
     }
 
