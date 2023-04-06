@@ -16,4 +16,5 @@ Class JobStatus{
     const JobAccepted = 10;
     const JobCancelled = 11;
     const JobExpired = 12;
+    const JobDeleted = 13;
 }

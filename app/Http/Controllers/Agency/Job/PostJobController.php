@@ -184,7 +184,10 @@ class PostJobController extends Controller
                         }else if( $time_diff_in_hour_till_job_start < 04){
                             return $this->error('Oops! Job Cannot Be Deleted. Less than 4 hours remaining till the job starts. ', null, null, 400);
                         }else{
-                            AgencyPostJob::where('id', $_GET['id'])->delete();
+                            AgencyPostJob::where('id', $_GET['id'])->update([
+                                'status' => JobStatus::JobDeleted,
+                                'deleted_at' => Carbon::now()
+                            ]);
                             return $this->success('Great! Job Deleted Successfully.', null, null, 200);
                         }
                         
