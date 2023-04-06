@@ -42,9 +42,7 @@
                                     <td>{{$key + 1}}</td>
                                     <td class="d-flex flex-row justify-content-center">
                                         @if ( $item->photo === null)
-                                            <span class="avatar-title rounded-circle fs-17 bg-dark text-light" style="height:40px; width:40px;">
-                                                <i class="ri-building-line"></i>
-                                            </span>
+                                            <img src="{{asset('assets/images/companies/company_image.jpg')}}" alt="user-img" class="img-thumbnail rounded-circle" height="50" width="50"/>
                                         @else
                                             <img class="image avatar-xs rounded-circle" src="{{asset($item->photo)}}" alt="agency logo">                                            
                                         @endif

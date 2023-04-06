@@ -1,5 +1,5 @@
 @extends('welcome')
-@section('title', ' Authorize Officer List')
+@section('title', ' All Jobs List')
 @section('custom-style')
 @endsection
 @section('content')
@@ -7,7 +7,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0 flex-grow-1">Authorize Officer List</h4>
+                    <h4 class="card-title mb-0 flex-grow-1">All Jobs</h4>
                 </div><!-- end card header -->
 
                 <div class="card-body">
@@ -19,19 +19,18 @@
                                         <input class="form-check-input fs-15" type="checkbox" id="checkAll" value="option">
                                     </div>
                                 </th>
-                                <th data-ordering="false">SR No.</th>
-                                <th data-ordering="false">Name</th>
-                                <th data-ordering="false">Email</th>
-                                <th data-ordering="false">Phone</th>
-                                <th data-ordering="false">Role</th>
-                                <th data-ordering="false">Belongs To Agency</th>
-                                <th>Joined On</th>
-                                <th>Status</th>
+                                <th>SR No.</th>
+                                <th>Job Title</th>
+                                <th>Start Date & Time</th>
+                                <th>End Date & Time</th>
+                                <th>Amount</th>
+                                <th>Payment Status</th>
+                                <th>Job Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($get_auth_officer as $key => $item)
+                            @foreach ($get_all_jobs as $key => $jobs)
                                 <tr>
                                     <th scope="row">
                                         <div class="form-check">
@@ -39,27 +38,27 @@
                                         </div>
                                     </th>
                                     <td>{{$key + 1}}</td>
-                                    <td>{{$item->name}}</td>
-                                    <td>{{$item->email}}</td>
-                                    <td>{{$item->phone}}</td>
-                                    <td>{{$item->role}}</td>
-                                    <td>{{$item->agency->company_name}}</td>
-                                    <td>{{$item->created_at->format('M-d, Y')}}</td>
+                                    <td>{{$jobs->title}}</td>
+                                    <td>{{$jobs->start_date}} @ {{$jobs->start_time}}</td>
+                                    <td>{{$jobs->end_date}} @ {{$jobs->end_time}}</td>
+                                    <td>{{$jobs->amount}}</td>
                                     <td>
-                                        @if ($item->status == 'OPEN')
-                                            <span class="badge badge-soft-success fs-14">OPEN</span>
-                                        @elseif($item->status == 'SUSPENDED')
-                                            <span class="badge badge-soft-warning fs-14">SUSPENDED</span>
-                                        @elseif($item->status == 'DELETED')
-                                            <span class="badge badge-soft-danger fs-14">DELETED</span>
+                                        @if($jobs->payment_status === 1)
+                                            <a href="javascript:void(0);" class="fs-14 badge badge-soft-success">SUCCESSFUL</a>
+                                        @elseif($jobs->payment_status === 0)
+                                            <a href="javascript:void(0);" class="fs-14 badge badge-soft-warning">PENDING</a>
+                                        @else
+                                            <a href="javascript:void(0);" class="fs-14 badge badge-soft-danger">FAILED</a>
                                         @endif
+                                    </td>
+                                    <td><span style="text-transform:uppercase;">{{$jobs->status}}</span></td>
                                     <td>
                                         <div class="dropdown d-inline-block">
                                             <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="ri-more-fill align-middle"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a href="{{route('admin.get.authorize.officer.list', ['id' => $item->id ])}}" class="dropdown-item"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> View Profile</a></li>
+                                                <li><a href="{{route('admin.agency.get.all.job', ['id' => encrypt($jobs->id) ])}}" class="dropdown-item"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> View Details</a></li>
                                                 <li>
                                                     <a class="dropdown-item remove-item-btn">
                                                         <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete

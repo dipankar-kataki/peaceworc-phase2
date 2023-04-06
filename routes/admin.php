@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Agency\Access\AccessController;
 use App\Http\Controllers\Admin\Agency\AgencyController;
+use App\Http\Controllers\Admin\Agency\Job\JobController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\LogOutController;
 use App\Http\Controllers\Admin\AuthorizeOfficer\AuthorizeOfficerController;
@@ -38,6 +39,10 @@ Route::group(['middleware' => 'auth'] ,function(){
 
         Route::group(['prefix' => 'authorize-officer'], function(){
             Route::get('list/{id?}', [AuthorizeOfficerController::class, 'getList'])->name('admin.get.authorize.officer.list');
+        });
+
+        Route::group(['prefix' => 'job'], function(){
+            Route::get('list/{id?}', [JobController::class, 'getAllJobs'])->name('admin.agency.get.all.job');
         });
     });
     Route::get('logout', [LogOutController::class, 'logout'])->name('admin.logout');

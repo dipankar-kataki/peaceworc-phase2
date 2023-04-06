@@ -14,6 +14,13 @@ class AgencyPostJob extends Model
     protected $table = 'agency_post_jobs';
     protected $guarded = [];
 
+    public function agency_profile(){
+        return $this->hasOne(AgencyProfileRegistration::class, 'user_id', 'user_id');
+    }
+
+    public function agency(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 
     public function getCareItemsAttribute($value){
         if(empty(json_decode($value))){

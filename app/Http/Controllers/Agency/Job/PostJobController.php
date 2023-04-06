@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Agency\Job;
 
 use App\Common\JobStatus;
 use App\Http\Controllers\Controller;
+use App\Models\AcceptJob;
 use App\Models\AgencyInformationStatus;
 use App\Models\AgencyPostJob;
 use App\Traits\ApiResponse;
@@ -168,8 +169,25 @@ class PostJobController extends Controller
                     if(!$check_if_job_exists){
                         return $this->error('Oops! Failed To Delete. Job Not Found', null, null, 500);
                     }else{
-                        AgencyPostJob::where('id', $_GET['id'])->delete();
-                        return $this->success('Great! Job Deleted Successfully.', null, null, 200);
+                        $check_if_job_is_accepted = AcceptJob::where('job_id', $_GET['id'])->exists();
+
+                        $get_job_details = AgencyPostJob::where('id', $_GET['id'])->first();
+
+                        $current_time = Carbon::now();
+                        $job_start_time = $get_job_details->start_date.''.$get_job_details->start_time;
+    
+                        $time_diff_in_seconds_till_job_start = $current_time->diffInSeconds($job_start_time);
+                        $time_diff_in_hour_till_job_start = gmdate('H', $time_diff_in_seconds_till_job_start);
+
+                        if($check_if_job_is_accepted){
+                            return $this->error('Oops! Job Cannot Be Deleted. Job Is Already Accepted By A Caregiver. ', null, null, 400);
+                        }else if( $time_diff_in_hour_till_job_start < 04){
+                            return $this->error('Oops! Job Cannot Be Deleted. Less than 4 hours remaining till the job starts. ', null, null, 400);
+                        }else{
+                            AgencyPostJob::where('id', $_GET['id'])->delete();
+                            return $this->success('Great! Job Deleted Successfully.', null, null, 200);
+                        }
+                        
                     }
                 }catch(\Exception $e){
                     return $this->error('Oops! Failed To Delete Job. Something Went Wrong.', null, null, 500);
