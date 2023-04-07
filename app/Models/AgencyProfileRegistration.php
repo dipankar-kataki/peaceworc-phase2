@@ -33,9 +33,9 @@ class AgencyProfileRegistration extends Model
         return $this->hasOne(AgencyInformationStatus::class, 'user_id', 'user_id')->select(['user_id', 'is_business_info_complete', 'is_other_info_added', 'is_authorize_info_added', 'is_profile_approved']);
     }
 
-    // public function jobs_posted(){
-    //     return $this->hasMany(AgencyPostJob::class, 'user_id', 'user_id')->count();
-    // }
+    public function jobs_posted(){
+        return $this->hasMany(AgencyPostJob::class, 'user_id', 'user_id')->count();
+    }
 
     
 
