@@ -116,6 +116,6 @@ class User extends Authenticatable
     }
 
     public function caregiverProfileStatus(){
-        return $this->hasOne(CaregiverStatusInformation::class, 'user_id', 'id')->pluck('is_basic_info_added', 'is_optional_info_added', 'is_documents_uploaded', 'is_profile_approved');
+        return $this->hasOne(CaregiverStatusInformation::class, 'user_id', 'id')->select(['is_basic_info_added', 'is_optional_info_added', 'is_documents_uploaded', 'is_profile_approved']);
     }
 }
