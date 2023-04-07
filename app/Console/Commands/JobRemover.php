@@ -2,7 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Common\JobStatus;
+use App\Models\AcceptJob;
+use App\Models\AgencyPostJob;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class JobRemover extends Command
 {
@@ -18,7 +23,7 @@ class JobRemover extends Command
      *
      * @var string
      */
-    protected $description = 'This command will pull the job from jobs table and check if the jobs end time is over. If over it will mark the job as expired.';
+    protected $description = 'This command will pull jobs from the jobs table and check if the jobs end time is over. If over it will mark the job as expired.';
 
     /**
      * Create a new command instance.
@@ -37,6 +42,39 @@ class JobRemover extends Command
      */
     public function handle()
     {
-        return 0;
+        try{
+            $get_jobs = AgencyPostJob::where('payment_status', 1)->get();
+
+            if(!$get_jobs->isEmpty() ){
+                
+                foreach($get_jobs as $job){
+
+                    $current_time = Carbon::now();
+    
+                    $job_end_time = $job->end_date.''.$job->end_time;
+            
+                    $time_diff_in_seconds_till_job_end = $current_time->diffInSeconds($job_end_time);
+    
+                    $time_diff_in_hour_till_job_end = gmdate('H', $time_diff_in_seconds_till_job_end);
+    
+                    if($time_diff_in_hour_till_job_end  <= 0){
+                        AgencyPostJob::where('id', $job->id)->update([
+                            'status' => JobStatus::JobExpired,
+                        ]);
+
+                        $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->exists();
+                        if($check_if_job_is_accepted){
+                            AcceptJob::where('job_id', $job->id)->update([
+                                'status' => JobStatus::JobExpired,
+                            ]);
+                        }
+                    }
+    
+                }
+            }
+            
+        }catch(\Exception $e){
+            Log::info( 'Something Went Wrong ===> ', $e->getMessage() ); 
+        }
     }
 }
