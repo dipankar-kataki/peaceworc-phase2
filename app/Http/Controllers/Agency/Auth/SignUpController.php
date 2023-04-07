@@ -148,7 +148,7 @@ class SignUpController extends Controller
     
                         $otp_validity_time =  $get_user_details->otp_validity;
     
-                        $current_time = Carbon::now();
+                        $current_time = Carbon::now()->timezone(env('APP_TIMEZONE'));
     
                         // $time_diff_in_minutes = $current_time->diffInMinutes($otp_validity_time);
 
