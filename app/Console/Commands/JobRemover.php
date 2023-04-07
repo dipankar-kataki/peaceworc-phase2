@@ -66,6 +66,8 @@ class JobRemover extends Command
                                 'status' => JobStatus::JobExpired,
                             ]);
                         }
+
+                        Log::info('Database Updated');
                     }
 
                 }
