@@ -167,7 +167,7 @@ class ProfileRegistrationController extends Controller
     }
 
     public function getProfileDetails(){
-        $details = AgencyProfileRegistration::with('profileCompletionStatus')->where('user_id', Auth::user()->id)->first();
+        $details = AgencyProfileRegistration::with('profileCompletionStatus')->withCount('job_count as job_count', 'revenue_count as revenue_count', 'rating_count as rating_count')->where('user_id', Auth::user()->id)->first();
         return $this->success('Great! Details fetched Successfully.', $details, null, 200 );
     }
 }
