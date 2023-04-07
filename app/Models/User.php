@@ -114,4 +114,8 @@ class User extends Authenticatable
     public function w4_form(){
         return $this->hasMany(W4Document::class)->where('status', 1);
     }
+
+    public function caregiverProfileStatus(){
+        return $this->hasOne(CaregiverStatusInformation::class, 'user_id', 'id');
+    }
 }

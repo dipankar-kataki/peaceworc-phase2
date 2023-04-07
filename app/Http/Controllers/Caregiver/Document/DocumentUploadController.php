@@ -24,7 +24,7 @@ class DocumentUploadController extends Controller
 
     public function getDocument(){
 
-        $details = User::where('id', auth('sanctum')->user()->id)->with('covid','childAbuse','criminal','driving','employment','identification','tuberculosis','w4_form')->first();
+        $details = User::where('id', auth('sanctum')->user()->id)->with('caregiverProfileStatus', 'covid','childAbuse','criminal','driving','employment','identification','tuberculosis','w4_form')->first();
         return $this->success('Document fetched successfully.',  $details, 'null', 200);
     }
     public function uploadDocument(Request $request){
