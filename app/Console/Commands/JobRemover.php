@@ -68,8 +68,6 @@ class JobRemover extends Command
                         }
 
                         Log::info('Database Updated');
-                    }else{
-                        Log::info('No Job Found To Updated');
                     }
 
                 }
