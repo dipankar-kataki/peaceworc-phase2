@@ -148,7 +148,7 @@ class SignUpController extends Controller
     
                         $otp_validity_time =  $get_user_details->otp_validity;
     
-                        $current_time = time();
+                        $current_time = date('Y-m-d h:i:s');
     
                         // $time_diff_in_minutes = $current_time->diffInMinutes($otp_validity_time);
 
