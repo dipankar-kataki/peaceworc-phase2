@@ -50,14 +50,12 @@ class JobRemover extends Command
                 foreach($get_jobs as $job){
 
                     $current_time = Carbon::now();
-    
                     $job_end_time = $job->end_date.''.$job->end_time;
-            
-                    $time_diff_in_seconds_till_job_end = $current_time->diffInSeconds($job_end_time);
-    
-                    $time_diff_in_hour_till_job_end = gmdate('H', $time_diff_in_seconds_till_job_end);
-    
-                    if($time_diff_in_hour_till_job_end  <= 0){
+
+                    $time_diff_in_minutes = $current_time->diffInMinutes($job_end_time);
+                    
+
+                    if($time_diff_in_minutes  === 0){
                         AgencyPostJob::where('id', $job->id)->update([
                             'status' => JobStatus::JobExpired,
                         ]);
@@ -69,8 +67,10 @@ class JobRemover extends Command
                             ]);
                         }
                     }
-    
+
                 }
+
+                
             }
             
         }catch(\Exception $e){
