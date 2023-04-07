@@ -148,42 +148,40 @@ class SignUpController extends Controller
     
                         $otp_validity_time =  $get_user_details->otp_validity;
     
-                        $current_time = Carbon::now()->shiftTimezone('Asia/Kolkata');
+                        $current_time = Carbon::now();
     
-                        // $time_diff_in_minutes = $current_time->diffInMinutes($otp_validity_time);
-
-                        return response()->json(['otp_validity_time' => $otp_validity_time, 'current_time' => $current_time]);
-
-                        // if( $time_diff_in_minutes > 3){
-                        //     return $this->error('Oops! OTP Expired.', null, null, 400);
-                        // }else{
-
-                        //     User::where('email', $request->email)->update([
-                        //         'is_otp_verified' => 1,
-                        //         'is_agreed_to_terms' => 1,
-                        //         'email_verified_at' => date('Y-m-d h:i:s')
-                        //     ]);
-
-                        //     AgencyProfileRegistration::create([
-                        //         'user_id' => $get_user_details->id,
-                        //         'company_name' => $request->company_name
-                        //     ]);
-
-                        //     $app_device_token = AppDeviceToken::where('user_id', $get_user_details->id)->first();
-
-                        //     if($app_device_token->fcm_token != null){
-
-                        //         $message = "Welcome Aboard! Thankyou For Joining Peaceworc.";
-                        //         $token = $app_device_token->fcm_token;
+                        $time_diff_in_minutes = $current_time->diffInMinutes($otp_validity_time);
                         
-                        //         $this->sendWelcomeNotification($token, $message);
-                        //     }
+                        if( $time_diff_in_minutes > 3){
+                            return $this->error('Oops! OTP Expired.', null, null, 400);
+                        }else{
 
-                        //     $auth_token = $get_user_details->createToken('auth_token')->plainTextToken;
+                            User::where('email', $request->email)->update([
+                                'is_otp_verified' => 1,
+                                'is_agreed_to_terms' => 1,
+                                'email_verified_at' => date('Y-m-d h:i:s')
+                            ]);
 
-                        //     return $this->success('Great! OTP Verified. SignUp Successful.', null, $auth_token, 201);
+                            AgencyProfileRegistration::create([
+                                'user_id' => $get_user_details->id,
+                                'company_name' => $request->company_name
+                            ]);
 
-                        // }
+                            $app_device_token = AppDeviceToken::where('user_id', $get_user_details->id)->first();
+
+                            if($app_device_token->fcm_token != null){
+
+                                $message = "Welcome Aboard! Thankyou For Joining Peaceworc.";
+                                $token = $app_device_token->fcm_token;
+                        
+                                $this->sendWelcomeNotification($token, $message);
+                            }
+
+                            $auth_token = $get_user_details->createToken('auth_token')->plainTextToken;
+
+                            return $this->success('Great! OTP Verified. SignUp Successful.', null, $auth_token, 201);
+
+                        }
                     }
                 }
 
