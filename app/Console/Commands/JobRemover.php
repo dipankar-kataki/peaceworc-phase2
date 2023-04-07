@@ -50,9 +50,9 @@ class JobRemover extends Command
                 foreach($get_jobs as $job){
 
                     $current_time = Carbon::now();
-                    $job_end_time = $job->end_date.''.$job->end_time;
+                    $job_start_time = $job->start_date.''.$job->start_time;
 
-                    $time_diff_in_minutes = $current_time->diffInMinutes($job_end_time);
+                    $time_diff_in_minutes = $current_time->diffInMinutes($job_start_time);
                     
 
                     if($time_diff_in_minutes  === 0){
