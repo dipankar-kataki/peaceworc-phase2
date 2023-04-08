@@ -345,7 +345,7 @@
                                 <h5 class="card-title mb-3">Authorized Officer Details</h5>
                                 <div class="row">
                                     @foreach ($authorize_officer as $key => $officer)
-                                        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                                        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
                                             <div class="d-flex mt-2">
                                                 <div class="flex-shrink-0 avatar-xs align-self-top me-3">
                                                     <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
