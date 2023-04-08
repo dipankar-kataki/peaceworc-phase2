@@ -153,23 +153,23 @@
                                                 <tbody>
                                                     <tr>
                                                         <th class="ps-0" scope="row"> <i class="ri-user-line"></i> :</th>
-                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->name ?? '<span class="text-danger">Name Missing</span>'}}</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->name ?? 'Name Missing'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-phone-line"></i> :</th>
-                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->phone ?? '<span class="text-danger">Phone Number Missing</span>'}}</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->phone ?? 'Phone Number Missing'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-mail-line"></i> :</th>
-                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->email ?? '<span class="text-danger">Email Missing</span>'}}</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->email ?? 'Email Missing'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-shield-user-line"></i> :</th>
-                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->role ?? '<span class="text-danger">Role Missing</span>'}}</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->role ?? 'Role Missing'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-calendar-line"></i> :</th>
-                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->created_at->format('M-d, Y') ?? '<span class="text-danger">Joined Date Missing</span>'}}</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->created_at->format('M-d, Y') ?? 'Joined Date Missing'}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -188,7 +188,7 @@
                                                 <p class="mb-1" style="font-weight:500">Company Bio :</p>
                                                 <div class="d-flex mt-2 text-align-justify">
                                                     <p class="px-3 fs-13">
-                                                        {{$agency_details->about_company ??  '<span class="text-danger">Company Bio Missing</span>'}}
+                                                        {{$agency_details->about_company ??  'Company Bio Missing'}}
                                                     </p>
                                                 </div>
                                             </div>
@@ -206,7 +206,7 @@
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="mb-1">Email Id :</p>
-                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->email ??  '<sapn class="text-danger">Email Id Missing</span>'}}</h6>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->email ??  'Email Id Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -219,7 +219,7 @@
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="mb-1">Phone Number :</p>
-                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->phone ??  '<sapn class="text-danger">Phone Number Missing</span>'}}</h6>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->phone ??  'Phone Number Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -232,7 +232,7 @@
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="mb-1">Legal Structure :</p>
-                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->legal_structure ??  '<sapn class="text-danger">Legal Structure Missing</span>'}}</h6>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->legal_structure ??  'Legal Structure Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -251,7 +251,7 @@
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="mb-1">Total Employees :</p>
-                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->number_of_employee ??  '<sapn class="text-danger">Total Employees Count Missing</span>'}}</h6>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->number_of_employee ??  'Total Employees Count Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -264,7 +264,7 @@
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="mb-1">Years In Business :</p>
-                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->years_in_business ??  '<sapn class="text-danger">Years In Business Missing</span>'}}</h6>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->years_in_business ??  'Years In Business Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -277,7 +277,7 @@
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="mb-1">Country of Business :</p>
-                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->country_of_business ??  '<sapn class="text-danger">Country of Business Missing</span>'}}</h6>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->country_of_business ??  'Country of Business Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -295,7 +295,7 @@
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="mb-1">Annual Revenue :</p>
-                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->annual_business_revenue ??  '<sapn class="text-danger">Annual Revenue Missing</span>'}}</h6>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->annual_business_revenue ??  'Annual Revenue Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -308,7 +308,7 @@
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="mb-1">Organization Type :</p>
-                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->organization_type ??  '<sapn class="text-danger">Organization Type Missing</span>'}}</h6>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->organization_type ??  'Organization Type Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -321,7 +321,7 @@
                                                     </div>
                                                     <div class="flex-grow-1 overflow-hidden">
                                                         <p class="mb-1">Tax Id/EIN Id :</p>
-                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->tax_id_or_ein_id ??  '<sapn class="text-danger">Tax Id/EIN Id Missing</span>'}}</h6>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$agency_details->tax_id_or_ein_id ??  'Tax Id/EIN Id Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>
