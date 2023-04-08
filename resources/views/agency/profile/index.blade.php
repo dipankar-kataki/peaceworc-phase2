@@ -157,7 +157,7 @@
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-phone-line"></i> :</th>
-                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->phone ?? <span class="text-danger">'Phone Number Missing'</span>}}</td>
+                                                        <td class="text-muted fs-12 text-wrap">{{$agency_details->user->phone ?? 'Phone Number Missing'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th class="ps-0" scope="row"><i class="ri-mail-line"></i> :</th>
