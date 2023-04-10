@@ -11,6 +11,7 @@ use App\Http\Controllers\Caregiver\Job\GetBiddingResultsController;
 use App\Http\Controllers\Caregiver\Job\JobController;
 use App\Http\Controllers\Caregiver\Job\OngoingJobController;
 use App\Http\Controllers\Caregiver\Job\QuickCallController;
+use App\Http\Controllers\Caregiver\Job\SearchJobController;
 use App\Http\Controllers\Caregiver\Job\StartJobController;
 use App\Http\Controllers\Caregiver\Job\UpcomingController;
 use App\Http\Controllers\Caregiver\Location\LocationController;
@@ -123,6 +124,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post('submit-bid', [BiddingController::class, 'submitBid']);
             Route::get('get-results', [GetBiddingResultsController::class, 'getBiddingResult']);
         });
+
+        Route::get('search', [SearchJobController::class, 'search']);
     });
 
     Route::group(['prefix' => 'document'], function(){
