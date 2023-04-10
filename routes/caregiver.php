@@ -125,7 +125,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::get('get-results', [GetBiddingResultsController::class, 'getBiddingResult']);
         });
 
-        Route::get('search', [SearchJobController::class, 'search']);
+        Route::post('search', [SearchJobController::class, 'search']);
     });
 
     Route::group(['prefix' => 'document'], function(){
