@@ -22,10 +22,13 @@ class SearchJobController extends Controller
                 if($amount_from == null && $amount_to == null){
                     $get_jobs = AgencyPostJob::where('payment_status', 1)->where('care_type','LIKE','%'.$request->care_type.'%')->get();
                     return $this->success('Great! Jobs Fetched Successfully', $get_jobs, null, 200);
+                }else if($amount_from != null && $amount_to != null){
+                    $get_jobs = AgencyPostJob::where('payment_status', 1)->whereBetween('amount', [$amount_from, $amount_to])->get();
+                    return $this->success('Great! Jobs Fetched Successfully', $get_jobs, null, 200);
                 }else{
                     $get_jobs = AgencyPostJob::where('payment_status', 1)
                                 ->where('care_type','LIKE','%'.$request->care_type.'%')
-                                ->whereBetween('points', [$amount_from, $amount_to])->get();
+                                ->whereBetween('amount', [$amount_from, $amount_to])->get();
                     return $this->success('Great! Jobs Fetched Successfully', $get_jobs, null, 200);
                 }
             }
