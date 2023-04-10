@@ -444,7 +444,7 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td class="text-center" style="width:100%;">Oops! No Payments Made Yet.</td>
+                                                        <td class="text-center">Oops! No Payments Made Yet.</td>
                                                     </tr>
                                                 @endforelse
                                                 
