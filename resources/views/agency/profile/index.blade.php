@@ -394,10 +394,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-4">
-                                    <h5 class="card-title flex-grow-1 mb-0">Documents</h5>
+                                    <h5 class="card-title flex-grow-1 mb-0">All Payments</h5>
                                     <div class="flex-shrink-0">
-                                        <input class="form-control d-none" type="file" id="formFile">
-                                        <label for="formFile" class="btn btn-danger"><i class="ri-upload-2-fill me-1 align-bottom"></i> Upload File</label>
+                                        <label for="filter_payment_range">- Filter -</label>
+                                        <div id="filter_payment_range" style="background: #fcfcfc; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%;border-radius:5px; color:black;">
+                                            <i class="las la-calendar-alt fs-16"></i>&nbsp;
+                                            <span></span> <i class="las la-caret-down"></i>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -781,6 +784,35 @@
                 }
             });
 
+        });
+    </script>
+
+    <script>
+        $(function() {
+        
+            var start = moment().subtract(29, 'days');
+            var end = moment();
+        
+            function cb(start, end) {
+                $('#filter_payment_range span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+        
+            $('#filter_payment_range').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                'showCustomRangeLabel' : false
+            }, cb);
+        
+            cb(start, end);
+        
         });
     </script>
 @endsection

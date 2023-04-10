@@ -6,6 +6,7 @@ use App\Common\Role;
 use App\Common\VisibilityStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AgencyInformationStatus;
+use App\Models\AgencyPayment;
 use App\Models\AgencyProfileRegistration;
 use App\Models\AuthorizeOfficer;
 use App\Models\Review;
@@ -45,13 +46,16 @@ class AgencyController extends Controller
 
             $reviews = Review::with('caregiver', 'agency')->where('agency_id', $id)->get();
 
+            $get_payments_made = AgencyPayment::where('agency_id', $id)->get();
+
             return view('agency.profile.index')->with(
                 [
                     'agency_details' => $agency_details,
                     'completion_rate' => $completion_rate, 
                     'is_profile_approved' => $agency_profile_completion_status->is_profile_approved ?? 'missing',
                     'authorize_officer' => $authorize_officer,
-                    'reviews' => $reviews
+                    'reviews' => $reviews,
+                    'get_payments_made' => $get_payments_made
                 ]
             );
         }catch(\Exception $e){
