@@ -11,6 +11,7 @@ use App\Http\Controllers\Agency\Job\AcceptedJob\UpcomingJobController;
 use App\Http\Controllers\Agency\Job\CareType\CareTypeController;
 use App\Http\Controllers\Agency\Job\CompletedJob\CompletedJobController;
 use App\Http\Controllers\Agency\Job\PostJobController;
+use App\Http\Controllers\Agency\Job\Search\SearchJobController;
 use App\Http\Controllers\Agency\Owner\OwnerProfileController;
 use App\Http\Controllers\Agency\Payments\AgencyPaymentController;
 use App\Http\Controllers\Agency\Registration\ProfileRegistrationController;
@@ -88,6 +89,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::group(['prefix' => 'completed-job'], function(){
             Route::get('get', [CompletedJobController::class, 'getCompletedJob']);
         });
+
+        Route::post('search', [SearchJobController::class, 'search']);
     });
 
     Route::group(['prefix' => 'payment'], function(){

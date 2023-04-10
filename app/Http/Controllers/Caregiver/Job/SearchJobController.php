@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Caregiver\Job;
 
+use App\Common\JobStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AgencyPostJob;
 use App\Traits\ApiResponse;
@@ -17,15 +18,23 @@ class SearchJobController extends Controller
             $amount_to  = $request->amount_to;
 
             if(( $request->care_type != null)  && ($amount_from == null && $amount_to == null) ){
-                $get_jobs = AgencyPostJob::where('payment_status', 1)->where('care_type', $request->care_type)->get();
+                $get_jobs = AgencyPostJob::where('payment_status', 1)
+                            ->where('care_type', $request->care_type)
+                            ->whereIn('status',[ JobStatus::Open,JobStatus::BiddingStarted, JobStatus::QuickCall])
+                            ->get();
                 return $this->success('Great! Jobs Fetched Successfully 1', $get_jobs, null, 200);
             }else if( ($request->care_type == null) && ($amount_from != null && $amount_to != null)){
-                $get_jobs = AgencyPostJob::where('payment_status', 1)->whereBetween('amount', [$amount_from, $amount_to])->get();
+                $get_jobs = AgencyPostJob::where('payment_status', 1)
+                            ->whereBetween('amount', [$amount_from, $amount_to])
+                            ->whereIn('status',[ JobStatus::Open,JobStatus::BiddingStarted, JobStatus::QuickCall])
+                            ->get();
                 return $this->success('Great! Jobs Fetched Successfully 2', $get_jobs, null, 200);
             }else{
                 $get_jobs = AgencyPostJob::where('payment_status', 1)
                             ->where('care_type', $request->care_type)
-                            ->whereBetween('amount', [$amount_from, $amount_to])->get();
+                            ->whereBetween('amount', [$amount_from, $amount_to])
+                            ->whereIn('status',[ JobStatus::Open,JobStatus::BiddingStarted, JobStatus::QuickCall])
+                            ->get();
                 return $this->success('Great! Jobs Fetched Successfully 3', $get_jobs, null, 200);
             }
             
