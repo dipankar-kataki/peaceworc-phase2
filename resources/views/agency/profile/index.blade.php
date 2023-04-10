@@ -443,8 +443,8 @@
                                                         <td>{{$get_pay->created_at->format('M-d, Y')}}</td>
                                                     </tr>
                                                 @empty
-                                                    <tr>
-                                                        <td class="text-center">Oops! No Payments Made Yet.</td>
+                                                    <tr class="text-center">
+                                                        <td>Oops! No Payments Made Yet.</td>
                                                     </tr>
                                                 @endforelse
                                                 
