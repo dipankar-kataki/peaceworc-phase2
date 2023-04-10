@@ -11,4 +11,10 @@ class AgencyPayment extends Model
 
     protected $table = 'agency_payments';
     protected $guarded = [];
+
+    public function job(){
+        return $this->belongsTo(AgencyPostJob::class, 'job_id', 'id');
+    }
 }
+
+

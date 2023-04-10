@@ -46,7 +46,7 @@ class AgencyController extends Controller
 
             $reviews = Review::with('caregiver', 'agency')->where('agency_id', $id)->get();
 
-            $get_payments_made = AgencyPayment::where('agency_id', $id)->get();
+            $get_payments_made = AgencyPayment::with('job')->where('agency_id', $id)->get();
 
             return view('agency.profile.index')->with(
                 [

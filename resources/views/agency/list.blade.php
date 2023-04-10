@@ -19,7 +19,7 @@
                                         <input class="form-check-input fs-15" type="checkbox" id="checkAll" value="option">
                                     </div>
                                 </th>
-                                <th data-ordering="false">SR No.</th>
+                                <th data-ordering="false">SL No.</th>
                                 <th data-ordering="false">Logo</th>
                                 <th data-ordering="false">Name</th>
                                 <th data-ordering="false">Email</th>
@@ -60,6 +60,7 @@
                                         @elseif($item->status == 'DELETED')
                                             <span class="badge badge-soft-danger fs-14">DELETED</span>
                                         @endif
+                                    </td>
                                     <td>
                                         <div class="dropdown d-inline-block">
                                             <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">

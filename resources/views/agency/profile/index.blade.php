@@ -393,7 +393,7 @@
                     <div class="tab-pane fade" id="payments-made" role="tabpanel">
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex align-items-center mb-4">
+                                <div class="d-flex align-items-center mb-3">
                                     <h5 class="card-title flex-grow-1 mb-0">All Payments</h5>
                                     <div class="flex-shrink-0">
                                         <label for="filter_payment_range">- Filter -</label>
@@ -405,209 +405,51 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-borderless align-middle mb-0">
-                                                <thead class="table-light">
-                                                    <tr>
-                                                        <th scope="col">File Name</th>
-                                                        <th scope="col">Type</th>
-                                                        <th scope="col">Size</th>
-                                                        <th scope="col">Upload Date</th>
-                                                        <th scope="col">Action</th>
+                                        <table id="agency_payments_list" class="pt-3 table table-bordered dt-responsive table-striped align-middle fs-13" style="width:100%;">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th>SL. No.</th>
+                                                    <th>Total Amount Paid</th>
+                                                    <th>Amount Paid For Job</th>
+                                                    <th>Caregiver Charge</th>
+                                                    <th>Peaceworc Charge</th>
+                                                    <th>Payment Status</th>
+                                                    <th>Created On</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                    
+                                                @forelse ($get_payments_made as $key => $get_pay)
+                                                    <tr class="text-center">
+                                                        <td>{{$key + 1}}</td>
+                                                        <td>
+                                                            <i class="las la-dollar-sign text-success fs-14" style="font-weight:800;"></i> {{$get_pay->amount}}
+                                                        </td>
+                                                        <td>{{$get_pay->job->title}}</td>
+                                                        <td><i class="las la-dollar-sign text-success fs-14" style="font-weight:800;"></i> {{$get_pay->caregiver_charge}}</td>
+                                                        <td>
+                                                            <i class="las la-dollar-sign text-success fs-14" style="font-weight:800;"></i> 
+                                                            {{$get_pay->peaceworc_charge }} <span class="fs-10" style="font-weight:600;">({{$get_pay->peaceworc_percentage}}% of total amount paid)</span>
+                                                        </td>
+                                                        <td>
+                                                            @if($get_pay->payment_status === 1)
+                                                                <a href="javascript:void(0);" class="fs-10 badge text-bg-success">SUCCESSFUL</a>
+                                                            @elseif($get_pay->payment_status === 0)
+                                                                <a href="javascript:void(0);" class="fs-10 badge text-bg-warning">PENDING</a>
+                                                            @else
+                                                                <a href="javascript:void(0);" class="fs-10 badge text-bg-danger">FAILED</a>
+                                                            @endif
+                                                        </td>
+                                                        <td>{{$get_pay->created_at->format('M-d, Y')}}</td>
                                                     </tr>
-                                                </thead>
-                                                <tbody>
+                                                @empty
                                                     <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar-sm">
-                                                                    <div class="avatar-title bg-soft-primary text-primary rounded fs-20">
-                                                                        <i class="ri-file-zip-fill"></i>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="ms-3 flex-grow-1">
-                                                                    <h6 class="fs-15 mb-0"><a href="javascript:void(0)">Artboard-documents.zip</a>
-                                                                    </h6>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>Zip File</td>
-                                                        <td>4.57 MB</td>
-                                                        <td>12 Dec 2021</td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn btn-light btn-icon" id="dropdownMenuLink15" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                    <i class="ri-equalizer-fill"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink15">
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill me-2 align-middle text-muted"></i>View</a></li>
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-download-2-fill me-2 align-middle text-muted"></i>Download</a></li>
-                                                                    <li class="dropdown-divider"></li>
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-line me-2 align-middle text-muted"></i>Delete</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
+                                                        <td class="text-center" style="width:100%;">Oops! No Payments Made Yet.</td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar-sm">
-                                                                    <div class="avatar-title bg-soft-danger text-danger rounded fs-20">
-                                                                        <i class="ri-file-pdf-fill"></i>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="ms-3 flex-grow-1">
-                                                                    <h6 class="fs-15 mb-0"><a href="javascript:void(0);">Bank Management System</a></h6>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>PDF File</td>
-                                                        <td>8.89 MB</td>
-                                                        <td>24 Nov 2021</td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn btn-light btn-icon" id="dropdownMenuLink3" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                    <i class="ri-equalizer-fill"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink3">
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill me-2 align-middle text-muted"></i>View</a></li>
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-download-2-fill me-2 align-middle text-muted"></i>Download</a></li>
-                                                                    <li class="dropdown-divider"></li>
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-line me-2 align-middle text-muted"></i>Delete</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar-sm">
-                                                                    <div class="avatar-title bg-soft-secondary text-secondary rounded fs-20">
-                                                                        <i class="ri-video-line"></i>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="ms-3 flex-grow-1">
-                                                                    <h6 class="fs-15 mb-0"><a href="javascript:void(0);">Tour-video.mp4</a></h6>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>MP4 File</td>
-                                                        <td>14.62 MB</td>
-                                                        <td>19 Nov 2021</td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn btn-light btn-icon" id="dropdownMenuLink4" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                    <i class="ri-equalizer-fill"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink4">
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill me-2 align-middle text-muted"></i>View</a></li>
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-download-2-fill me-2 align-middle text-muted"></i>Download</a></li>
-                                                                    <li class="dropdown-divider"></li>
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-line me-2 align-middle text-muted"></i>Delete</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar-sm">
-                                                                    <div class="avatar-title bg-soft-success text-success rounded fs-20">
-                                                                        <i class="ri-file-excel-fill"></i>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="ms-3 flex-grow-1">
-                                                                    <h6 class="fs-15 mb-0"><a href="javascript:void(0);">Account-statement.xsl</a></h6>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>XSL File</td>
-                                                        <td>2.38 KB</td>
-                                                        <td>14 Nov 2021</td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn btn-light btn-icon" id="dropdownMenuLink5" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                    <i class="ri-equalizer-fill"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink5">
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill me-2 align-middle text-muted"></i>View</a></li>
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-download-2-fill me-2 align-middle text-muted"></i>Download</a></li>
-                                                                    <li class="dropdown-divider"></li>
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-line me-2 align-middle text-muted"></i>Delete</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar-sm">
-                                                                    <div class="avatar-title bg-soft-info text-info rounded fs-20">
-                                                                        <i class="ri-folder-line"></i>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="ms-3 flex-grow-1">
-                                                                    <h6 class="fs-15 mb-0"><a href="javascript:void(0);">Project Screenshots Collection</a></h6>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>Floder File</td>
-                                                        <td>87.24 MB</td>
-                                                        <td>08 Nov 2021</td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn btn-light btn-icon" id="dropdownMenuLink6" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                    <i class="ri-equalizer-fill"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink6">
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill me-2 align-middle"></i>View</a></li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="javascript:void(0);"><i class="ri-download-2-fill me-2 align-middle"></i>Download</a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-line me-2 align-middle"></i>Delete</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar-sm">
-                                                                    <div class="avatar-title bg-soft-danger text-danger rounded fs-20">
-                                                                        <i class="ri-image-2-fill"></i>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="ms-3 flex-grow-1">
-                                                                    <h6 class="fs-15 mb-0">
-                                                                        <a href="javascript:void(0);">Velzon-logo.png</a>
-                                                                    </h6>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>PNG File</td>
-                                                        <td>879 KB</td>
-                                                        <td>02 Nov 2021</td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn btn-light btn-icon" id="dropdownMenuLink7" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                    <i class="ri-equalizer-fill"></i>
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink7">
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill me-2 align-middle"></i>View</a></li>
-                                                                    <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-download-2-fill me-2 align-middle"></i>Download</a></li>
-                                                                    <li>
-                                                                        <a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-line me-2 align-middle"></i>Delete</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="text-center mt-3">
-                                            <a href="javascript:void(0);" class="text-success"><i class="mdi mdi-loading mdi-spin fs-20 align-middle me-2"></i> Load more </a>
-                                        </div>
+                                                @endforelse
+                                                
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -697,6 +539,19 @@
 @endsection
 
 @section('custom-scripts')
+    <script>
+        $(document).ready( function () {
+            $('#agency_payments_list').DataTable({
+                dom: 'Bfrtip',
+                searching:false,
+                buttons: [
+                    'pdf',
+                    'excel',
+                    'print'
+                ]
+            });
+        } );
+    </script>
     <script>
 
         $('.updateApprovalStatus').on('click', function(){
