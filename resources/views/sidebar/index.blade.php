@@ -34,7 +34,7 @@
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
                     <a class="{{Route::is('admin.dashboard') ? 'nav-link menu-link active' : 'nav-link menu-link'}} " href="{{route('admin.dashboard')}}">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
+                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
                     </a>
                 </li> <!-- end Dashboard Menu -->
                 <li class="nav-item">
