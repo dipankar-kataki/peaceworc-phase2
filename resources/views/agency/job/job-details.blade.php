@@ -132,8 +132,9 @@
                                             <!--end col-->
                                         </div>
                                         <!--end row-->
+                                        <p class="mb-1" style="font-weight:500">Other Information :</p>
+
                                         <div class="row">
-                                            <p class="mb-1" style="font-weight:500">Other Information :</p>
                                             <div class="col-md-12">
                                                 <div class="d-flex mt-2 px-2">
                                                     <div class="flex-grow-1 overflow-hidden">
@@ -171,7 +172,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <hr class="mt-4 mx-3" style="width:95%;">
+                                        </div>
+                                        
+                                        <hr class="mt-4 mx-3" style="width:95%;">
+
+                                        <div class="row">
                                             <div class="col-md-3">
                                                 <div class="d-flex mt-2 px-2">
                                                     <div class="flex-grow-1 overflow-hidden">
@@ -198,7 +203,7 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="d-flex mt-2 px-2">
-                                                    <div class="flex-grow-1 overflow-hidden">
+                                                    <div class="flex-grow-1 overflow-hidden wrap">
                                                         <p class="mb-1">Address :</p>
                                                         <h6 class="text-truncate mb-0 fs-12">{{$get_single_job_details->street ??  'Street Missing'}}, {{$get_single_job_details->city ??  'City Missing'}}, {{$get_single_job_details->state ??  'State Missing'}}, {{$get_single_job_details->zip_code ??  'Zip Codde Missing'}}, {{$get_single_job_details->country ??  'Country Missing'}}</h6>
                                                     </div>
@@ -257,9 +262,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
-                                            <!--end col-->
                                         </div>
+                                        <!--end col-->
                                         <!--end row-->
                                     </div>
                                     <!--end card-body-->
