@@ -80,23 +80,12 @@
                                 <i class="ri-airplay-fill d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Job Details</span>
                             </a>
                         </li>
-                        {{-- <li class="nav-item">
-                            <a class="nav-link fs-14" data-bs-toggle="tab" href="#authorized-officers-tab" role="tab">
-                                <i class="ri-list-unordered d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Accepted By</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-14" data-bs-toggle="tab" href="#payments-made" role="tab">
-                                <i class="ri-folder-4-line d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Payments Made</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fs-14" data-bs-toggle="tab" href="#all-reviews" role="tab">
-                                <i class="ri-price-tag-line d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Reviews</span>
-                            </a>
-                        </li> --}}
-                        
                     </ul>
+                </div>
+                <div class="d-flex flex-row justify-content-end">
+                    <a class="fs-14 btn btn-info" href="#">
+                        Job Status : {{$get_single_job_details->status}}
+                    </a>
                 </div>
                 <!-- Tab panes -->
                 <div class="tab-content pt-4 text-muted">
@@ -107,10 +96,16 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
-                                                <p class="mb-1" style="font-weight:500">Job Title :</p>
+                                                <p class="mb-1" style="font-weight:500">Title :</p>
                                                 <div class="d-flex mt-2 text-align-justify">
                                                     <p class="px-3 fs-13">
                                                         {{$get_single_job_details->title ??  'Job Title Missing'}}
+                                                    </p>
+                                                </div>
+                                                <p class="mb-1" style="font-weight:500">Description :</p>
+                                                <div class="d-flex mt-2 text-align-justify">
+                                                    <p class="px-3 fs-13">
+                                                        {{$get_single_job_details->description ??  'Job Description Missing'}}
                                                     </p>
                                                 </div>
                                             </div>
@@ -118,135 +113,131 @@
                                         </div>
                                         <!--end row-->
                                         <div class="row">
-                                            <p class="mb-1" style="font-weight:500">Basic Information :</p>
-                                            <div class="col-md-4">
-                                                <div class="d-flex mt-4">
-                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                            <i class='eos-icons-outlined'>mark_email_read</i>
-                                                        </div>
-                                                    </div>
+                                            <p class="mb-1" style="font-weight:500">Other Information :</p>
+                                            <div class="col-md-12">
+                                                <div class="d-flex mt-2 px-2">
                                                     <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1">Email Id :</p>
-                                                        {{-- <h6 class="text-truncate mb-0 fs-12">{{$agency_details->email ??  'Email Id Missing'}}</h6> --}}
+                                                        <p class="mb-1">Patient Details :</p>
+                                                        <div class="d-flex mt-2">
+                                                            @foreach ($get_single_job_details->care_items as $key => $care_item)
+                                                            
+                                                                
+                                                                <div class="flex-shrink-0 avatar-xs align-self-top me-3">
+                                                                    <div class="avatar-title bg-light rounded-circle fs-12 text-primary">
+                                                                        {{$key + 1}}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex-grow-1 overflow-hidden">
+                                                                    <p class="mb-2">Care Type : 
+                                                                        <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$get_single_job_details->care_type ??  'Care type Missing'}}</span>
+                                                                    </p>
+                                                                    <p class="mb-2">Patient Name : 
+                                                                        <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$care_item->patient_name ??  'Patient Name Missing'}}</span>
+                                                                    </p>
+                                                                    
+                                                                    <p class="mb-2">Gender :
+                                                                        <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$care_item->gender ??  'Gender Missing'}}</span>
+                                                                    </p>
+                                                                    
+                                                                    <p class="mb-2">Age :
+                                                                        <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$care_item->age . ' Yrs' ??  'Age Missing'}}</span>
+                                                                    </p>
+                                                                    
+                                                                </div>
+                                                            
+                                                            
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="d-flex mt-4">
-                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                            <i class='eos-icons-outlined'>phone_android</i>
-                                                        </div>
-                                                    </div>
+                                            <hr class="mt-4 mx-3" style="width:95%;">
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-2 px-2">
                                                     <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1">Phone Number :</p>
-                                                        {{-- <h6 class="text-truncate mb-0 fs-12">{{$agency_details->phone ??  'Phone Number Missing'}}</h6> --}}
+                                                        <p class="mb-1">Job Start Date And Time :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{Carbon\Carbon::parse($get_single_job_details->start_date)->format('M-d, Y') ??  'Job Start Date Missing'}} @ {{Carbon\Carbon::parse($get_single_job_details->start_time)->format('H:i A') ??  'Job Start Time Missing'}}</h6>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="d-flex mt-4">
-                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                            <i class='eos-icons-outlined'>landscape</i>
-                                                        </div>
-                                                    </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-2 px-2">
                                                     <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1">Legal Structure :</p>
-                                                        {{-- <h6 class="text-truncate mb-0 fs-12">{{$agency_details->legal_structure ??  'Legal Structure Missing'}}</h6> --}}
+                                                        <p class="mb-1">Job End Date And Time :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{Carbon\Carbon::parse($get_single_job_details->end_date)->format('M-d, Y') ??  'Job End Date Missing'}} @ {{Carbon\Carbon::parse($get_single_job_details->end_time)->format('H:i A') ??  'Job End Time Missing'}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-2 px-2">
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Job Amount :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">${{$get_single_job_details->amount ??  'Job Amount Missing'}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-2 px-2">
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Address :</p>
+                                                        <h6 class="text-truncate mb-0 fs-12">{{$get_single_job_details->street ??  'Street Missing'}}, {{$get_single_job_details->city ??  'City Missing'}}, {{$get_single_job_details->state ??  'State Missing'}}, {{$get_single_job_details->zip_code ??  'Zip Codde Missing'}}, {{$get_single_job_details->country ??  'Country Missing'}}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="mt-4 mx-3" style="width:95%;">
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-2 px-2">
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Medical History :</p>
+                                                            
+                                                        @foreach ($get_single_job_details->medical_history as $key => $med)
+                                                            <ul>
+                                                                <li class="mb-0 pb-0" style="line-height: 10px;">{{$med ??  'Medical History Missing'}}</li>
+                                                            </ul>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-2 px-2">
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Expertise :</p>
+                                                            
+                                                        @foreach ($get_single_job_details->expertise as $key => $expertise)
+                                                            <ul>
+                                                                <li class="mb-0 pb-0" style="line-height: 10px;">{{$expertise ??  'Expertise Missing'}}</li>
+                                                            </ul>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-2 px-2">
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Other Requirements :</p>
+                                                            
+                                                        @foreach ($get_single_job_details->other_requirements as $key => $requirements)
+                                                            <ul>
+                                                                <li class="mb-0 pb-0" style="line-height: 10px;">{{$requirements ??  'Other Requirements Missing'}}</li>
+                                                            </ul>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="d-flex mt-2 px-2">
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <p class="mb-1">Check List :</p>
+                                                            
+                                                        @foreach ($get_single_job_details->check_list as $key => $check_list)
+                                                            <ul>
+                                                                <li class="mb-0 pb-0" style="line-height: 10px;">{{$check_list ??  'Check List Missing'}}</li>
+                                                            </ul>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </div>
                                             
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                        <div class="row mt-2">
-                                            
-                                            <div class="col-md-4">
-                                                <div class="d-flex mt-4">
-                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                            <i class='eos-icons-outlined'>groups</i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1">Total Employees :</p>
-                                                        {{-- <h6 class="text-truncate mb-0 fs-12">{{$agency_details->number_of_employee ??  'Total Employees Count Missing'}}</h6> --}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="d-flex mt-4">
-                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                            <i class='eos-icons-outlined'>date_range</i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1">Years In Business :</p>
-                                                        {{-- <h6 class="text-truncate mb-0 fs-12">{{$agency_details->years_in_business ??  'Years In Business Missing'}}</h6> --}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="d-flex mt-4">
-                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                            <i class='eos-icons-outlined'>flag</i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1">Country of Business :</p>
-                                                        {{-- <h6 class="text-truncate mb-0 fs-12">{{$agency_details->country_of_business ??  'Country of Business Missing'}}</h6> --}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                        </div>
-                                        <!--end row-->
-                                        <div class="row mt-3">
-                                            <p class="mb-1" style="font-weight:500">Financial Information :</p>
-                                            <div class="col-md-4">
-                                                <div class="d-flex mt-4">
-                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                            <i class='eos-icons-outlined'>paid</i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1">Annual Revenue :</p>
-                                                        {{-- <h6 class="text-truncate mb-0 fs-12">{{$agency_details->annual_business_revenue ??  'Annual Revenue Missing'}}</h6> --}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="d-flex mt-4">
-                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                            <i class='eos-icons-outlined'>account_balance</i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1">Organization Type :</p>
-                                                        {{-- <h6 class="text-truncate mb-0 fs-12">{{$agency_details->organization_type ??  'Organization Type Missing'}}</h6> --}}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="d-flex mt-4">
-                                                    <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                        <div class="avatar-title bg-light rounded-circle fs-16 text-primary">
-                                                            <i class='eos-icons-outlined'><i class='eos-icons-outlined'>badge</i></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1">Tax Id/EIN Id :</p>
-                                                        {{-- <h6 class="text-truncate mb-0 fs-12">{{$agency_details->tax_id_or_ein_id ??  'Tax Id/EIN Id Missing'}}</h6> --}}
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <!--end col-->
                                         </div>
                                         <!--end row-->

@@ -11,7 +11,7 @@
                 </div><!-- end card header -->
 
                 <div class="card-body">
-                    <table id="agency_list" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width:100%">
+                    <table id="agency_list" class="table table-bordered dt-responsive table-striped align-middle" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col" style="width: 10px;">

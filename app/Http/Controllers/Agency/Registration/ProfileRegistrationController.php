@@ -123,7 +123,7 @@ class ProfileRegistrationController extends Controller
 
         $check_if_user_data_exists = AgencyProfileRegistration::where('user_id', Auth::user()->id)->exists();
         if(!$check_if_user_data_exists ){
-            return $this->error('Oops! Failed To Update Profile. User Data Donot Exists.', null, null, 404);  
+            return $this->error('Oops! Failed To Update Profile. User Details Does Not Exists.', null, null, 404);  
         }else{
             try{
 
