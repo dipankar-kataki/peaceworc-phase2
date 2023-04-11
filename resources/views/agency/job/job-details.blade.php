@@ -9,6 +9,10 @@
             object-fit: cover;
             object-position: top;
         } 
+
+        .profile-wid-bg::before {
+            background: linear-gradient(to top, #00040f, #2e3d61) !important;
+        }
     </style>
     
 @section('content')
@@ -83,10 +87,24 @@
                             Payment Status : SUCCESS
                         </a>
                     @endif
-                    
-                    <a class="fs-12 btn btn-info mx-3" href="#">
+                    @if ($get_single_job_details->status === 'Open Job')
+                        <span class="d-flex align-self-center mx-2 btn btn-md btn-primary fs-12"><i class="mdi mdi-circle-medium"></i>Job Status : {{$get_single_job_details->status}}</span>
+                    @elseif($get_single_job_details->status === 'Ongoing Job')
+                        <span class="d-flex align-self-center mx-2 btn btn-md btn-secondary fs-12"><i class="mdi mdi-circle-medium"></i> Job Status : {{$get_single_job_details->status}}</span>
+                    @elseif($get_single_job_details->status === 'Completed Job' || $get_single_job_details->status === 'Closed' )
+                        <span class="d-flex align-self-center mx-2 btn btn-md btn-success fs-12"><i class="mdi mdi-circle-medium"></i> Job Status : {{$get_single_job_details->status}}</span>
+                    @elseif($get_single_job_details->status === 'Deleted' || $get_single_job_details->status === 'Quick Call' )
+                        <span class="d-flex align-self-center mx-2 btn btn-md btn-danger fs-12"><i class="mdi mdi-circle-medium"></i> Job Status : {{$get_single_job_details->status}}</span>
+                    @elseif($get_single_job_details->status === 'Bidding Started' || $get_single_job_details->status === 'Bidding Ended' || $get_single_job_details->status === 'Upcoming')
+                        <span class="d-flex align-self-center mx-2 btn btn-md btn-info fs-12"><i class="mdi mdi-circle-medium"></i> Job Status : {{$get_single_job_details->status}}</span>
+                    @elseif($get_single_job_details->status === 'Pending' || $get_single_job_details->status === 'On Hold' )
+                        <span class="d-flex align-self-center mx-2 btn btn-md btn-warning fs-12"><i class="mdi mdi-circle-medium"></i> Job Status : {{$get_single_job_details->status}}</span>
+                    @elseif($get_single_job_details->status === 'Expired' ||  $get_single_job_details->status === 'Cancelled' )
+                        <span class="d-flex align-self-center mx-2 btn btn-md btn-dark fs-12"><i class="mdi mdi-circle-medium"></i> Job Status : {{$get_single_job_details->status}}</span>
+                    @endif
+                    {{-- <a class="fs-12 btn btn-info mx-3" href="#">
                         Job Status : {{$get_single_job_details->status}}
-                    </a>
+                    </a> --}}
                 </div>
                 <!-- Tab panes -->
                 <div class="tab-content pt-4 text-muted">
