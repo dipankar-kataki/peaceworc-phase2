@@ -72,23 +72,25 @@
     <div class="row">
         <div class="col-lg-12">
             <div>
-                <div class="d-flex">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-pills animation-nav profile-nav gap-2 gap-lg-3 flex-grow-1" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link fs-14 active" data-bs-toggle="tab" href="#overview-tab" role="tab">
-                                <i class="ri-airplay-fill d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Job Details</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+               
                 <div class="d-flex flex-row justify-content-end">
-                    <a class="fs-14 btn btn-info" href="#">
+                    @if($get_single_job_details->payment_status === 0)
+                        <a class="fs-12 btn btn-warning" href="#">
+                            Payment Status : PENDING
+                        </a>
+                    @else
+                        <a class="fs-12 btn btn-success" href="#">
+                            Payment Status : SUCCESS
+                        </a>
+                    @endif
+                    
+                    <a class="fs-12 btn btn-info mx-3" href="#">
                         Job Status : {{$get_single_job_details->status}}
                     </a>
                 </div>
                 <!-- Tab panes -->
                 <div class="tab-content pt-4 text-muted">
+                    
                     <div class="tab-pane active" id="overview-tab" role="tabpanel">
                         <div class="row">
                             <div class="col-xxl-12">
