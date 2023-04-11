@@ -137,9 +137,9 @@
                                         <div class="row">
                                             <div class="mt-2 px-2">
                                                 <p class="mb-1 mx-2">Patient Details :</p>
-                                                <div class="d-flex mt-2">
+                                                <div class="d-flex flex-wrap mt-2">
                                                     @foreach ($get_single_job_details->care_items as $key => $care_item)
-                                                        <div class="col-md-4 d-flex">
+                                                        <div class="col-md-4 d-flex mb-3">
                                                             <div class="avatar-xs align-self-top me-3">
                                                                 <div class="avatar-title bg-light rounded-circle fs-12 text-primary">
                                                                     {{$key + 1}}
