@@ -135,43 +135,37 @@
                                         <p class="mb-1" style="font-weight:500">Other Information :</p>
 
                                         <div class="row">
-                                                <div class="d-flex mt-2 px-2">
-                                                    <div class="flex-grow-1 overflow-hidden">
-                                                        <p class="mb-1 mx-2">Patient Details :</p>
-                                                        <div class="d-flex mt-2">
-                                                            @foreach ($get_single_job_details->care_items as $key => $care_item)
-                                                            
-                                                                <div class="col-md-4 d-flex">
-                                                                    <div class="flex-shrink-0 avatar-xs align-self-top me-3">
-                                                                        <div class="avatar-title bg-light rounded-circle fs-12 text-primary">
-                                                                            {{$key + 1}}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="flex-grow-1 overflow-hidden">
-                                                                        <p class="mb-2">Care Type : 
-                                                                            <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$get_single_job_details->care_type ??  'Care type Missing'}}</span>
-                                                                        </p>
-                                                                        <p class="mb-2">Patient Name : 
-                                                                            <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$care_item->patient_name ??  'Patient Name Missing'}}</span>
-                                                                        </p>
-                                                                        
-                                                                        <p class="mb-2">Gender :
-                                                                            <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$care_item->gender ??  'Gender Missing'}}</span>
-                                                                        </p>
-                                                                        
-                                                                        <p class="mb-2">Age :
-                                                                            <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$care_item->age . ' Yrs' ??  'Age Missing'}}</span>
-                                                                        </p>
-                                                                        
-                                                                    </div>
+                                            <div class="mt-2 px-2">
+                                                <p class="mb-1 mx-2">Patient Details :</p>
+                                                <div class="d-flex mt-2">
+                                                    @foreach ($get_single_job_details->care_items as $key => $care_item)
+                                                        <div class="col-md-4 d-flex">
+                                                            <div class="flex-shrink-0 avatar-xs align-self-top me-3">
+                                                                <div class="avatar-title bg-light rounded-circle fs-12 text-primary">
+                                                                    {{$key + 1}}
                                                                 </div>
+                                                            </div>
+                                                            <div class="flex-grow-1 overflow-hidden">
+                                                                <p class="mb-2">Care Type : 
+                                                                    <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$get_single_job_details->care_type ??  'Care type Missing'}}</span>
+                                                                </p>
+                                                                <p class="mb-2">Patient Name : 
+                                                                    <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$care_item->patient_name ??  'Patient Name Missing'}}</span>
+                                                                </p>
                                                                 
-                                                            
-                                                            
-                                                            @endforeach
+                                                                <p class="mb-2">Gender :
+                                                                    <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$care_item->gender ??  'Gender Missing'}}</span>
+                                                                </p>
+                                                                
+                                                                <p class="mb-2">Age :
+                                                                    <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$care_item->age . ' Yrs' ??  'Age Missing'}}</span>
+                                                                </p>
+                                                                
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    @endforeach
                                                 </div>
+                                            </div>
                                         </div>
                                         
                                         <hr class="mt-4 mx-3" style="width:95%;">
