@@ -140,12 +140,12 @@
                                                 <div class="d-flex mt-2">
                                                     @foreach ($get_single_job_details->care_items as $key => $care_item)
                                                         <div class="col-md-4 d-flex">
-                                                            <div class="flex-shrink-0 avatar-xs align-self-top me-3">
+                                                            <div class="avatar-xs align-self-top me-3">
                                                                 <div class="avatar-title bg-light rounded-circle fs-12 text-primary">
                                                                     {{$key + 1}}
                                                                 </div>
                                                             </div>
-                                                            <div class="flex-grow-1 overflow-hidden">
+                                                            <div>
                                                                 <p class="mb-2">Care Type : 
                                                                     <span class="text-truncate mb-0 fs-12" style="color:#495057;font-weight:500;">{{$get_single_job_details->care_type ??  'Care type Missing'}}</span>
                                                                 </p>
