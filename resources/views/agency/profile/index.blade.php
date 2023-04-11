@@ -125,9 +125,9 @@
                         </li>
                         
                     </ul>
-                    <div class="flex-shrink-0">
+                    {{-- <div class="flex-shrink-0">
                         <a href="pages-profile-settings.html" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i> Edit Profile</a>
-                    </div>
+                    </div> --}}
                 </div>
                 <!-- Tab panes -->
                 <div class="tab-content pt-4 text-muted">
