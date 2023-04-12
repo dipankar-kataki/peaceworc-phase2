@@ -75,6 +75,16 @@ class User extends Authenticatable
        
     }
 
+    public function getStatusAttribute($value){
+        if($value == 1){
+            return 'ACTIVE';
+        }else if($value == 2){
+            return 'SUSPENDED';
+        }else if($value == 3){
+            return 'DELETED';
+        }
+    }
+
     public function agencyProfile(){
         return $this->hasOne(AgencyProfileRegistration::class, 'user_id', 'id');
     }

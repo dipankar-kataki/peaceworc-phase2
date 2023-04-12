@@ -57,17 +57,16 @@
                 <li class="nav-item">
                     <a class="{{Request::segment(2) == 'job' ? 'nav-link menu-link active' : 'nav-link menu-link'}}" href="#jobItems" data-bs-toggle="collapse"
                         role="button" aria-expanded="false" aria-controls="sidebarApps">
-                        <i class="ri-briefcase-2-fill"></i> <span data-key="t-apps">Jobs</span>
+                        <i class="ri-briefcase-2-fill"></i> <span data-key="t-apps">Caregiver</span>
                     </a>
                     <div class="collapse menu-dropdown" id="jobItems">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="#" class="{{Request::segment(3) == 'open-job' ? 'nav-link menu-link active' : 'nav-link menu-link'}}"> Open Jobs
-                                </a>
+                                <a href="{{route('admin.get.caregiver.list')}}" class="{{Request::segment(3) == 'list' ? 'nav-link menu-link active' : 'nav-link menu-link'}}">Caregiver List</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a href="#" class="nav-link">Quick Calls</a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </li>

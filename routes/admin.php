@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Agency\Job\JobController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\LogOutController;
 use App\Http\Controllers\Admin\AuthorizeOfficer\AuthorizeOfficerController;
+use App\Http\Controllers\Admin\Caregiver\CaregiverController;
 use App\Http\Controllers\Admin\Dashboard\DashboardController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,13 @@ Route::group(['middleware' => 'auth'] ,function(){
             Route::get('list/{id?}', [JobController::class, 'getAllJobs'])->name('admin.agency.get.all.job');
         });
     });
+
+    Route::group(['prefix' => 'caregiver'], function(){
+        Route::get('list', [CaregiverController::class, 'getList'])->name('admin.get.caregiver.list');
+        Route::get('details/{id}', [CaregiverController::class, 'getCaregiverDetails'])->name('admin.get.caregiver.details');
+    });
+
+
     Route::get('logout', [LogOutController::class, 'logout'])->name('admin.logout');
     
 });
