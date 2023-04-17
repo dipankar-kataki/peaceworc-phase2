@@ -47,7 +47,9 @@
                                             <img class="image avatar-xs rounded-circle" src="{{asset($item->photo)}}" alt="agency logo">                                            
                                         @endif
                                     </td>
-                                    <td>{{$item->company_name}}</td>
+                                    <td>
+                                        <a href="{{route('admin.get.agency.details', ['id' => encrypt($item->user_id) ] )}}" style="color:blue;">{{$item->company_name}}</a>
+                                    </td>
                                     <td>{{$item->email ?? 'Not Found'}}</td>
                                     <td>{{$item->phone ?? 'Not Found'}}</td>
                                     <td>{{$item->tax_id_or_ein_id ?? 'Not Found'}}</td>

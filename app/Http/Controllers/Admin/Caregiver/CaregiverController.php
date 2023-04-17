@@ -17,9 +17,11 @@ class CaregiverController extends Controller
 
     public function getCaregiverDetails($id){
         try{
-
+            $id = decrypt($id);
+            $get_details = User::with('caregiverProfile')->where('id', $id)->first();
+            return view('caregiver.profile.details')->with(['get_details' => $get_details]);
         }catch(\Exception $e){
-
+            echo 'Oops! Something Went Wrong.';
         }
     }
 }

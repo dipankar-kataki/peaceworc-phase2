@@ -39,7 +39,7 @@
                                             <img class="image avatar-xs rounded-circle" src="{{asset($item->caregiverProfile->photo)}}" alt="Caregiver Image">                                            
                                         @endif
                                     </td>
-                                    <td>{{$item->name}}</td>
+                                    <td><a href="{{route('admin.get.caregiver.details', ['id' => encrypt($item->id) ] )}}" style="color:blue;">{{$item->name}}</a></td>
                                     <td>{{$item->email ?? 'Not Found'}}</td>
                                     <td>{{$item->caregiverProfile->phone ?? 'Not Found'}}</td>
                                     <td>{{$item->caregiverProfile->gender ?? 'Not Found'}}</td>
