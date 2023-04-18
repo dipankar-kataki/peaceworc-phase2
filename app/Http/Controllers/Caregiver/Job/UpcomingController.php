@@ -74,7 +74,7 @@ class UpcomingController extends Controller
                     }
                 }else{
                     try{
-                        $get_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->first();
+                        $get_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('job_id', $_GET['job_id'])->where('status', JobStatus::JobAccepted)->first();
                         
                         $all_details = [];
                             $agency = AgencyProfileRegistration::where('user_id',$get_job->job->user_id)->select('company_name','photo')->first();
