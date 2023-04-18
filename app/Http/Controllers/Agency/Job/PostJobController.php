@@ -214,7 +214,25 @@ class PostJobController extends Controller
                 }else{
                     $get_job = AcceptJob::where('job_id', $_GET['job_id'])->first();
                     $get_caregiver_profile = User::with('caregiverProfile')->where('id', $get_job->user_id)->first();
-                    return $this->success('Great! Profile Fetched Successfully', $get_caregiver_profile, null, 200);
+                    // $details = [];
+
+                    $caregiver_profile = [
+                        "name" => $get_caregiver_profile->name,
+                        "email" => $get_caregiver_profile->email,
+                        "photo" => $get_caregiver_profile->caregiver_profile->photo,
+                        "bio" =>  $get_caregiver_profile->caregiver_profile->bio,
+                        "phone" =>  $get_caregiver_profile->caregiver_profile->phone,
+                        "dob" =>  $get_caregiver_profile->caregiver_profile->dob,
+                        "gender" =>  $get_caregiver_profile->caregiver_profile->gender,
+                        "experience" =>  $get_caregiver_profile->caregiver_profile->experience,
+                        "care_completed" => $get_caregiver_profile->caregiver_profile->care_completed,
+                        "state" =>  $get_caregiver_profile->caregiver_profile->state,
+                        "zip_code" =>  $get_caregiver_profile->caregiver_profile->zip_code,
+                        "country" =>  $get_caregiver_profile->caregiver_profile->country,
+                    ];
+
+                    // array_push($details, $caregiver_profile);
+                    return $this->success('Great! Profile Fetched Successfully', $caregiver_profile, null, 200);
                 }
             }
         }catch(\Exception $e){
