@@ -28,7 +28,7 @@ class UpcomingController extends Controller
                         
                         $all_details = [];
                         foreach($get_job as $job){
-                            $agency = AgencyProfileRegistration::where('user_id',$job->job->user_id)->select('company_name','photo')->first();
+                            $agency = AgencyProfileRegistration::where('user_id',$job->job->user_id)->select('company_name','photo','floor_no','appartment_or_unit','street','city_or_district','state','zip_code','country')->first();
             
             
                 
@@ -77,7 +77,7 @@ class UpcomingController extends Controller
                         $get_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('job_id', $_GET['job_id'])->where('status', JobStatus::JobAccepted)->first();
                         
                         $all_details = [];
-                            $agency = AgencyProfileRegistration::where('user_id',$get_job->job->user_id)->select('company_name','photo')->first();
+                            $agency = AgencyProfileRegistration::where('user_id',$get_job->job->user_id)->select('company_name','photo','floor_no','appartment_or_unit','street','city_or_district','state','zip_code','country')->first();
             
             
                 
