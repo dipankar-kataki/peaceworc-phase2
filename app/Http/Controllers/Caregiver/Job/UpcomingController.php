@@ -50,7 +50,7 @@ class UpcomingController extends Controller
                                 'job_id' => $job->job_id,
                                 'agency_name' => ucwords($agency->company_name),
                                 'agency_photo' => $agency->photo,
-                                'agency_address' => $get_job->job->short_address,
+                                'agency_address' => $job->job->short_address,
                                 'title' => $job->job->title,
                                 'care_type' => $job->job->care_type,
                                 'care_items' => $job->job->care_items,
