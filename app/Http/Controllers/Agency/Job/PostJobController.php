@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\AcceptJob;
 use App\Models\AgencyInformationStatus;
 use App\Models\AgencyPostJob;
+use App\Models\CaregiverProfileRegistration;
+use App\Models\User;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use DateTime;
@@ -198,6 +200,26 @@ class PostJobController extends Controller
             }
         }
         
+        
+    }
+
+    public function getCaregiverProfile(){
+
+        try{
+            if(!isset($_GET['job_id'])){
+                return $this->error('Oops! Something Went Wrong. Failed To Get Profile. ', null, null, 400);
+            }else{
+                if($_GET['job_id'] == null || $_GET['job_id'] == ''){
+                    return $this->error('Oops! Something Went Wrong. Failed To Get Profile. ', null, null, 400);
+                }else{
+                    $get_job = AcceptJob::where('job_id', $_GET['job_id'])->first();
+                    $get_caregiver_profile = User::with('caregiverProfile')->where('id', $get_job->user_id)->first();
+                    return $this->success('Great! Profile Fetched Successfully', $get_caregiver_profile, null, 200);
+                }
+            }
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong.', null, null, 500);
+        }
         
     }
 }

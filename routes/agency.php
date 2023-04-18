@@ -91,7 +91,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         });
 
         Route::post('search', [SearchJobController::class, 'search']);
+
+        Route::get('caregiver-profile', [PostJobController::class, 'getCaregiverProfile']);
     });
+
 
     Route::group(['prefix' => 'payment'], function(){
         Route::post('update-status', [AgencyPaymentController::class, 'updateStatus']);
