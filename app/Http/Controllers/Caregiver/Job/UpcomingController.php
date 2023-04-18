@@ -108,7 +108,7 @@ class UpcomingController extends Controller
                                 'end_date' => Carbon::parse($get_job->job->end_date)->format('m-d-Y'),
                                 'end_time' => $get_job->job->end_time,
                                 'amount' => $get_job->job->amount,
-                                'address' => $get_job->job->adress,
+                                'address' => $get_job->job->address,
                                 'short_address' => $get_job->job->short_address,
                                 'description' => $get_job->job->description,
                                 'medical_history' => $get_job->job->medical_history,
