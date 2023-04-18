@@ -289,7 +289,7 @@ class JobController extends Controller
                     return $this->error('Oops! Something Went Wrong. Failed To Get Profile. ', null, null, 400);
                 }else{
                     
-                    $get_job = AgencyPostJob::where('job_id', $_GET['job_id'])->first();
+                    $get_job = AgencyPostJob::where('id', $_GET['job_id'])->first();
                     $get_agency_profile = AgencyProfileRegistration::where('user_id', $get_job->user_id)->first();
 
                     // $agency_profile = [
