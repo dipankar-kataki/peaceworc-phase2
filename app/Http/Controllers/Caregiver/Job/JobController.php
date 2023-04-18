@@ -292,22 +292,21 @@ class JobController extends Controller
                     $get_job = AgencyPostJob::where('id', $_GET['job_id'])->first();
                     $get_agency_profile = AgencyProfileRegistration::where('user_id', $get_job->user_id)->first();
 
-                    // $agency_profile = [
-                    //     "name" => $get_caregiver_profile->name,
-                    //     "email" => $get_caregiver_profile->email,
-                    //     "photo" => $get_caregiver_profile->caregiverProfile->photo,
-                    //     "bio" =>  $get_caregiver_profile->caregiverProfile->bio,
-                    //     "phone" =>  $get_caregiver_profile->caregiverProfile->phone,
-                    //     "dob" =>  $get_caregiver_profile->caregiverProfile->dob,
-                    //     "gender" =>  $get_caregiver_profile->caregiverProfile->gender,
-                    //     "experience" =>  $get_caregiver_profile->caregiverProfile->experience,
-                    //     "care_completed" => $get_caregiver_profile->caregiverProfile->care_completed,
-                    //     "state" =>  $get_caregiver_profile->caregiverProfile->state,
-                    //     "zip_code" =>  $get_caregiver_profile->caregiverProfile->zip_code,
-                    //     "country" =>  $get_caregiver_profile->caregiverProfile->country,
-                    // ];
+                    $agency_profile = [
+                        "company_name" => $get_agency_profile->company_name,
+                        "photo" => $get_agency_profile->photo,
+                        "about_company" => $get_agency_profile->about_company,
+                        'email' => $get_agency_profile->email,
+                        "phone" =>  $get_agency_profile->phone,
+                        "legal_structure" =>  $get_agency_profile->legal_structure,
+                        "organization_type" =>  $get_agency_profile->organization_type,
+                        "years_in_business" =>  $get_agency_profile->years_in_business,
+                        "state" =>  $get_agency_profile->state,
+                        "zip_code" =>  $get_agency_profile->zip_code,
+                        "country" =>  $get_agency_profile->country,
+                    ];
 
-                    return $this->success('Great! Profile Fetched Successfully', $get_agency_profile, null, 200);
+                    return $this->success('Great! Profile Fetched Successfully', $agency_profile, null, 200);
                 }
             }
         }catch(\Exception $e){
