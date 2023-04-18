@@ -192,8 +192,6 @@ class JobController extends Controller
         }
     }
 
-   
-
     public function getAllMyBiddedJobs(){
         if(!isset($_GET['id'])){
             return $this->error('Oops! Failed To Fetch Job', null, null, 500);
@@ -279,6 +277,41 @@ class JobController extends Controller
 
                 return $this->success('Great! Job Fetched Successfully', $get_job_details, null, 200);
             }
+        }
+    }
+
+    public function getAgencyProfile(){
+        try{
+            if(!isset($_GET['job_id'])){
+                return $this->error('Oops! Something Went Wrong. Failed To Get Profile. ', null, null, 400);
+            }else{
+                if($_GET['job_id'] == null || $_GET['job_id'] == ''){
+                    return $this->error('Oops! Something Went Wrong. Failed To Get Profile. ', null, null, 400);
+                }else{
+                    
+                    $get_job = AgencyPostJob::where('job_id', $_GET['job_id'])->first();
+                    $get_agency_profile = AgencyProfileRegistration::where('user_id', $get_job->user_id)->first();
+
+                    // $agency_profile = [
+                    //     "name" => $get_caregiver_profile->name,
+                    //     "email" => $get_caregiver_profile->email,
+                    //     "photo" => $get_caregiver_profile->caregiverProfile->photo,
+                    //     "bio" =>  $get_caregiver_profile->caregiverProfile->bio,
+                    //     "phone" =>  $get_caregiver_profile->caregiverProfile->phone,
+                    //     "dob" =>  $get_caregiver_profile->caregiverProfile->dob,
+                    //     "gender" =>  $get_caregiver_profile->caregiverProfile->gender,
+                    //     "experience" =>  $get_caregiver_profile->caregiverProfile->experience,
+                    //     "care_completed" => $get_caregiver_profile->caregiverProfile->care_completed,
+                    //     "state" =>  $get_caregiver_profile->caregiverProfile->state,
+                    //     "zip_code" =>  $get_caregiver_profile->caregiverProfile->zip_code,
+                    //     "country" =>  $get_caregiver_profile->caregiverProfile->country,
+                    // ];
+
+                    return $this->success('Great! Profile Fetched Successfully', $get_agency_profile, null, 200);
+                }
+            }
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);
         }
     }
 }

@@ -212,9 +212,9 @@ class PostJobController extends Controller
                 if($_GET['job_id'] == null || $_GET['job_id'] == ''){
                     return $this->error('Oops! Something Went Wrong. Failed To Get Profile. ', null, null, 400);
                 }else{
+                    
                     $get_job = AcceptJob::where('job_id', $_GET['job_id'])->first();
                     $get_caregiver_profile = User::with('caregiverProfile')->where('id', $get_job->user_id)->first();
-                    // $details = [];
 
                     $caregiver_profile = [
                         "name" => $get_caregiver_profile->name,
@@ -231,7 +231,6 @@ class PostJobController extends Controller
                         "country" =>  $get_caregiver_profile->caregiverProfile->country,
                     ];
 
-                    // array_push($details, $caregiver_profile);
                     return $this->success('Great! Profile Fetched Successfully', $caregiver_profile, null, 200);
                 }
             }

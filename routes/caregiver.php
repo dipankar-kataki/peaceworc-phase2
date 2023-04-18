@@ -128,7 +128,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('search', [SearchJobController::class, 'search']);
 
 
-        // Route::get('agency-profile')
+        Route::get('agency-profile', [JobController::class, 'getAgencyProfile']);
     });
 
     Route::group(['prefix' => 'document'], function(){
