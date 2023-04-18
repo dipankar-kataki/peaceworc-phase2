@@ -45,12 +45,12 @@ class UpcomingController extends Controller
                             if( $from < $to ){
                                 $diff_in_hours = 0;
                             }
-            
+                             
                             $details = [
                                 'job_id' => $job->job_id,
                                 'agency_name' => ucwords($agency->company_name),
                                 'agency_photo' => $agency->photo,
-                                'agency_address' => $agency->floor_no ?? '' .', '.$agency->appartment_or_unit ?? '' .', '.$agency->street.', '.$agency->city_or_district.', '.$agency->state.', '.$agency->zip_code.', '.$agency->country,
+                                'agency_address' => $agency->floor_no.', '.$agency->appartment_or_unit.', '.$agency->street.', '.$agency->city_or_district.', '.$agency->state.', '.$agency->zip_code.', '.$agency->country,
                                 'title' => $job->job->title,
                                 'care_type' => $job->job->care_type,
                                 'care_items' => $job->job->care_items,
@@ -94,12 +94,12 @@ class UpcomingController extends Controller
                             if( $from < $to ){
                                 $diff_in_hours = 0;
                             }
-            
+                             
                             $details = [
                                 'job_id' => $get_job->job_id,
                                 'agency_name' => ucwords($agency->company_name),
                                 'agency_photo' => $agency->photo,
-                                'agency_address' => $agency->floor_no ?? '' .', '.$agency->appartment_or_unit ?? '' .', '.$agency->street.', '.$agency->city_or_district.', '.$agency->state.', '.$agency->zip_code.', '.$agency->country,
+                                'agency_address' => $agency->floor_no.', '.$agency->appartment_or_unit.', '.$agency->street.', '.$agency->city_or_district.', '.$agency->state.', '.$agency->zip_code.', '.$agency->country,
                                 'title' => $get_job->job->title,
                                 'care_type' => $get_job->job->care_type,
                                 'care_items' => $get_job->job->care_items,
