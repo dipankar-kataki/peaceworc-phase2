@@ -219,16 +219,16 @@ class PostJobController extends Controller
                     $caregiver_profile = [
                         "name" => $get_caregiver_profile->name,
                         "email" => $get_caregiver_profile->email,
-                        "photo" => $get_caregiver_profile->caregiver_profile->photo,
-                        "bio" =>  $get_caregiver_profile->caregiver_profile->bio,
-                        "phone" =>  $get_caregiver_profile->caregiver_profile->phone,
-                        "dob" =>  $get_caregiver_profile->caregiver_profile->dob,
-                        "gender" =>  $get_caregiver_profile->caregiver_profile->gender,
-                        "experience" =>  $get_caregiver_profile->caregiver_profile->experience,
-                        "care_completed" => $get_caregiver_profile->caregiver_profile->care_completed,
-                        "state" =>  $get_caregiver_profile->caregiver_profile->state,
-                        "zip_code" =>  $get_caregiver_profile->caregiver_profile->zip_code,
-                        "country" =>  $get_caregiver_profile->caregiver_profile->country,
+                        "photo" => $get_caregiver_profile->caregiverProfile->photo,
+                        "bio" =>  $get_caregiver_profile->caregiverProfile->bio,
+                        "phone" =>  $get_caregiver_profile->caregiverProfile->phone,
+                        "dob" =>  $get_caregiver_profile->caregiverProfile->dob,
+                        "gender" =>  $get_caregiver_profile->caregiverProfile->gender,
+                        "experience" =>  $get_caregiver_profile->caregiverProfile->experience,
+                        "care_completed" => $get_caregiver_profile->caregiverProfile->care_completed,
+                        "state" =>  $get_caregiver_profile->caregiverProfile->state,
+                        "zip_code" =>  $get_caregiver_profile->caregiverProfile->zip_code,
+                        "country" =>  $get_caregiver_profile->caregiverProfile->country,
                     ];
 
                     // array_push($details, $caregiver_profile);
@@ -236,7 +236,7 @@ class PostJobController extends Controller
                 }
             }
         }catch(\Exception $e){
-            return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);
         }
         
     }
