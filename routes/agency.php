@@ -14,6 +14,7 @@ use App\Http\Controllers\Agency\Job\PostJobController;
 use App\Http\Controllers\Agency\Job\Search\SearchJobController;
 use App\Http\Controllers\Agency\Owner\OwnerProfileController;
 use App\Http\Controllers\Agency\Payments\AgencyPaymentController;
+use App\Http\Controllers\Agency\Rating\RatingController;
 use App\Http\Controllers\Agency\Registration\ProfileRegistrationController;
 use App\Http\Controllers\Agency\Status\InformationStatusController;
 use Illuminate\Http\Request;
@@ -98,6 +99,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::group(['prefix' => 'payment'], function(){
         Route::post('update-status', [AgencyPaymentController::class, 'updateStatus']);
+    });
+
+    Route::group(['prefix' => 'rating'], function(){
+        Route::get('get', [RatingController::class, 'getAgencyRating']);
+        Route::post('add-caregiver-rating', [RatingController::class, 'addCaregiverRating']);
     });
     
     Route::post('logout', [LogOutController::class,'logout']);

@@ -16,6 +16,7 @@ use App\Http\Controllers\Caregiver\Job\StartJobController;
 use App\Http\Controllers\Caregiver\Job\UpcomingController;
 use App\Http\Controllers\Caregiver\Location\LocationController;
 use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
+use App\Http\Controllers\Caregiver\Rating\RatingController;
 use App\Http\Controllers\Caregiver\Registration\ProfileRegistrationController;
 use App\Http\Controllers\Caregiver\Status\StatusInformationController;
 use Illuminate\Http\Request;
@@ -136,6 +137,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('get', [DocumentUploadController::class, 'getDocument']);
         Route::post('delete', [DocumentUploadController::class, 'deleteDocument']);
         Route::post('update-status', [DocumentUploadController::class, 'updateStatus']);
+    });
+
+    Route::group(['prefix' => 'rating'], function(){
+        Route::get('get', [RatingController::class, 'getCaregiverRating']);
+        Route::post('add-agency-rating', [RatingController::class, 'addAgencyRating']);
     });
 
 
