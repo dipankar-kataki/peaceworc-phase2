@@ -57,33 +57,33 @@ class User extends Authenticatable
     public function getRoleAttribute($value){
         
         if($value == 1){
-            return 'Admin';
+            return 'Peaceworc Admin';
         }
         if($value == 2){
             return 'Caregiver';
         }
         if($value == 3){
-            return 'Agency_Owner';
+            return 'Owner';
         }
         if($value == 4){
-            return 'Agency_Admin';
+            return 'Admin';
         }
         if($value == 5){
-            return 'Agency_Operator';
+            return 'Operator';
         }
 
        
     }
 
-    public function getStatusAttribute($value){
-        if($value == 1){
-            return 'ACTIVE';
-        }else if($value == 2){
-            return 'SUSPENDED';
-        }else if($value == 3){
-            return 'DELETED';
-        }
-    }
+    // public function getStatusAttribute($value){
+    //     if($value == 1){
+    //         return 'ACTIVE';
+    //     }else if($value == 2){
+    //         return 'SUSPENDED';
+    //     }else if($value == 3){
+    //         return 'DELETED';
+    //     }
+    // }
 
     public function agencyProfile(){
         return $this->hasOne(AgencyProfileRegistration::class, 'user_id', 'id');

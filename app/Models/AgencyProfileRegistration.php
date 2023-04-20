@@ -19,15 +19,15 @@ class AgencyProfileRegistration extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getStatusAttribute($value){
-        if($value == 1){
-            return 'ACTIVE';
-        }else if($value == 2){
-            return 'SUSPENDED';
-        }else if($value == 3){
-            return 'DELETED';
-        }
-    }
+    // public function getStatusAttribute($value){
+    //     if($value == 1){
+    //         return 'ACTIVE';
+    //     }else if($value == 2){
+    //         return 'SUSPENDED';
+    //     }else if($value == 3){
+    //         return 'DELETED';
+    //     }
+    // }
 
     public function profileCompletionStatus(){
         return $this->hasOne(AgencyInformationStatus::class, 'user_id', 'user_id')->select(['user_id', 'is_business_info_complete', 'is_other_info_added', 'is_authorize_info_added', 'is_profile_approved']);

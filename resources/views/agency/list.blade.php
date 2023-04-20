@@ -55,11 +55,11 @@
                                     <td>{{$item->tax_id_or_ein_id ?? 'Not Found'}}</td>
                                     <td>{{$item->created_at->format('M-d, Y')}}</td>
                                     <td>
-                                        @if ($item->status == 'ACTIVE')
+                                        @if ($item->status == 1)
                                             <span class="badge badge-soft-success fs-14">ACTIVE</span>
-                                        @elseif($item->status == 'SUSPENDED')
+                                        @elseif($item->status == 2)
                                             <span class="badge badge-soft-warning fs-14">SUSPENDED</span>
-                                        @elseif($item->status == 'DELETED')
+                                        @elseif($item->status == 3)
                                             <span class="badge badge-soft-danger fs-14">DELETED</span>
                                         @endif
                                     </td>
