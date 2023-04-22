@@ -122,9 +122,17 @@ class JobController extends Controller
             $get_jobs = AgencyPostJob::where('status', JobStatus::BiddingStarted)->latest()->get();
             $get_job_details = [];
 
-
+            $get_user = User::where('id', Auth::user()->id)->first();
+            $lat1 = $get_user->lat;
+            $long1 = $get_user->long;
 
             foreach($get_jobs as $job){
+
+                $lat2 = $job->lat;
+                $long2 = $job->long;
+
+                $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
+
                 $get_jobs_bidded_by_single_user = CaregiverBidding::where('user_id', Auth::user()->id)->where('job_id', $job->id)->where('status', JobStatus::BiddingStarted )->first();
                     
                 if($get_jobs_bidded_by_single_user == null){
@@ -148,6 +156,7 @@ class JobController extends Controller
                         'short_address' => $job->short_address,
                         'lat' => $job->lat,
                         'long' => $job->long,
+                        'distance' => $miles,
                         'description' => $job->description,
                         'medical_history' => $job->medical_history,
                         'expertise' => $job->expertise,

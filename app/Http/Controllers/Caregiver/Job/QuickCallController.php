@@ -6,12 +6,15 @@ use App\Common\JobStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AgencyPostJob;
 use App\Models\AgencyProfileRegistration;
+use App\Models\User;
 use App\Traits\ApiResponse;
+use App\Traits\JobDistance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QuickCallController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, JobDistance;
     public function getQuickCallJobs(){
 
         if(!isset($_GET['id'])){
@@ -21,6 +24,12 @@ class QuickCallController extends Controller
             if($_GET['id'] == ''){
                 return $this->error('Oops! Something Went Wrong.', null, null, 500);
             }else{
+
+                $get_user = User::where('id', Auth::user()->id)->first();
+                $lat1 = $get_user->lat;
+                $long1 = $get_user->long;
+
+
                 if($_GET['id'] == 0){
 
                     try{
@@ -29,6 +38,13 @@ class QuickCallController extends Controller
                         $get_job_details = [];
                 
                         foreach($get_jobs as $job){
+
+                            $lat2 = $job->lat;
+                            $long2 = $job->long;
+
+                            $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
+
+
                             $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $job->user_id)->first();
                             $details = [
                                 'job_id' => $job->id,
@@ -46,6 +62,7 @@ class QuickCallController extends Controller
                                 'short_address' => $job->short_address,
                                 'lat' => $job->lat,
                                 'long' => $job->long,
+                                'distance' => $miles,
                                 'description' => $job->description,
                                 'medical_history' => $job->medical_history,
                                 'expertise' => $job->expertise,
@@ -71,6 +88,12 @@ class QuickCallController extends Controller
                         $get_jobs = AgencyPostJob::where('id', $_GET['id'])->where('status', JobStatus::QuickCall)->first();
                         $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $get_jobs->user_id)->first();
                         $job_list = [];
+
+                        $lat2 = $get_jobs->lat;
+                        $long2 = $get_jobs->long;
+
+                        $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
+
                             $details = [
                                 'job_id' => $get_jobs->id,
                                 'company_name' => ucwords($job_owner->company_name),
@@ -87,6 +110,7 @@ class QuickCallController extends Controller
                                 'short_address' => $get_jobs->short_address,
                                 'lat' => $get_jobs->lat,
                                 'long' => $get_jobs->long,
+                                'distance' => $miles,
                                 'description' => $get_jobs->description,
                                 'medical_history' => $get_jobs->medical_history,
                                 'expertise' => $get_jobs->expertise,
