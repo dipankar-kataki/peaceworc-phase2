@@ -7,23 +7,38 @@ use App\Http\Controllers\Controller;
 use App\Models\AgencyPostJob;
 use App\Models\AgencyProfileRegistration;
 use App\Models\CaregiverBidding;
+use App\Models\User;
 use App\Traits\ApiResponse;
+use App\Traits\JobDistance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, JobDistance;
+
     public function getJobs(Request $request){
 
         if(!isset($_GET['id'])){
             return $this->error('Oops! Failed To Fetch Job', null, null, 500);
         }else{
+
+            $get_user = User::where('id', Auth::user()->id)->first();
+            $lat1 = $get_user->lat;
+            $long1 = $get_user->long;
+
             if($_GET['id'] == 0){
                 $get_jobs = AgencyPostJob::where('status', JobStatus::Open)->where('payment_status', 1)->latest()->paginate('5');
                 $get_job_details = [];
+
                 foreach($get_jobs as $job){
+
+                    $lat2 = $job->lat;
+                    $long2 = $job->long;
+
+                    $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
+
                     $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $job->user_id)->first();
                     $details = [
                         'job_id' => $job->id,
@@ -41,14 +56,13 @@ class JobController extends Controller
                         'short_address' => $job->short_address,
                         'lat' => $job->lat,
                         'long' => $job->long,
+                        'distance' => $miles,
                         'description' => $job->description,
                         'medical_history' => $job->medical_history,
                         'expertise' => $job->expertise,
                         'other_requirements' => $job->other_requirements,
                         'check_list' => $job->check_list,
                         'status' => $job->status,
-                        // 'bidding_start_time' => $job->bidding_start_time,
-                        // 'bidding_end_time' => $job->bidding_end_time,
                         'created_at' => $job->created_at->diffForHumans(),
 
                     ];
@@ -60,6 +74,11 @@ class JobController extends Controller
             }else{
                 $get_jobs = AgencyPostJob::where('status', JobStatus::Open)->where('id', $_GET['id'])->first();
                 $get_job_details = [];
+
+                $lat2 = $get_jobs->lat;
+                $long2 = $get_jobs->long;
+
+                $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
                
                     $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $get_jobs->user_id)->first();
                     $details = [
@@ -78,6 +97,7 @@ class JobController extends Controller
                         'short_address' => $get_jobs->short_address,
                         'lat' => $get_jobs->lat,
                         'long' => $get_jobs->long,
+                        'distance' => $miles,
                         'description' => $get_jobs->description,
                         'medical_history' => $get_jobs->medical_history,
                         'expertise' => $get_jobs->expertise,
@@ -101,10 +121,15 @@ class JobController extends Controller
         try{
             $get_jobs = AgencyPostJob::where('status', JobStatus::BiddingStarted)->latest()->get();
             $get_job_details = [];
+
+
+
             foreach($get_jobs as $job){
                 $get_jobs_bidded_by_single_user = CaregiverBidding::where('user_id', Auth::user()->id)->where('job_id', $job->id)->where('status', JobStatus::BiddingStarted )->first();
                     
                 if($get_jobs_bidded_by_single_user == null){
+
+
                     $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $job->user_id)->first();
 
                     $details = [
@@ -157,6 +182,7 @@ class JobController extends Controller
             if($get_job_for_bidding == null){
                 return $this->error('Oops! Invalid Request', null, null, 500);
             }else{
+
                 $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $get_job_for_bidding->user_id)->first();
                 $details = [
                     'job_id' => $get_job_for_bidding->id,
@@ -197,6 +223,7 @@ class JobController extends Controller
             return $this->error('Oops! Failed To Fetch Job', null, null, 500);
         }else{
             $get_job_details = [];
+
             if($_GET['id'] == 0){
 
                 $get_my_bidded_jobs = CaregiverBidding::where('status', JobStatus::BiddingStarted)->where('user_id', Auth::user()->id)->get();

@@ -82,7 +82,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('limited-request', function (Request $request) {
-            return Limit::perMinute(6)->response(function () {
+            return Limit::perMinute(20)->response(function () {
                 return $this->error('Oops! Too Many Attempts. User Blocked For 1 Minute ', null, null, 429);
             });
         });
