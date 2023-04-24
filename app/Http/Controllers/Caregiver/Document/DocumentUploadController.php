@@ -24,7 +24,7 @@ class DocumentUploadController extends Controller
 
     public function getDocument(){
 
-        $details = User::where('id', auth('sanctum')->user()->id)->with('caregiverProfileStatus', 'covid','childAbuse','criminal','driving','employment','identification','tuberculosis','w4_form')->first();
+        $details = User::where('id', auth('sanctum')->user()->id)->with('caregiverProfileStatus', 'covid','childAbuse','criminal','driving','employment','identification','tuberculosis')->first();
         return $this->success('Document fetched successfully.',  $details, 'null', 200);
     }
     public function uploadDocument(Request $request){
@@ -110,19 +110,22 @@ class DocumentUploadController extends Controller
                         'user_id' => auth('sanctum')->user()->id,
                         'expiry_date' => $request->expiry_date
                     ]);
-                }else if($documentCategory == 'w4_form'){
-                    W4Document::create([
-                        'type' => $type,
-                        'name' => $document->getClientOriginalName(),
-                        'image' => $file,
-                        'user_id' => auth('sanctum')->user()->id,
-                        'expiry_date' => $request->expiry_date
-                    ]);
                 }else {
                     return $this->error('Oops! Documents upload failed', null, 'null', 400);
                 }
                 
-                $details = User::where('id', Auth::user()->id)->with('covid','childAbuse','criminal','driving','employment','identification','tuberculosis','w4_form')->first();
+                // else if($documentCategory == 'w4_form'){
+                //     W4Document::create([
+                //         'type' => $type,
+                //         'name' => $document->getClientOriginalName(),
+                //         'image' => $file,
+                //         'user_id' => auth('sanctum')->user()->id,
+                //         'expiry_date' => $request->expiry_date
+                //     ]);
+                // }
+                
+                
+                $details = User::where('id', Auth::user()->id)->with('covid','childAbuse','criminal','driving','employment','identification','tuberculosis')->first();
                 
                 return $this->success('Great! Document Uploaded successfully.',  $details, 'null', 201);
 
@@ -170,13 +173,15 @@ class DocumentUploadController extends Controller
                     TuberculosisDocument::where('id', $request->document_id)->where('user_id', Auth::user()->id)->update([
                         'status' => 0
                     ]);
-                }else if($request->documentCategory == 'w4_form'){
-                    W4Document::where('id', $request->document_id)->where('user_id', Auth::user()->id)->update([
-                        'status' => 0
-                    ]);
                 }else {
                     return $this->error('Oops! Failed To Delete Document', null, 'null', 400);
                 }
+                // else if($request->documentCategory == 'w4_form'){
+                //     W4Document::where('id', $request->document_id)->where('user_id', Auth::user()->id)->update([
+                //         'status' => 0
+                //     ]);
+                // }
+                
 
                 return $this->success('Great! Document Deleted successfully.',  null, 'null', 201);
             }catch(\Exception $e){
@@ -195,9 +200,9 @@ class DocumentUploadController extends Controller
             $employment_count = EmploymentEligibilityDocument::where('user_id', Auth::user()->id)->where('status', 1)->count();
             $identification_count = IdentificationDocument::where('user_id', Auth::user()->id)->where('status', 1)->count();
             $tuberculosis_count = TuberculosisDocument::where('user_id', Auth::user()->id)->where('status', 1)->count();
-            $w4_count = W4Document::where('user_id', Auth::user()->id)->where('status', 1)->count();
+            // $w4_count = W4Document::where('user_id', Auth::user()->id)->where('status', 1)->count();
 
-            if($covid_count == 0 || $child_count == 0 || $criminal_count == 0 || $driving_count == 0 || $employment_count == 0 || $identification_count == 0 || $tuberculosis_count == 0 || $w4_count == 0){
+            if($covid_count == 0 || $child_count == 0 || $criminal_count == 0 || $driving_count == 0 || $employment_count == 0 || $identification_count == 0 || $tuberculosis_count == 0 ){
                 return $this->error('Oops! Failed To Update Status. Please Upload All Documents.', null, null, 400);  
             }
 

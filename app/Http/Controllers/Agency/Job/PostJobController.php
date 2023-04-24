@@ -214,7 +214,8 @@ class PostJobController extends Controller
                 }else{
                     
                     $get_job = AcceptJob::where('job_id', $_GET['job_id'])->first();
-                    $get_caregiver_profile = User::with('caregiverProfile')->where('id', $get_job->user_id)->first();
+                    $get_caregiver_profile = User::with('caregiverProfile', 'caregiverCertificates')->where('id', $get_job->user_id)->first();
+                    // $get_caregiver_certificates
 
                     $caregiver_profile = [
                         "name" => $get_caregiver_profile->name,
@@ -229,6 +230,7 @@ class PostJobController extends Controller
                         "state" =>  $get_caregiver_profile->caregiverProfile->state,
                         "zip_code" =>  $get_caregiver_profile->caregiverProfile->zip_code,
                         "country" =>  $get_caregiver_profile->caregiverProfile->country,
+                        "certificate" => $get_caregiver_profile->caregiverCertificates
                     ];
 
                     return $this->success('Great! Profile Fetched Successfully', $caregiver_profile, null, 200);
