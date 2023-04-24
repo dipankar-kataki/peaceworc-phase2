@@ -29,6 +29,16 @@ Route::group(['middleware' => 'auth'] ,function(){
     Route::get('dashboard', [DashboardController::class, 'viewDashboard'])->name('admin.dashboard');
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Agency Routes
+    |--------------------------------------------------------------------------
+    |
+    | Here is where you can register Agency routes for the application.
+    |
+    */
+
+
     Route::group([ 'prefix' => 'agency'], function(){
         Route::get('list', [AgencyController::class, 'getList'])->name('admin.get.agency.list');
         Route::get('details/{id}', [AgencyController::class, 'getAgencyDetails'])->name('admin.get.agency.details');
@@ -46,6 +56,16 @@ Route::group(['middleware' => 'auth'] ,function(){
             Route::get('list/{id?}', [JobController::class, 'getAllJobs'])->name('admin.agency.get.all.job');
         });
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Caregiver Routes
+    |--------------------------------------------------------------------------
+    |
+    | Here is where you can register Caregiver routes for the application.
+    |
+    */
+
 
     Route::group(['prefix' => 'caregiver'], function(){
         Route::get('list', [CaregiverController::class, 'getList'])->name('admin.get.caregiver.list');

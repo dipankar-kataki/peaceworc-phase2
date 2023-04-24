@@ -22,19 +22,32 @@
         <div class="row g-4">
             <div class="col-auto">
                 <div class="avatar-lg">
-                    <img src="assets/images/users/avatar-1.jpg" alt="user-img" class="img-thumbnail rounded-circle" />
+                @if ( $get_caregiver_details->caregiverProfile->photo === null)
+                    <img src="{{asset('assets/images/users/user-dummy-img.jpg')}}" alt="user-img" class="img-thumbnail rounded-circle" height="100" width="100"/>
+                @else
+                    <img src="{{asset($get_caregiver_details->caregiverProfile->photo)}}" alt="user-img" class="img-thumbnail rounded-circle" height="100" width="100"/>
+                @endif
                 </div>
             </div>
             <!--end col-->
             <div class="col">
                 <div class="p-2">
-                    <h3 class="text-white mb-1">Anna Adame</h3>
-                    <p class="text-white-75">Owner & Founder</p>
+                    <h3 class="text-white mb-1">{{$get_caregiver_details->name}}</h3>
+                    {{-- <p class="text-white-75">Owner & Founder</p> --}}
                     <div class="hstack text-white-50 gap-1">
-                        <div class="me-2"><i class="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>California, United States</div>
-                        <div>
-                            <i class="ri-building-line me-1 text-white-75 fs-16 align-middle"></i>Themesbrand
+                        <div class="me-2">
+                            <i class="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>
+                            {{$get_caregiver_details->caregiverProfile->appartment_or_unit != null ? $get_caregiver_details->caregiverProfile->appartment_or_unit.', ' : '' }}
+                            {{$get_caregiver_details->caregiverProfile->floor_no != null ? $get_caregiver_details->caregiverProfile->floor_no.', ' : '' }}
+                            {{$get_caregiver_details->caregiverProfile->street != null ? $get_caregiver_details->caregiverProfile->street.', ' : ''}}
+                            {{$get_caregiver_details->caregiverProfile->city_or_district != null ? $get_caregiver_details->caregiverProfile->city_or_district.', ' : '' }}
+                            {{$get_caregiver_details->caregiverProfile->state != null ? $get_caregiver_details->caregiverProfile->state.', ' : ''}}
+                            {{$get_caregiver_details->caregiverProfile->zip_code != null ? $get_caregiver_details->caregiverProfile->zip_code.', ' : ''}}
+                            {{$get_caregiver_details->caregiverProfile->country}}
                         </div>
+                        {{-- <div>
+                            <i class="ri-building-line me-1 text-white-75 fs-16 align-middle"></i>Themesbrand
+                        </div> --}}
                     </div>
                 </div>
             </div>
