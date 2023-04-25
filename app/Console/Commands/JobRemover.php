@@ -5,12 +5,18 @@ namespace App\Console\Commands;
 use App\Common\JobStatus;
 use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
+use App\Models\AppDeviceToken;
+use App\Models\User;
+use App\Traits\JobNotCompleteNotification;
+use App\Traits\WelcomeNotification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
 class JobRemover extends Command
 {
+
+    use JobNotCompleteNotification, WelcomeNotification;
     /**
      * The name and signature of the console command.
      *
@@ -58,29 +64,75 @@ class JobRemover extends Command
 
                     if($check_if_job_is_accepted){
 
-                        if($job_end_time->gt($current_time) == false){
+                        if($current_time->gt($job_end_time)){
 
-                            AgencyPostJob::where('id', $job->id)->update([
-                                'status' => JobStatus::JobExpired,
-                            ]);
+                            $check_if_job_completed_or_closed =  AcceptJob::where('job_id', $job->id)->whereIn('status',[ JobStatus::Completed,JobStatus::Closed])->exists();
+
+                            if(!$check_if_job_completed_or_closed){
+
+                                Log::info('Oops! Job Is Not Completed Yet');
+
+                                $diff_in_minutes = $job_end_time->diffInMinutes($current_time);
+
+                                if( $diff_in_minutes <= 10){
+                                    $job_accepted_by = AcceptJob::where('job_id', $job->id)->first();
+
+                                    $get_caregiver_details = User::where('id', $job_accepted_by->user_id)->first();
+                                    $device_token = AppDeviceToken::where('user_id', $job->user_id )->get();
     
-                            $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->exists();
-                            if($check_if_job_is_accepted){
-                                AcceptJob::where('job_id', $job->id)->update([
-                                    'status' => JobStatus::JobExpired,
-                                ]);
-                            }
+                                    foreach($device_token as $key => $token){
     
-                            Log::info('Database Updated. Some of the jobs are expired.');
+                                        $data['job_title'] = $job->title;
+                                        $data['job_amount'] = $job->amount;
+                                        $data['job_start_date'] = Carbon::parse($job->start_date)->format('M-d, Y');
+                                        $data['job_start_time'] = $job->start_timr;
+                                        $data['job_end_date'] = Carbon::parse($job->end_date)->format('M-d, Y');
+                                        $data['job_end_time'] = $job->end_time;
+                                        $data['job_accepted_by'] = $get_caregiver_details->name;
+                                        $data['message'] = 'Job end time is over but not closed yet.';
+                                        $data['minutes_passed'] = $diff_in_minutes;
+                                        $data['notification_type'] = 'fullscreen';
+                                        // $token = [];
+                                        $token = $token->fcm_token;
+                                        // $message = 'Job end time is over but not closed yet.';
+                                        // $token = $device_token->fcm_token;
+        
+                                        $this->sendJobNotCompleteNotification($token, $data);
+        
+                                        // $this->sendWelcomeNotification($token, $message);
+
+                                        Log::info('Notification Sent');
+                                    }
+                                }else{
+                                    AgencyPostJob::where('id', $job->id)->update([
+                                        'status' => JobStatus::JobExpired,
+                                    ]);
+            
+                                    $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->exists();
+                                    if($check_if_job_is_accepted){
+                                        AcceptJob::where('job_id', $job->id)->update([
+                                            'status' => JobStatus::JobExpired,
+                                        ]);
+                                    }
+            
+                                    Log::info('Database Updated. Some of the jobs are expired.');
+                                        }
+
+                                    }else{
+                                        Log::info('Job Is Completed');
+                                    }
+                        }else{
+                            Log::info('Current Time is Smaller');
                         }
                         
                     }else{
-                        if( $job_start_time->gt($current_time) == false){
+                        if( !$job_start_time->gt($current_time)){
                             AgencyPostJob::where('id', $job->id)->update([
                                 'status' => JobStatus::JobCancelled,
                             ]);
     
                             $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->exists();
+
                             if($check_if_job_is_accepted){
                                 AcceptJob::where('job_id', $job->id)->update([
                                     'status' => JobStatus::JobCancelled,
@@ -90,13 +142,18 @@ class JobRemover extends Command
                             Log::info('Database Updated. Some of the jobs are removed.');
                         }
                     }
-
-                    
                 }
             }
             
         }catch(\Exception $e){
-            Log::info( 'Something Went Wrong ===> ', $e->getMessage() ); 
+
+            $details = [
+                'Error' => $e->getMessage(),
+                'Line' => $e->getLine()
+
+            ];
+
+            Log::info('Something Went Wrong', $details);
         }
     }
 }
