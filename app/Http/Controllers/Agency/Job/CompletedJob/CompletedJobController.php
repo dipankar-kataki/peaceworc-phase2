@@ -18,7 +18,7 @@ class CompletedJobController extends Controller
 
     public function getCompletedJob(){
         try{
-            $get_upcoming_job = AgencyPostJob::where('user_id', Auth::user()->id)->where('status', JobStatus::Completed)->latest()->paginate('5');
+            $get_upcoming_job = AgencyPostJob::where('user_id', Auth::user()->id)->whereIn('status', [JobStatus::Completed, JobStatus::Closed])->latest()->paginate('5');
             $all_details = [];
             foreach($get_upcoming_job as $job){
                 $check_accepted_by = AcceptJob::where('job_id', $job->id)->where('status', JobStatus::Completed)->latest()->get();
