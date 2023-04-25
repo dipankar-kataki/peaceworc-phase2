@@ -211,15 +211,15 @@ Route::post('check-notification', function(){
 });
 
 Route::get('time-and-zone',function(){
-    echo date('Y-m-d H:i A');
-    echo "\n ------------------- \n";
-    echo  date_default_timezone_get() ;
+    // echo date('Y-m-d H:i A');
+    // echo "\n ------------------- \n";
+    // echo  date_default_timezone_get() ;
 
-    echo "\n ------------- Timezone Using Carbon----------- \n";
+    // echo "\n ------------- Timezone Using Carbon----------- \n";
 
-    echo $timeZone = Carbon::now();
-    echo "\n ------------------- \n";
-    echo $timeZone->tzName;
+    // echo $timeZone = Carbon::now();
+    // echo "\n ------------------- \n";
+    // echo $timeZone->tzName;
 
      
 });

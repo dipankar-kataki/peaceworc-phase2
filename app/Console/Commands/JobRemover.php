@@ -52,21 +52,46 @@ class JobRemover extends Command
                     $current_time = Carbon::now();
 
                     $job_start_time = new Carbon($job->start_date.' '.$job->start_time);
+                    $job_end_time = new Carbon($job->end_date.' '.$job->end_time);
 
-                    if( $job_start_time->gt($current_time) == false){
-                        AgencyPostJob::where('id', $job->id)->update([
-                            'status' => JobStatus::JobExpired,
-                        ]);
+                    $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->where('status','!=',JobStatus::JobExpired)->exists();
 
-                        $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->exists();
-                        if($check_if_job_is_accepted){
-                            AcceptJob::where('job_id', $job->id)->update([
+                    if($check_if_job_is_accepted){
+
+                        if($job_end_time->gt($current_time) == false){
+
+                            AgencyPostJob::where('id', $job->id)->update([
                                 'status' => JobStatus::JobExpired,
                             ]);
+    
+                            $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->exists();
+                            if($check_if_job_is_accepted){
+                                AcceptJob::where('job_id', $job->id)->update([
+                                    'status' => JobStatus::JobExpired,
+                                ]);
+                            }
+    
+                            Log::info('Database Updated. Some of the jobs are expired.');
                         }
-
-                        Log::info('Database Updated. Some of the jobs are removed.');
+                        
+                    }else{
+                        if( $job_start_time->gt($current_time) == false){
+                            AgencyPostJob::where('id', $job->id)->update([
+                                'status' => JobStatus::JobCancelled,
+                            ]);
+    
+                            $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->exists();
+                            if($check_if_job_is_accepted){
+                                AcceptJob::where('job_id', $job->id)->update([
+                                    'status' => JobStatus::JobCancelled,
+                                ]);
+                            }
+    
+                            Log::info('Database Updated. Some of the jobs are removed.');
+                        }
                     }
+
+                    
                 }
             }
             

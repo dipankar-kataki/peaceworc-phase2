@@ -40,7 +40,7 @@ class CompleteJobController extends Controller
                     'end_date' => Carbon::parse($job->job->end_date)->format('m-d-Y') ,
                     'end_time' => $job->job->end_time,
                     'amount' => $job->job->amount,
-                    'address' => $job->job->amount,
+                    'address' => ($job->job->floor_no != null ?  $job->job->floor_no.', ' : '').''.( $job->job->appartment_or_unit != null ?  $job->job->appartment_or_unit.', ' : '').''.( $job->job->address),
                     'short_address' => $job->job->short_address,
                     'description' => $job->job->description,
                     'medical_history' => $job->job->medical_history,
