@@ -8,6 +8,7 @@ use App\Http\Controllers\Agency\AuthorizeOfficer\AuthorizeOfficerController;
 use App\Http\Controllers\Agency\Job\Accepted\OngoingJobController;
 use App\Http\Controllers\Agency\Job\AcceptedJob\JobOngoingController;
 use App\Http\Controllers\Agency\Job\AcceptedJob\UpcomingJobController;
+use App\Http\Controllers\Agency\Job\CancelledJob\CancelledJobController;
 use App\Http\Controllers\Agency\Job\CareType\CareTypeController;
 use App\Http\Controllers\Agency\Job\CompletedJob\CompletedJobController;
 use App\Http\Controllers\Agency\Job\PostJobController;
@@ -89,6 +90,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::group(['prefix' => 'completed-job'], function(){
             Route::get('get', [CompletedJobController::class, 'getCompletedJob']);
+        });
+
+        Route::group(['prefix' => 'canceled-job'], function(){
+            Route::get('get', [CancelledJobController::class, 'getCanceledJob']);
         });
 
         Route::post('search', [SearchJobController::class, 'search']);
