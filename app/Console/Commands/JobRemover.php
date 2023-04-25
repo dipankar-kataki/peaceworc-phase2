@@ -50,25 +50,27 @@ class JobRemover extends Command
                 foreach($get_jobs as $job){
 
                     $current_time = Carbon::now();
-                    $job_start_time = $job->start_date.''.$job->start_time;
 
-                    $time_diff_in_minutes = $current_time->diffInMinutes($job_start_time);
+                    Log::info('Current Time Zone From Job Remover -------------',$current_time->tzName);
+                    // $job_start_time = $job->start_date.''.$job->start_time;
+
+                    // $time_diff_in_minutes = $current_time->diffInMinutes($job_start_time);
                     
 
-                    if($time_diff_in_minutes  === 0){
-                        AgencyPostJob::where('id', $job->id)->update([
-                            'status' => JobStatus::JobExpired,
-                        ]);
+                    // if($time_diff_in_minutes  === 0){
+                    //     AgencyPostJob::where('id', $job->id)->update([
+                    //         'status' => JobStatus::JobExpired,
+                    //     ]);
 
-                        $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->exists();
-                        if($check_if_job_is_accepted){
-                            AcceptJob::where('job_id', $job->id)->update([
-                                'status' => JobStatus::JobExpired,
-                            ]);
-                        }
+                    //     $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->exists();
+                    //     if($check_if_job_is_accepted){
+                    //         AcceptJob::where('job_id', $job->id)->update([
+                    //             'status' => JobStatus::JobExpired,
+                    //         ]);
+                    //     }
 
-                        Log::info('Database Updated');
-                    }
+                    //     Log::info('Database Updated');
+                    // }
 
                 }
 

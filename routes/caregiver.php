@@ -19,6 +19,7 @@ use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
 use App\Http\Controllers\Caregiver\Rating\RatingController;
 use App\Http\Controllers\Caregiver\Registration\ProfileRegistrationController;
 use App\Http\Controllers\Caregiver\Status\StatusInformationController;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,13 +38,13 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::middleware(['throttle:limited-request'])->group(function () {
+// Route::middleware(['throttle:limited-request'])->group(function () {
     Route::post('signup', [SignUpController::class, 'signUp']);
     Route::post('login', [LoginController::class, 'login']);
     Route::post('resend-otp', [SignUpController::class, 'resendOtp']);
     Route::post('verify-otp', [SignUpController::class, 'verifyOtp']);
     Route::post('check-email-exist', [SignUpController::class, 'checkEmailExists']);
-});
+// });
 
 
 
@@ -207,4 +208,18 @@ Route::post('check-notification', function(){
     curl_close( $ch );
     return $result;
 
+});
+
+Route::get('time-and-zone',function(){
+    echo date('Y-m-d H:i A');
+    echo "\n ------------------- \n";
+    echo  date_default_timezone_get() ;
+
+    echo "\n ------------- Timezone Using Carbon----------- \n";
+
+    echo $timeZone = Carbon::now();
+    echo "\n ------------------- \n";
+    echo $timeZone->tzName;
+
+     
 });
