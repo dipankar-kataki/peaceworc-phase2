@@ -42,7 +42,7 @@ class AgencyProfileRegistration extends Model
     }
 
     public function rating_count(){
-        return $this->hasMany(Reward::class, 'user_id', 'user_id');
+        return $this->hasMany(CaregiverRating::class, 'user_id', 'agency_id');
     }
 
 
