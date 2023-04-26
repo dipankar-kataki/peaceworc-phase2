@@ -22,6 +22,7 @@ class SearchJobController extends Controller
             return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
+                $job_status = 0;
                 if($request->job_status == 'Open Job'){
                     $job_status =  1;
                 }else if($request->job_status == 'Bidding Started'){
@@ -33,7 +34,7 @@ class SearchJobController extends Controller
                 $get_jobs = AgencyPostJob::where('user_id', Auth::user()->id)->where('status', $job_status)->get();
                 return $this->success('Great! Jobs Fetched Successfully', $get_jobs, null, 200);
             }catch(\Exception $e){  
-                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);
             }
         }
     }
