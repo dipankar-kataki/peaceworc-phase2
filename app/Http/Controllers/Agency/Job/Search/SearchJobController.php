@@ -31,7 +31,7 @@ class SearchJobController extends Controller
                     $job_status =  8;
                 }
 
-                $get_jobs = AgencyPostJob::where('user_id', Auth::user()->id)->where('status', $job_status)->get();
+                $get_jobs = AgencyPostJob::where('user_id', Auth::user()->id)->where('status', $job_status)->where('payment_status', 1)->get();
                 return $this->success('Great! Jobs Fetched Successfully', $get_jobs, null, 200);
             }catch(\Exception $e){  
                 return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);
