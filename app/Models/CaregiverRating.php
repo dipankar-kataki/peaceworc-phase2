@@ -11,4 +11,5 @@ class CaregiverRating extends Model
 
     protected $table = 'caregiver_ratings';
     protected $guarded = [];
+
 }

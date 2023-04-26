@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Agency\Rating;
 
 use App\Http\Controllers\Controller;
 use App\Models\AgencyRating;
+use App\Models\CaregiverRating;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class RatingController extends Controller
 
     public function getAgencyRating(){
         try{
-            $get_rating = AgencyRating::where('caregiver_id', Auth::user()->id)->avg('rating');
+            $get_rating = CaregiverRating::where('agency_id', Auth::user()->id)->avg('rating');
             return $this->success('Great! Rating Fetched Successfully.', $get_rating, null, 200);
         }catch(\Exception $e){
             return $this->error('Oops! Something Went Wrong.', null, null, 500);
