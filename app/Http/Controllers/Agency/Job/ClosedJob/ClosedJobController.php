@@ -33,6 +33,8 @@ class ClosedJobController extends Controller
                     'status' => JobStatus::Closed
                 ]);
 
+                return $this->success('Great! Job Closed Successfully.', null, null, 201);
+
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong', null, null, 500);
             }

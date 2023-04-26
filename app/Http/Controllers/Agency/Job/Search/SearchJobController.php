@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AgencyPostJob;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class SearchJobController extends Controller
@@ -29,7 +30,7 @@ class SearchJobController extends Controller
                     $job_status =  8;
                 }
 
-                $get_jobs = AgencyPostJob::where('status', $job_status)->get();
+                $get_jobs = AgencyPostJob::where('user_id', Auth::user()->id)->where('status', $job_status)->get();
                 return $this->success('Great! Jobs Fetched Successfully', $get_jobs, null, 200);
             }catch(\Exception $e){  
                 return $this->error('Oops! Something Went Wrong.', null, null, 500);
