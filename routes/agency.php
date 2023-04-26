@@ -10,6 +10,7 @@ use App\Http\Controllers\Agency\Job\AcceptedJob\JobOngoingController;
 use App\Http\Controllers\Agency\Job\AcceptedJob\UpcomingJobController;
 use App\Http\Controllers\Agency\Job\CancelledJob\CancelledJobController;
 use App\Http\Controllers\Agency\Job\CareType\CareTypeController;
+use App\Http\Controllers\Agency\Job\ClosedJob\ClosedJobController;
 use App\Http\Controllers\Agency\Job\CompletedJob\CompletedJobController;
 use App\Http\Controllers\Agency\Job\PostJobController;
 use App\Http\Controllers\Agency\Job\Search\SearchJobController;
@@ -94,6 +95,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::group(['prefix' => 'canceled-job'], function(){
             Route::get('get', [CancelledJobController::class, 'getCanceledJob']);
+        });
+
+        Route::group(['prefix' => 'closed-job'], function(){
+            Route::post('close', [ClosedJobController::class, 'closeJob']);
         });
 
         Route::post('search', [SearchJobController::class, 'search']);
