@@ -74,7 +74,7 @@ class JobRemover extends Command
 
                                 $diff_in_minutes = $job_end_time->diffInMinutes($current_time);
 
-                                if( $diff_in_minutes <= 10){
+                                // if( $diff_in_minutes <= 10){
                                     $job_accepted_by = AcceptJob::where('job_id', $job->id)->first();
 
                                     $get_caregiver_details = User::where('id', $job_accepted_by->user_id)->first();
@@ -103,24 +103,11 @@ class JobRemover extends Command
 
                                         Log::info('Notification Sent');
                                     }
-                                }else{
-                                    AgencyPostJob::where('id', $job->id)->update([
-                                        'status' => JobStatus::JobExpired,
-                                    ]);
-            
-                                    $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->exists();
-                                    if($check_if_job_is_accepted){
-                                        AcceptJob::where('job_id', $job->id)->update([
-                                            'status' => JobStatus::JobExpired,
-                                        ]);
-                                    }
-            
-                                    Log::info('Database Updated. Some of the jobs are expired.');
-                                        }
+                                // }
 
-                                    }else{
-                                        Log::info('Job Is Completed');
-                                    }
+                            }else{
+                                Log::info('Job Is Completed');
+                            }
                         }else{
                             Log::info('Current Time is Smaller');
                         }
@@ -128,14 +115,14 @@ class JobRemover extends Command
                     }else{
                         if( !$job_start_time->gt($current_time)){
                             AgencyPostJob::where('id', $job->id)->update([
-                                'status' => JobStatus::JobCancelled,
+                                'status' => JobStatus::JobExpired,
                             ]);
     
                             $check_if_job_is_accepted = AcceptJob::where('job_id', $job->id)->exists();
 
                             if($check_if_job_is_accepted){
                                 AcceptJob::where('job_id', $job->id)->update([
-                                    'status' => JobStatus::JobCancelled,
+                                    'status' => JobStatus::JobExpired,
                                 ]);
                             }
     
