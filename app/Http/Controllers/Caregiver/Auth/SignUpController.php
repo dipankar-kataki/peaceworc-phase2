@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Caregiver\Auth;
 
 use App\Common\Role;
+use App\Events\SendOtpMailEvent;
 use App\Http\Controllers\Controller;
 use App\Mail\SendEmailVerificationOTPMail;
 use App\Models\AppDeviceToken;
@@ -14,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -49,7 +51,8 @@ class SignUpController extends Controller
                             'otp_validity' => date('Y-m-d h:i:s')
                         ]);
 
-                        Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));
+                        Event::dispatch(new SendOtpMailEvent($request->email, $otp));
+
                         return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 201);
                     }else{
                         return $this->error('Oops! User Already Registered. ', null, null, 400);
@@ -73,7 +76,7 @@ class SignUpController extends Controller
                             'role' => Role::Caregiver,
                         ]);
 
-                        Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));
+                        Event::dispatch(new SendOtpMailEvent($request->email, $otp));
                         return $this->success('Great! Email Verification OTP Sent Successfully', null, null, 201);
                     }else{
                         return $this->error('Oops! SignUp Failed', null, null, 400);
@@ -107,7 +110,7 @@ class SignUpController extends Controller
                         'otp_validity' => date('Y-m-d h:i:s')
                     ]);
 
-                    Mail::to($request->email)->send(new SendEmailVerificationOTPMail($otp));
+                    Event::dispatch(new SendOtpMailEvent($request->email, $otp));
 
                     return $this->success('Great! Email Verification OTP Sent Successfully. ', null, null, 201);
                     
