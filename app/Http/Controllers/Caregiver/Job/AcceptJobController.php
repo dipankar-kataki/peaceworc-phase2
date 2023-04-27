@@ -23,18 +23,24 @@ class AcceptJobController extends Controller
                     if($check_if_profile_completion_status_exists->is_basic_info_added == 0 || $check_if_profile_completion_status_exists->is_documents_uploaded == 0){
                         return $this->error('Oops! Profile Incomplete. Failed To Accept job.', null, null, 500);
                     }else{
-                        $create = AcceptJob::create([
-                            'user_id' => Auth::user()->id,
-                            'job_id' => $request->job_id,
-                            'status' => JobStatus::JobAccepted
-                        ]);
-            
-                        if($create){
-                            AgencyPostJob::where('id', $request->job_id)->update([
+
+                        $check_if_job_is_already_accepted = AcceptJob::where('job_id', $request->job_id)->exists();
+                        if($check_if_job_is_already_accepted){
+                            return $this->error('Oops! This Job Has Already Been Awarded.', null, null, 500);
+                        }else{
+                            $create = AcceptJob::create([
+                                'user_id' => Auth::user()->id,
+                                'job_id' => $request->job_id,
                                 'status' => JobStatus::JobAccepted
                             ]);
+                
+                            if($create){
+                                AgencyPostJob::where('id', $request->job_id)->update([
+                                    'status' => JobStatus::JobAccepted
+                                ]);
+                            }
+                            return $this->success('Great! Job Accepted Successfully', null, null, 201);
                         }
-                        return $this->success('Great! Job Accepted Successfully', null, null, 201);
                     }
                 }else{
                     return $this->error('Oops! Profile Incomplete. Failed To Accept job.', null, null, 500);
