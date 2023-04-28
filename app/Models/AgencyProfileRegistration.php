@@ -34,11 +34,11 @@ class AgencyProfileRegistration extends Model
     }
 
     public function job_count(){
-        return $this->hasMany(AgencyPostJob::class, 'user_id', 'user_id');
+        return $this->hasMany(AgencyPostJob::class, 'user_id', 'user_id')->where('payment_status', 1);
     }
 
     public function revenue_count(){
-        return $this->hasMany(AgencyPayment::class, 'agency_id', 'user_id');
+        return $this->hasMany(AgencyPayment::class, 'agency_id', 'user_id')->where('payment_status', 1);
     }
 
     public function rating_count(){
