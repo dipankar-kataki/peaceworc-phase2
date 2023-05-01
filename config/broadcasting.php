@@ -37,15 +37,11 @@ return [
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => true,
+                // 'useTLS' => true,
                 'encrypted' => true,
                 'host' => 'localhost',
-                'port' => 6002,
+                'port' => 6001,
                 'schema' => 'https',
-                'curl_options' => [
-                    'CURLOPT_SSL_VERIFYHOST' => 0,
-                    'CURLOPT_SLL_VERIFYPEER' => 0
-                ]
 
                 // 'useTLS' => true,
                 // 'host' => 'localhost',
