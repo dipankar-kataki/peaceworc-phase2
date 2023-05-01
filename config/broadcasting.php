@@ -38,7 +38,7 @@ return [
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'useTLS' => false,
-                'host' => 'peaceworc-phase2-dev.ekodusproject.tech',
+                'host' => '127.0.0.1',
                 'port' => 6001,
                 'schema' => 'https'
 
