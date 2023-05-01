@@ -27,8 +27,8 @@ window.Echo = new Echo({
     // forceTLS: true,
     encrypted: true,
     wsHost: window.location.hostname,
-    wsPort: 6001,
-    wssPort: 6001,
+    wsPort: 6002,
+    wssPort: 6002,
     disableStats: true,
     enabledTransports: ['ws', 'wss'],
 

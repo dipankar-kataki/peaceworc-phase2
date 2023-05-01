@@ -40,7 +40,7 @@ return [
                 // 'useTLS' => true,
                 'encrypted' => true,
                 'host' => 'peaceworc-phase2-dev.ekodusproject.tech',
-                'port' => 6001,
+                'port' => 6002,
                 'schema' => 'https',
 
                 // 'useTLS' => true,
