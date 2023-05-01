@@ -37,7 +37,15 @@ return [
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => true,
+                'useTLS' => false,
+                'host' => 'peaceworc-phase2-dev.ekodusproject.tech',
+                'port' => 6001,
+                'schema' => 'https'
+
+                // 'useTLS' => true,
+                // 'host' => 'localhost',
+                // 'port' => 6001,
+                // 'schema' => 'http'
             ],
         ],
 

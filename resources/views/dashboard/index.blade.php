@@ -1567,4 +1567,9 @@
     </div>
 @endsection
 @section('custom-scripts')
+    <script>
+        Echo.channel('testing-channel').listen('TestEvent', (e) => {
+            console.log(e)
+        })
+    </script>
 @endsection
