@@ -37,8 +37,8 @@ return [
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => false,
-                'host' => '127.0.0.1',
+                // 'useTLS' => false,
+                'host' => 'localhost',
                 'port' => 6001,
                 'schema' => 'https'
 
