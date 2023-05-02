@@ -140,8 +140,9 @@ class SignUpController extends Controller
                     $otp_validity_time =  $get_user_details->otp_validity;
     
                         $current_time = Carbon::now();
-    
-                        $time_diff_in_minutes = $current_time->diffInMinutes($otp_validity_time);
+
+                        $otp_val = new Carbon($otp_validity_time);
+                        $time_diff_in_minutes = $current_time->diffInMinutes($otp_val);
 
                         return response()->json(['Difference' =>  $time_diff_in_minutes]);
 
