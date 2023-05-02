@@ -40,9 +40,9 @@ return [
                 // 'useTLS' => true,
                 'useTLS' => false,
                 'encrypted' => false,
-                'host' => '127.0.0.1',
+                'host' => 'workspace',
                 'port' => 6001,
-                'scheme' => 'http'
+                'scheme' => 'https'
 
                 // 'useTLS' => true,
                 // 'host' => 'localhost',
