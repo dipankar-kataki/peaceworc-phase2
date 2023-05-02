@@ -143,7 +143,7 @@ class SignUpController extends Controller
     
                         $time_diff_in_minutes = $current_time->diffInMinutes($otp_validity_time);
 
-                        return response()->json('Difference', $time_diff_in_minutes);
+                        return response()->json(['Difference' =>  $time_diff_in_minutes]);
 
                         if( $time_diff_in_minutes > 3){
                             return $this->error('Oops! OTP Expired.', null, null, 400);
