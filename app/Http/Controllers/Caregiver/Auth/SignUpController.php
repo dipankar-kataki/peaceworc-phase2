@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Traits\ApiResponse;
 use App\Traits\WelcomeNotification;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -139,13 +140,14 @@ class SignUpController extends Controller
                 }else{
                     $otp_validity_time =  $get_user_details->otp_validity;
     
-                        $current_time = date('Y-m-d H:i:s');
+                        $current_time = new DateTime();
 
-                        $otp_val = new Carbon($otp_validity_time);
+                        // $otp_val = new Carbon($otp_validity_time);
 
-                        $time_diff_in_minutes = $current_time->diffInMinutes($otp_val);
+                        // $time_diff_in_minutes = $current_time->diffInMinutes($otp_val);
+                        $time_diff_in_minutes =  $current_time->diff(new DateTime($otp_validity_time));
 
-                        return response()->json(['Difference' =>  $current_time]);
+                        return response()->json(['Difference' =>  $time_diff_in_minutes]);
 
                         if( $time_diff_in_minutes >= 3){
                             return $this->error('Oops! OTP Expired.', null, null, 400);
