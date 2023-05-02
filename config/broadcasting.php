@@ -39,9 +39,9 @@ return [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 // 'useTLS' => true,
                 'useTLS' => false,
-                'encrypted' => false,
-                'host' => 'workspace',
-                'port' => 6001,
+                'encrypted' => true,
+                'host' => 'peaceworc-phase2-dev.ekodusproject.tech',
+                'port' => env('LARAVEL_WEBSOCKETS_PORT', 6001),
                 'scheme' => 'https'
 
                 // 'useTLS' => true,
