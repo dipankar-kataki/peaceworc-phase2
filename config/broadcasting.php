@@ -38,16 +38,16 @@ return [
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 // 'useTLS' => true,
-                'useTLS' => false,
-                'encrypted' => true,
-                'host' => 'peaceworc-phase2-dev.ekodusproject.tech',
-                'port' => env('LARAVEL_WEBSOCKETS_PORT', 6001),
-                'scheme' => 'https'
+                // 'useTLS' => false,
+                // 'encrypted' => true,
+                // 'host' => 'peaceworc-phase2-dev.ekodusproject.tech',
+                // 'port' => env('LARAVEL_WEBSOCKETS_PORT', 6001),
+                // 'scheme' => 'https'
 
-                // 'useTLS' => true,
-                // 'host' => 'localhost',
-                // 'port' => 6001,
-                // 'schema' => 'http'
+                'useTLS' => true,
+                'host' => 'localhost',
+                'port' => 6001,
+                'schema' => 'http'
             ],
         ],
 

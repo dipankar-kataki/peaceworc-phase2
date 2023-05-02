@@ -117,7 +117,6 @@ return [
          * in a separate file specified by local_pk.
          */
 
-        'ssl' => true,
 
         'local_cert' => env('LARAVEL_WEBSOCKETS_SSL_LOCAL_CERT', null),
 
@@ -131,10 +130,6 @@ return [
          * Passphrase for your local_cert file.
          */
         'passphrase' => env('LARAVEL_WEBSOCKETS_SSL_PASSPHRASE', null),
-
-        'verify_peer' => true,
-        
-        'verify_peer_name' => true,
     ],
 
     /*
