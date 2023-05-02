@@ -139,7 +139,7 @@ class SignUpController extends Controller
                 }else{
                     $otp_validity_time =  $get_user_details->otp_validity;
     
-                        $current_time = Carbon::now();
+                        $current_time = Carbon::now()->setTimezone('Asia/Kolkata');
 
                         $otp_val = new Carbon($otp_validity_time);
 
