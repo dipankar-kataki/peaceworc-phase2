@@ -151,11 +151,11 @@ class SignUpController extends Controller
     
                         $otp_validity_time =  $get_user_details->otp_validity;
     
-                        $current_time = Carbon::now();
+                        $current_time = new DateTime();
     
-                        $time_diff_in_minutes = $current_time->diffInMinutes($otp_validity_time);
+                        $time_diff_in_minutes = $current_time->diff(new DateTime($otp_validity_time));
                         
-                        if( $time_diff_in_minutes > 3){
+                        if(  $time_diff_in_minutes->i > 3){
                             return $this->error('Oops! OTP Expired.', null, null, 400);
                         }else{
 
