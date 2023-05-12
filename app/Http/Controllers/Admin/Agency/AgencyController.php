@@ -11,16 +11,22 @@ use App\Models\AgencyProfileRegistration;
 use App\Models\AuthorizeOfficer;
 use App\Models\Review;
 use App\Models\User;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AgencyController extends Controller
 {
-    public function getList(){
-        $agency_list = AgencyProfileRegistration::get();
+    use ApiResponse;
 
-        return response()->json(['message' => 'Great! Details Fetched Successfully', 'data' => $agency_list, 'status' => 1]);
-        // return view('agency.list')->with(['agency_list' => $agency_list ]);
+    public function getList(){
+        try{
+            $agency_list = AgencyProfileRegistration::get();
+            return $this->success('Great! Details Fetched Successfully', $agency_list, null, 200);
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong', null, null, 500);
+        }
+        
     }
 
     public function getAgencyDetails($id){
