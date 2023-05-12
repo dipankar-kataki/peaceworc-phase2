@@ -18,7 +18,9 @@ class AgencyController extends Controller
 {
     public function getList(){
         $agency_list = AgencyProfileRegistration::get();
-        return view('agency.list')->with(['agency_list' => $agency_list ]);
+
+        return response()->json(['message' => 'Great! Details Fetched Successfully', 'data' => $agency_list, 'status' => 1]);
+        // return view('agency.list')->with(['agency_list' => $agency_list ]);
     }
 
     public function getAgencyDetails($id){
