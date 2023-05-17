@@ -5,6 +5,7 @@ use App\Http\Controllers\Agency\Auth\LoginController;
 use App\Http\Controllers\Agency\Auth\LogOutController;
 use App\Http\Controllers\Agency\Auth\SignUpController;
 use App\Http\Controllers\Agency\AuthorizeOfficer\AuthorizeOfficerController;
+use App\Http\Controllers\Agency\Client\ClientController;
 use App\Http\Controllers\Agency\Job\Accepted\OngoingJobController;
 use App\Http\Controllers\Agency\Job\AcceptedJob\JobOngoingController;
 use App\Http\Controllers\Agency\Job\AcceptedJob\UpcomingJobController;
@@ -108,7 +109,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('caregiver-profile', [PostJobController::class, 'getCaregiverProfile']);
     });
 
-
     Route::group(['prefix' => 'payment'], function(){
         Route::post('update-status', [AgencyPaymentController::class, 'updateStatus']);
     });
@@ -116,6 +116,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'rating'], function(){
         Route::get('get', [RatingController::class, 'getAgencyRating']);
         Route::post('add-caregiver-rating', [RatingController::class, 'addCaregiverRating']);
+    });
+
+    Route::group(['prefix' => 'client'], function(){
+        Route::get('get-profile', [ClientController::class, 'getProfile']);
+        Route::post('create-profile', [ClientController::class, 'createProfile']);
     });
     
     Route::post('logout', [LogOutController::class,'logout']);

@@ -26,7 +26,7 @@ class OwnerProfileController extends Controller
             try{
                 $check_if_phone_exists = User::where('phone', $request->phone)->exists();
                 if($check_if_phone_exists){
-                    return $this->error('Oops! Phone Number Already Associated With Another User.', null, null, 400);
+                    return $this->error('Oops! Phone Number Already Exist.', null, null, 400);
                 }else{
                     $update = User::where('id', Auth::user()->id)->update([
                         'phone' => $request->phone
