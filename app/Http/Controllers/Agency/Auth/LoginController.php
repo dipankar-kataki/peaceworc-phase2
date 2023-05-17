@@ -32,12 +32,12 @@ class LoginController extends Controller
                 $user = User::where('email', $request->email)->first();
 
                 if($user == null){
-                    return $this->error('Invalid credentials. User unauthorized',null, 'null', 401);
+                    return $this->error('Invalid credentials. User Not Found.',null, 'null', 401);
                 }else if($user->is_otp_verified == 0){
-                    return $this->error('Invalid credentials. User unauthorized',null, 'null', 401);
+                    return $this->error('Invalid credentials. User Unauthorized',null, 'null', 401);
                 }else{
                     if ( ! Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => Role::Agency_Owner]) ){
-                        return $this->error('Invalid credentials. User unauthorized',null, 'null', 401);
+                        return $this->error('Invalid credentials. Failed To Login.',null, 'null', 401);
                     }else{
 
                         $user = User::where('email', $request->email)->firstOrFail();

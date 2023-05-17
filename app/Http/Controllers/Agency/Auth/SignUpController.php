@@ -135,14 +135,14 @@ class SignUpController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Opps! Validation Error. '.$validator->errors()->first(), null, null, 400);
+            return $this->error('Opps! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
 
 
                 $get_user_details = User::where('email', $request->email)->first();
                 if($get_user_details == null){
-                    return $this->success('Oops! Invalid Email Id. OTP not verified', null, null, 400);
+                    return $this->error('Oops! Invalid Email Id. OTP not verified', null, null, 400);
                 }else{
 
                     if($get_user_details->otp != $request->otp){
@@ -189,7 +189,7 @@ class SignUpController extends Controller
                 }
 
             }catch(\Exception $e){
-                return $this->error('Oops!. Something Went Wrong.'.$e, null, null, 500);
+                return $this->error('Oops!. Something Went Wrong.', null, null, 500);
             }
             
         }

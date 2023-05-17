@@ -39,6 +39,8 @@ use Illuminate\Support\Facades\Route;
     Route::post('resend-otp', [SignUpController::class, 'resendOtp']);
     Route::post('verify-otp', [SignUpController::class, 'verifyOtp']);
     Route::post('send-forgot-password-mail', [ForgotPasswordController::class, 'sendForgotPasswordMail']);
+    Route::post('verify-forgot-otp', [ForgotPasswordController::class, 'verifyForgotOtp']);
+    Route::post('update-forgot-password', [ForgotPasswordController::class, 'updateForgotPassword']);
     
 // });
 
