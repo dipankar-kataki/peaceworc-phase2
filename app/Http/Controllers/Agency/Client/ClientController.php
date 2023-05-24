@@ -16,7 +16,7 @@ class ClientController extends Controller
 
     public function getProfile(){
         try{
-            $get_clients = ClientProfile::where('agency_id', Auth::user()->id)->where('status', 1)->get();
+            $get_clients = ClientProfile::where('agency_id', Auth::user()->id)->where('status', 1)->orderBy('created_at', 'DESC')->get();
             return $this->success('Great! Clients Fetched Successfully.', $get_clients, null, 200);
         }catch(\Exception $e){
             return $this->error('Oops! Something Went Wrong.', null, null, 500);
