@@ -17,8 +17,8 @@ class AddColumnShortAddressToClientProfilesTable extends Migration
             $table->string('short_address')->after('address');
             $table->string('street')->after('short_address');
             $table->string('appartment_or_unit')->after('street');
-            $table->string('floor_no')->after('appartment_or_unit');
-            $table->string('city')->after('floor_no');
+            $table->string('floor_no')->after('appartment_or_unit')->nullable();
+            $table->string('city')->after('floor_no')->nullable();
             $table->string('state')->after('city');
             $table->string('zip_code')->after('state');
             $table->string('country')->after('zip_code');
