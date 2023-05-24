@@ -30,7 +30,17 @@ class ClientController extends Controller
             'phone' => 'required',
             'email' => 'required|email',
             'address' => 'required',
-            'photo' => 'required|image|mimes:jpg,png,jpeg|max:1048'
+            'photo' => 'required|image|mimes:jpg,png,jpeg|max:1048',
+            'short_address' => 'required',
+            'street' => 'required',
+            'appartment_or_unit' => 'required',
+            'floor_no' => 'required',
+            'city' => 'required',
+            'state' => 'required',
+            'zip_code' => 'required',
+            'country' => 'required',
+            'lat' => 'required',
+            'long' => 'required',
         ]);
 
         if($validator->fails()){
@@ -50,13 +60,24 @@ class ClientController extends Controller
                 if($get_client){
                     return $this->error('Oops! Phone Number Already Exist.', null, null, 400);
                 }else{
+                    
                     ClientProfile::create([
                         'agency_id' => Auth::user()->id,
                         'name' => $request->name,
                         'phone' => $request->phone,
                         'email' => $request->email,
                         'address' => $request->address,
-                        'photo' => $imageName
+                        'photo' => $imageName,
+                        'short_address' => $request->short_address,
+                        'street' => $request->street,
+                        'appartment_or_unit' => $request->appartment_or_unit,
+                        'floor_no' => $request->floor_no,
+                        'city' => $request->city,
+                        'state' => $request->state,
+                        'zip_code' => $request->zip_code,
+                        'country' => $request->country,
+                        'lat' => $request->lat,
+                        'long' => $request->long,
                     ]);
     
                     return $this->success('Great! Client Profile Created Successfully.', null, null, 201);
