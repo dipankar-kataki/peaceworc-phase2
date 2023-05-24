@@ -33,8 +33,6 @@ class ClientController extends Controller
             'photo' => 'required|image|mimes:jpg,png,jpeg|max:1048',
             'short_address' => 'required',
             'street' => 'required',
-            'appartment_or_unit' => 'required',
-            'floor_no' => 'required',
             'city' => 'required',
             'state' => 'required',
             'zip_code' => 'required',
