@@ -60,7 +60,7 @@ class ClientController extends Controller
                 if($get_client){
                     return $this->error('Oops! Phone Number Already Exist.', null, null, 400);
                 }else{
-                    
+
                     ClientProfile::create([
                         'agency_id' => Auth::user()->id,
                         'name' => $request->name,
@@ -85,6 +85,25 @@ class ClientController extends Controller
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);
             }
+        }
+    }
+
+
+    public function searchClient(Request $request){
+        try{
+            if(!isset($_GET['client_name'])){
+                return $this->error('Oops! Client Name Required.', null ,null, 400);
+            }else{
+                $client_name = $_GET['client_name'];
+
+                $get_clients = ClientProfile::where('agency_id', Auth::user()->id)
+                                ->where('name','LIKE','%'.$client_name.'%')
+                                ->get();
+                return $this->success('Great! Details Fetched Successfully', $get_clients, null, 200);
+            }
+            
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong.', null ,null, 500);
         }
     }
 }

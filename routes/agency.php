@@ -121,6 +121,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'client'], function(){
         Route::get('get-profile', [ClientController::class, 'getProfile']);
         Route::post('create-profile', [ClientController::class, 'createProfile']);
+        Route::get('search', [ClientController::class, 'searchClient']);
     });
     
     Route::post('logout', [LogOutController::class,'logout']);
