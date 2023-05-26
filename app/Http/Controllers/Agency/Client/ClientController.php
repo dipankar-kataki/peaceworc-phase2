@@ -95,6 +95,7 @@ class ClientController extends Controller
                 $client_name = $_GET['client_name'];
 
                 $get_clients = ClientProfile::where('agency_id', Auth::user()->id)
+                                ->where('status', 1)
                                 ->where('name','LIKE','%'.$client_name.'%')
                                 ->get();
                 return $this->success('Great! Details Fetched Successfully', $get_clients, null, 200);
@@ -102,6 +103,27 @@ class ClientController extends Controller
             
         }catch(\Exception $e){
             return $this->error('Oops! Something Went Wrong.', null ,null, 500);
+        }
+    }
+
+
+    public function deleteClient(Request $request){
+        $validator = Validator::make($request->all(),[
+            'client_id' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
+        }else{
+            try{
+                ClientProfile::where('id', $request->client_id)->update([
+                    'status' => 0
+                ]);
+
+                return $this->success('Great! Client Deleted Successfully.', null, null, 200);
+            }catch(\Exception $e){
+                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            }
         }
     }
 }
