@@ -22,6 +22,7 @@ class PostJobController extends Controller
 
     public function createJob(Request $request){
         $validator = Validator::make($request->all(),[
+            'client_id' => 'required',
             'title' => 'required | string',
             'care_type' => 'required | string',
             'care_items' => 'required',
