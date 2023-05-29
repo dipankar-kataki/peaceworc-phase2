@@ -116,7 +116,7 @@ class PostJobController extends Controller
 
 
                         }catch(\Exception $e){
-                            return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);
+                            return $this->error('Oops! Something Went Wrong.', null, null, 500);
                         }
                     }
                 }
