@@ -81,8 +81,35 @@ class ClientController extends Controller
                         'lat' => $request->lat,
                         'long' => $request->long,
                     ]);
+
+                    
+                    $client_data = ClientProfile::where('status', 1)->where('email', $request->email)->first();
+                    $details = [];
+                    $client_details = [
+                        'agency_id' => $client_data->agency_id,
+                        'name' => $client_data->name,
+                        'phone' => $client_data->phone,
+                        'email' => $client_data->email,
+                        'gender' => $client_data->gender,
+                        'age' => $client_data->age,
+                        'address' => $client_data->address,
+                        'photo' => $client_data->photo,
+                        'short_address' => $client_data->short_address,
+                        'street' => $client_data->street,
+                        'appartment_or_unit' => $client_data->appartment_or_unit,
+                        'floor_no' => $client_data->floor_no,
+                        'city' => $client_data->city,
+                        'state' => $client_data->state,
+                        'zip_code' => $client_data->zip_code,
+                        'country' => $client_data->country,
+                        'lat' => $client_data->lat,
+                        'long' => $client_data->long,
+                    ];
+
+                    array_push($details, $client_details);
+
     
-                    return $this->success('Great! Client Profile Created Successfully.', null, null, 201);
+                    return $this->success('Great! Client Profile Created Successfully.', $details, null, 201);
                 }
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);

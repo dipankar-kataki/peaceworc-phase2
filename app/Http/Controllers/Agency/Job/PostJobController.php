@@ -78,6 +78,7 @@ class PostJobController extends Controller
                             
                             $create = AgencyPostJob::create([
                                 'user_id' => Auth::user()->id,
+                                'client_id' => $request->client_id,
                                 'title' => $request->title,
                                 'care_type' => $request->care_type,
                                 'care_items' => json_encode($request->care_items),
