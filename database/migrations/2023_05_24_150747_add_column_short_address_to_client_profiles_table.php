@@ -16,9 +16,9 @@ class AddColumnShortAddressToClientProfilesTable extends Migration
         Schema::table('client_profiles', function (Blueprint $table) {
             $table->string('short_address')->after('address');
             $table->string('street')->after('short_address');
-            $table->string('appartment_or_unit')->after('street');
+            $table->string('appartment_or_unit')->after('street')->nullable();
             $table->string('floor_no')->after('appartment_or_unit')->nullable();
-            $table->string('city')->after('floor_no')->nullable();
+            $table->string('city')->after('floor_no');
             $table->string('state')->after('city');
             $table->string('zip_code')->after('state');
             $table->string('country')->after('zip_code');
