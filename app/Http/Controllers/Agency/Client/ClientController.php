@@ -121,9 +121,14 @@ class ClientController extends Controller
     public function searchClient(Request $request){
         try{
             if(!isset($_GET['client_name'])){
-                return $this->error('Oops! Client Name Required.', null ,null, 400);
+
+                $get_clients = ClientProfile::where('agency_id', Auth::user()->id)
+                                ->where('status', 1)
+                                ->get();
+                return $this->success('Great! Details Fetched Successfully', $get_clients, null, 200);
             }else{
                 $client_name = $_GET['client_name'];
+                
 
                 $get_clients = ClientProfile::where('agency_id', Auth::user()->id)
                                 ->where('status', 1)
