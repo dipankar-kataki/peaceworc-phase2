@@ -15,6 +15,7 @@ use App\Http\Controllers\Caregiver\Job\SearchJobController;
 use App\Http\Controllers\Caregiver\Job\StartJobController;
 use App\Http\Controllers\Caregiver\Job\UpcomingController;
 use App\Http\Controllers\Caregiver\Location\LocationController;
+use App\Http\Controllers\Caregiver\MapLocation\MapLocationController;
 use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
 use App\Http\Controllers\Caregiver\Rating\RatingController;
 use App\Http\Controllers\Caregiver\Registration\ProfileRegistrationController;
@@ -143,6 +144,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'rating'], function(){
         Route::get('get', [RatingController::class, 'getCaregiverRating']);
         Route::post('add-agency-rating', [RatingController::class, 'addAgencyRating']);
+    });
+
+
+    Route::group(['prefix' => 'map-locations'], function(){
+        Route::get('get-locations', [MapLocationController::class, 'getJobLocations']);
     });
 
 

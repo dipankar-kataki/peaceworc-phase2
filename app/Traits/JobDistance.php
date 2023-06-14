@@ -42,7 +42,7 @@ trait JobDistance
             } else if ($unit == "N") {
                 return ( round($miles * 0.8684, 2) ).' '.'Nautical Miles';
             } else {
-                return round($miles, 2).' '.'Miles';
+                return round($miles, 2);
             }
         }
 	}
