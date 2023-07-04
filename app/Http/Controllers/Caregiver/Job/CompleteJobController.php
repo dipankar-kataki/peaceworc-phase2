@@ -24,7 +24,7 @@ class CompleteJobController extends Controller
             $all_details = [];
             
             foreach($get_job as $job){
-                $agency = AgencyProfileRegistration::where('user_id', $job->job->user_id)->select('id','company_name','photo')->first();
+                $agency = AgencyProfileRegistration::where('user_id', $job->job->user_id)->select('user_id','company_name','photo')->first();
 
 
                 $details = [
