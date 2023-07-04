@@ -182,7 +182,8 @@ class SignUpController extends Controller
 
                             $auth_token = $get_user_details->createToken('auth_token')->plainTextToken;
 
-                            return $this->success('Great! OTP Verified. SignUp Successful.', null, $auth_token, 201);
+                            $verified_user_id = $get_user_details->id;
+                            return $this->success('Great! OTP Verified. SignUp Successful.', $verified_user_id , $auth_token, 201);
 
                         }
                     }
