@@ -20,6 +20,7 @@ use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
 use App\Http\Controllers\Caregiver\Rating\RatingController;
 use App\Http\Controllers\Caregiver\Registration\ProfileRegistrationController;
 use App\Http\Controllers\Caregiver\Status\StatusInformationController;
+use App\Http\Controllers\Chatting\ChattingController;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -149,6 +150,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::group(['prefix' => 'map-locations'], function(){
         Route::get('get-locations', [MapLocationController::class, 'getJobLocations']);
+    });
+
+    Route::group(['prefix' => 'chatting'], function(){
+        Route::post('upload-image',[ChattingController::class, 'uploadImage']);
+        Route::post('upload-message',[ChattingController::class, 'uploadMessage']);
     });
 
 
