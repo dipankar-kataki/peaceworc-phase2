@@ -24,11 +24,12 @@ class CompleteJobController extends Controller
             $all_details = [];
             
             foreach($get_job as $job){
-                $agency = AgencyProfileRegistration::where('user_id', $job->job->user_id)->select('company_name','photo')->first();
+                $agency = AgencyProfileRegistration::where('user_id', $job->job->user_id)->select('id','company_name','photo')->first();
 
 
                 $details = [
                     'job_id' => $job->job_id,
+                    'agency_id' => $agency->id,
                     'agency_name' => ucwords($agency->company_name),
                     'agency_photo' => $agency->photo,
                     'agency_address' => $job->job->short_address,

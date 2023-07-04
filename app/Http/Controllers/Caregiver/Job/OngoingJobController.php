@@ -22,11 +22,12 @@ class OngoingJobController extends Controller
             $all_details = [];
             if($get_job != null){
             
-                $agency = AgencyProfileRegistration::where('user_id',$get_job->job->user_id)->select('company_name','photo')->first();
+                $agency = AgencyProfileRegistration::where('user_id',$get_job->job->user_id)->select('id','company_name','photo')->first();
 
 
                 $details = [
                     'job_id' => $get_job->job_id,
+                    'agency_id' => $agency->id,
                     'agency_name' => $agency->company_name,
                     'agency_photo' => $agency->photo,
                     'agency_address' => $get_job->job->short_address,
