@@ -27,7 +27,7 @@ class OngoingJobController extends Controller
 
                 $details = [
                     'job_id' => $get_job->job_id,
-                    'agency_id' => $agency->id,
+                    'agency_id' => $agency->user_id,
                     'agency_name' => $agency->company_name,
                     'agency_photo' => $agency->photo,
                     'agency_address' => $get_job->job->short_address,
