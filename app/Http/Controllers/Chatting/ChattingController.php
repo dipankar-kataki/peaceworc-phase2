@@ -36,28 +36,29 @@ class ChattingController extends Controller
     }
 
     public function uploadMessage(Request $request){
-        return $this->success('Great! Message Uploaded Successfully.', $request->data->toArray(), null, 201);
-        $validator = Validator::make($request->all(),[
-            'sent_by' => 'required',
-            'received_by' => 'required'
-        ]);
+        $jsonResponse =  $request->getContent();
+        $messageData = json_decode($jsonResponse, true);
+        try{
 
-        if($validator->fails()){
-            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
-        }else{
-            try{
-                
-                ChatSystem::create([
-                    'sent_by' => $request->sent_by,
-                    'received_by' => $request->received_by,
-                    'message' => $request->message,
-                    'image_path' => $request->imagePath
+            if( ($messageData['chatResponse']['userId'] == '') || ($messageData['chatResponse']['targetId'] == '')){
+                return $this->error('Oops! Message Not Saved. Target-Id or User-Id Might Be Missing', null, null, 400);
+            }else{
+                $create = ChatSystem::create([
+                    'sent_id' => $messageData['chatResponse']['userId'],
+                    'received_id' => $messageData['chatResponse']['targetId'],
+                    'message' => $messageData['chatResponse']['msg'],
+                    'image_path' => $messageData['chatResponse']['image']
                 ]);
 
-                return $this->success('Great! Message Uploaded Successfully.', null, null, 201);
-            }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                if($create){
+                    return $this->success('Great! Message Uploaded Successfully.', null, null, 201);
+                }else{
+                    return $this->success('Oops! Message Not Uploaded.', null, null, 400);
+                }
             }
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong.'.$e->getMessage(), null, null, 500);
         }
+        
     }
 }

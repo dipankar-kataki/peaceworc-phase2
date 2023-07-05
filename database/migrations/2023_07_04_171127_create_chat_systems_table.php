@@ -15,19 +15,19 @@ class CreateChatSystemsTable extends Migration
     {
         Schema::create('chat_systems', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sent_by');
-            $table->unsignedBigInteger('received_by');
+            $table->unsignedBigInteger('sent_id');
+            $table->unsignedBigInteger('received_id');
             $table->text('message')->nullable();
             $table->string('image_path')->nullable();
             $table->timestamps();
 
             // Indexes
-            $table->index('sent_by');
-            $table->index('received_by');
+            $table->index('sent_id');
+            $table->index('received_id');
 
             // Foreign key constraints
-            $table->foreign('sent_by')->references('id')->on('users');
-            $table->foreign('received_by')->references('id')->on('users');
+            $table->foreign('sent_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('received_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
