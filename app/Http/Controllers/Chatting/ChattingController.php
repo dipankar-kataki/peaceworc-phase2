@@ -30,12 +30,13 @@ class ChattingController extends Controller
 
                 return $this->success('Great! Image Uploaded Successfully.', $imageName, null, 201);
             }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                return $this->error('Oops! Something Went Wrong.', $e->getMessage(), null, 500);
             }
         }
     }
 
     public function uploadMessage(Request $request){
+        return $this->success('Great! Message Uploaded Successfully.', $request->data->toArray(), null, 201);
         $validator = Validator::make($request->all(),[
             'sent_by' => 'required',
             'received_by' => 'required'
@@ -46,14 +47,14 @@ class ChattingController extends Controller
         }else{
             try{
                 
-                // ChatSystem::create([
-                //     'sent_by' => $request->sent_by,
-                //     'received_by' => $request->received_by,
-                //     'message' => $request->message,
-                //     'image_path' => $request->imagePath
-                // ]);
+                ChatSystem::create([
+                    'sent_by' => $request->sent_by,
+                    'received_by' => $request->received_by,
+                    'message' => $request->message,
+                    'image_path' => $request->imagePath
+                ]);
 
-                return $this->success('Great! Message Uploaded Successfully.', $request->sent_by, null, 201);
+                return $this->success('Great! Message Uploaded Successfully.', null, null, 201);
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong.', null, null, 500);
             }
