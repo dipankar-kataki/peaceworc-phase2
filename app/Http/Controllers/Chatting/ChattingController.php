@@ -46,8 +46,12 @@ class ChattingController extends Controller
                 $create = ChatSystem::create([
                     'sent_id' => $messageData['chatResponse']['userId'],
                     'received_id' => $messageData['chatResponse']['targetId'],
+                    'job_id' => $messageData['chatResponse']['jobId'],
+                    'message_id' => $messageData['chatResponse']['messageId'],
                     'message' => $messageData['chatResponse']['msg'],
-                    'image_path' => $messageData['chatResponse']['image']
+                    'image_path' => $messageData['chatResponse']['image'],
+                    'is_message_sent' => 1,
+
                 ]);
 
                 if($create){
@@ -57,8 +61,23 @@ class ChattingController extends Controller
                 }
             }
         }catch(\Exception $e){
-            return $this->error('Oops! Something Went Wrong.'.$e->getMessage(), null, null, 500);
+            return $this->error('Oops! Something Went Wrong.', null, null, 500);
         }
         
+    }
+
+    public function updateMessage(Request $request){
+        try{
+            $jsonResponse =  $request->getContent();
+            $messageData = json_decode($jsonResponse, true);
+
+            ChatSystem::where('message_id', $messageData['messageId'])->update([
+                'is_message_seen' => 1
+            ]);
+
+            return $this->success('Great! Message Seen Successfully.', null, null, 201);
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong. '.$e->getMessage(), null, null, 500);
+        }
     }
 }
