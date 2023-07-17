@@ -5,6 +5,7 @@ use App\Http\Controllers\Agency\Auth\LoginController;
 use App\Http\Controllers\Agency\Auth\LogOutController;
 use App\Http\Controllers\Agency\Auth\SignUpController;
 use App\Http\Controllers\Agency\AuthorizeOfficer\AuthorizeOfficerController;
+use App\Http\Controllers\Agency\Chatting\AgencyChattingController;
 use App\Http\Controllers\Agency\Client\ClientController;
 use App\Http\Controllers\Agency\Job\Accepted\OngoingJobController;
 use App\Http\Controllers\Agency\Job\AcceptedJob\JobOngoingController;
@@ -119,6 +120,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('create-profile', [ClientController::class, 'createProfile']);
         Route::get('search', [ClientController::class, 'searchClient']);
         Route::post('delete', [ClientController::class, 'deleteClient']);
+    });
+
+    Route::group(['prefix' => 'chatting'], function(){
+        Route::get('get-chats',[AgencyChattingController::class, 'getChats']);
     });
     
     Route::post('logout', [LogOutController::class,'logout']);
