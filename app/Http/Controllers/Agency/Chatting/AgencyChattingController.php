@@ -30,7 +30,8 @@ class AgencyChattingController extends Controller
                                 'image' => $item->image_path,
                                 'is_message_seen' => $item->is_message_seen,
                                 'userId' => $item->sent_id,
-                                'targetId' => $item->received_id
+                                'targetId' => $item->received_id,
+                                'time' => $item->created_at
                             ];
 
                             array_push($chat_details, $details);

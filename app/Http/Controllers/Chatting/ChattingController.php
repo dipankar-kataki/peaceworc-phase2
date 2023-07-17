@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Chatting;
 use App\Http\Controllers\Controller;
 use App\Models\ChatSystem;
 use App\Traits\ApiResponse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -103,7 +104,8 @@ class ChattingController extends Controller
                                 'image' => $item->image_path,
                                 'is_message_seen' => $item->is_message_seen,
                                 'userId' => $item->sent_id,
-                                'targetId' => $item->received_id
+                                'targetId' => $item->received_id,
+                                'time' => Carbon::parse($item->created_at)->format('h:i A')
                             ];
 
                             array_push($chat_details, $details);
