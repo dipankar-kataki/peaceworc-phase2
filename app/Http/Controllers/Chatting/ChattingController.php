@@ -91,8 +91,9 @@ class ChattingController extends Controller
                     return $this->error('Oops! Invalid Job Id', null, null, 400);
                 }else{
                     $check_if_job_id_exists = ChatSystem::where('job_id', $_GET['job_id'])->exists();
+                    $chat_details = [];
                     if($check_if_job_id_exists){
-                        $chat_details = [];
+                        
                         $chat_data = ChatSystem::with('job')->where('job_id', $_GET['job_id'])->where('sent_id', Auth::user()->id)->latest()->paginate(10);
 
                         foreach($chat_data as $key => $item){
@@ -112,7 +113,7 @@ class ChattingController extends Controller
                         
                         return $this->success('Great! Chats Fetched Successfully', $chat_details, null, 200);
                     }else{
-                        return $this->error('Oops! Invalid Job Id.', null, null, 400);
+                        return $this->success('Great! Chats Fetched Successfully', $chat_details, null, 200);
                     }
                 }
             }
