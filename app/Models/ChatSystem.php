@@ -10,4 +10,8 @@ class ChatSystem extends Model
     use HasFactory;
     protected $table = 'chat_systems';
     protected $guarded = [];
+
+    public function job(){
+        return $this->belongsTo(AgencyPostJob::class, 'job_id', 'id');
+    }
 }

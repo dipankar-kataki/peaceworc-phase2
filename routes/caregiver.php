@@ -156,6 +156,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('upload-image',[ChattingController::class, 'uploadImage']);
         Route::post('upload-message',[ChattingController::class, 'uploadMessage']);
         Route::post('update-message',[ChattingController::class, 'updateMessage']);
+        Route::get('get-chats',[ChattingController::class, 'getChats']);
     });
 
 
