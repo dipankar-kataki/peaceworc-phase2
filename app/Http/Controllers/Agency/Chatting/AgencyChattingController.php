@@ -12,10 +12,10 @@ class AgencyChattingController extends Controller
     public function getChats(){
         try{
             if(!isset($_GET['job_id'])){
-                return $this->error('Oops! Job id is required', null, null, 500);
+                return response()->json(['success' => false, 'message' => 'Oops! Job id is required', 'chatModel' =>  [], 'token' => null, 'httpStatusCode' => 500]);
             }else{
                 if($_GET['job_id'] == 0){
-                    return $this->error('Oops! Invalid Job Id', null, null, 400);
+                    return response()->json(['success' => false, 'message' => 'Oops! Invalid Job Id', 'chatModel' =>  [], 'token' => null, 'httpStatusCode' => 400]);
                 }else{
                     $check_if_job_id_exists = ChatSystem::where('job_id', $_GET['job_id'])->exists();
                     $chat_details = [];
@@ -25,28 +25,27 @@ class AgencyChattingController extends Controller
 
                         foreach($chat_data as $key => $item){
                             $details = [
-                                'message_id' => $item->message_id,
-                                'message' => $item->message,
-                                'image_path' => $item->image_path,
-                                'is_message_sent' => $item->is_message_sent,
+                                'messageId' => $item->message_id,
+                                'msg' => $item->message,
+                                'image' => $item->image_path,
                                 'is_message_seen' => $item->is_message_seen,
-                                'job_title' => $item->job->title,
-                                'sent_by' => $item->sent_id,
-                                'received_by' => $item->received_id
+                                'userId' => $item->sent_id,
+                                'targetId' => $item->received_id
                             ];
 
                             array_push($chat_details, $details);
                         }
                         
-                        return $this->success('Great! Chats Fetched Successfully', $chat_details, null, 200);
+                        return response()->json(['success' => true, 'message' => 'Great! Chats Fetched Successfully', 'chatModel' =>  $chat_details, 'token' => null, 'httpStatusCode' => 200]);
+                        // return $this->success('Great! Chats Fetched Successfully', $chat_details, null, 200);
                     }else{
-                        return $this->success('Great! Chats Fetched Successfully', $chat_details, null, 200);
+                        return response()->json(['success' => true, 'message' => 'Great! Chats Fetched Successfully', 'chatModel' =>  $chat_details, 'token' => null, 'httpStatusCode' => 200]);
                     }
                 }
             }
             
         }catch(\Exception $e){
-            return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            return response()->json(['success' => false, 'message' => 'Oops! Something Went Wrong', 'chatModel' =>  [], 'token' => null, 'httpStatusCode' => 500]);
         }
     }
 }
