@@ -21,7 +21,7 @@ class AgencyChattingController extends Controller
                     $chat_details = [];
                     if($check_if_job_id_exists){
                         
-                        $chat_data = ChatSystem::with('job')->where('job_id', $_GET['job_id'])->where('sent_id', Auth::user()->id)->latest()->paginate(10);
+                        $chat_data = ChatSystem::with('job')->where('job_id', $_GET['job_id'])->latest()->paginate(10);
 
                         foreach($chat_data as $key => $item){
                             $details = [
