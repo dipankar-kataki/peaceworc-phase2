@@ -31,7 +31,7 @@ class AgencyChattingController extends Controller
                                 'is_message_seen' => $item->is_message_seen,
                                 'userId' => $item->sent_id,
                                 'targetId' => $item->received_id,
-                                'time' => $item->created_at
+                                'time' =>  Carbon::parse($item->created_at)->format('h:i A')
                             ];
 
                             array_push($chat_details, $details);
