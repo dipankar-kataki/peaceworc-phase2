@@ -20,6 +20,7 @@ use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
 use App\Http\Controllers\Caregiver\Rating\RatingController;
 use App\Http\Controllers\Caregiver\Registration\ProfileRegistrationController;
 use App\Http\Controllers\Caregiver\Status\StatusInformationController;
+use App\Http\Controllers\Caregiver\Stripe\StripePaymentController;
 use App\Http\Controllers\Chatting\ChattingController;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -157,6 +158,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('upload-message',[ChattingController::class, 'uploadMessage']);
         Route::post('update-message',[ChattingController::class, 'updateMessage']);
         Route::get('get-chats',[ChattingController::class, 'getChats']);
+    });
+
+    Route::group(['prefix' => 'stripe'], function(){
+        Route::post('create-connected-account', [StripePaymentController::class, 'createConnectedAccount']);
+        Route::get('return-url', [StripePaymentController::class, 'returnUrl'])->name('stripe.return.url');
+        Route::get('refresh-url', [StripePaymentController::class, 'refreshUrl'])->name('stripe.refresh.url');
     });
 
 
