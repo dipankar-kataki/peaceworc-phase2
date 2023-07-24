@@ -164,6 +164,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('create-connected-account', [StripePaymentController::class, 'createConnectedAccount']);
         Route::get('return-url', [StripePaymentController::class, 'returnUrl'])->name('stripe.return.url');
         Route::get('refresh-url', [StripePaymentController::class, 'refreshUrl'])->name('stripe.refresh.url');
+        Route::get('get-accounts', [StripePaymentController::class, 'getAccounts']);
     });
 
 
