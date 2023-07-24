@@ -71,4 +71,26 @@ class StripePaymentController extends Controller
             return $this->error('Oops! Something Went Wrong', null, null, 500);
         }
     }
+
+    public function deleteAccount(Request $request){
+        $validator = Validator::make($request->all(), [
+            'account_id' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops '.$validator->errors()->first(), null, null, 400);
+        }else{
+            try{
+                $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+                $is_account_deleted = $stripe->accounts->delete(
+                    $request->account_id,
+                    []
+                );
+                return $this->success('Great! Account Deleted Successfully', $is_account_deleted, null, 200);
+            }catch(\Exception $e){
+                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            }
+        }
+        
+    }
 }
