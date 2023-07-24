@@ -17,7 +17,7 @@ class StripePaymentController extends Controller
             $account = $stripe->accounts->create([
                 'type' => 'express',
                 'country' => 'US',
-                'email' => 'subhrajit@ekodus.com',
+                'email' => Auth::user()->email,
                 'capabilities' => [
                     'card_payments' => ['requested' => true],
                     'transfers' => ['requested' => true],
