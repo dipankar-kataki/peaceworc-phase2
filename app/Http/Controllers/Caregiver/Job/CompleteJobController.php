@@ -8,14 +8,16 @@ use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
 use App\Models\AgencyProfileRegistration;
 use App\Traits\ApiResponse;
+use App\Traits\JobDistance;
 use Carbon\Carbon;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CompleteJobController extends Controller
 {   
-    use ApiResponse;
+    use ApiResponse, JobDistance;
 
     public function getCompleteJob(){
         try{
@@ -85,5 +87,61 @@ class CompleteJobController extends Controller
                 return $this->error('Oops! Something Went Wrong.', null, null, 500);
             }
         }
+    }
+
+    public function getCompleteJobDetails(Request $request){
+        try{
+            if(!isset($_GET['id'])){
+                return $this->error('Oops! Failed To Fetch Job', null, null, 500);
+            }else{
+                $get_user = User::where('id', Auth::user()->id)->first();
+                $lat1 = $get_user->lat;
+                $long1 = $get_user->long;
+    
+                $get_jobs = AgencyPostJob::where('status', JobStatus::Completed)->where('id', $_GET['id'])->first();
+                $get_job_details = [];
+    
+                $lat2 = $get_jobs->lat;
+                $long2 = $get_jobs->long;
+    
+                $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
+                
+                $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $get_jobs->user_id)->first();
+                $details = [
+                    'job_id' => $get_jobs->id,
+                    'company_name' => ucwords($job_owner->company_name),
+                    'company_photo' => $job_owner->photo,
+                    'job_title' => $get_jobs->title,
+                    'care_type' => $get_jobs->care_type,
+                    'care_items' => $get_jobs->care_items,
+                    'start_date' => $get_jobs->start_date,
+                    'start_time' => $get_jobs->start_time,
+                    'end_date' => $get_jobs->end_date,
+                    'end_time' => $get_jobs->end_time,
+                    'amount' => $get_jobs->amount,
+                    'address' => ($get_jobs->floor_no != null ? $get_jobs->floor_no.', ' : '').''.($get_jobs->appartment_or_unit != null ? $get_jobs->appartment_or_unit.', ' : '').''.($get_jobs->address),
+                    'short_address' => $get_jobs->short_address,
+                    'lat' => $get_jobs->lat,
+                    'long' => $get_jobs->long,
+                    'distance' => $miles,
+                    'description' => $get_jobs->description,
+                    'medical_history' => $get_jobs->medical_history,
+                    'expertise' => $get_jobs->expertise,
+                    'other_requirements' => $get_jobs->other_requirements,
+                    'check_list' => $get_jobs->check_list,
+                    'status' => $get_jobs->status,
+                    // 'bidding_start_time' => $job->bidding_start_time,
+                    // 'bidding_end_time' => $job->bidding_end_time,
+                    'created_at' => $get_jobs->created_at->diffForHumans(),
+    
+                ];
+                array_push($get_job_details, $details);
+    
+                return $this->success('Great! Job Fetched Successfully', $get_job_details, null, 200);
+            }
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong', null, null, 500);
+        }
+        
     }
 }

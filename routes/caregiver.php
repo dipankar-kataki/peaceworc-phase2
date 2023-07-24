@@ -123,6 +123,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::group(['prefix' => 'complete-job'], function(){
             Route::post('complete', [CompleteJobController::class, 'completeJob']);
             Route::get('get', [CompleteJobController::class, 'getCompleteJob']);
+            Route::get('details', [CompleteJobController::class, 'getCompleteJobDetails']);
         });
 
         Route::group(['prefix' => 'bidding'], function(){
