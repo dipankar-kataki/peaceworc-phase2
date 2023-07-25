@@ -110,6 +110,7 @@ class CompleteJobController extends Controller
                 $details = [
                     'job_id' => $get_jobs->id,
                     'agency_id' => $get_jobs->user_id,
+                    'owner_name' =>  $job_owner->user->name,
                     'company_name' => ucwords($job_owner->company_name),
                     'company_photo' => $job_owner->photo,
                     'job_title' => $get_jobs->title,
