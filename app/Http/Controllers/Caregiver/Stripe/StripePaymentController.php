@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Caregiver\Stripe;
 
 use App\Http\Controllers\Controller;
+use App\Models\StripeConnectedAccount;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,31 +22,43 @@ class StripePaymentController extends Controller
             return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
-                $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
-                $account = $stripe->accounts->create([
-                    'type' => 'express',
-                    'country' => 'US',
-                    // 'email' => Auth::user()->email,
-                    'email' => $request->email,
-                    'capabilities' => [
-                        'card_payments' => ['requested' => true],
-                        'transfers' => ['requested' => true],
-                    ],
-                ]);
-    
-                if($account->id != null){
-                    $links = $stripe->accountLinks->create([
-                        'account' => $account->id,
-                        'refresh_url' => route('stripe.return.url'),
-                        'return_url' => route('stripe.refresh.url'),
-                        'type' => 'account_onboarding',
-                    ]);
-    
-                    return $this->success('Great! Connected Account Created And Account Link Generated Successfully.', $links->url, null, 201);
+
+                $connected_account = StripeConnectedAccount::where('user_id', Auth::user()->id)->first();
+
+                if($connected_account != null){
+                    return $this->error('You Already Have A Payout Account', null, null, 400);
                 }else{
-                    return $this->error('Oops! Unable To Link Account.',null,null,400);
+
+                    $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+                    $account = $stripe->accounts->create([
+                        'type' => 'express',
+                        'country' => 'US',
+                        'email' => Auth::user()->email,
+                        // 'email' => $request->email,
+                        'capabilities' => [
+                            'card_payments' => ['requested' => true],
+                            'transfers' => ['requested' => true],
+                        ],
+                    ]);
+        
+                    if($account->id != null){
+                        $links = $stripe->accountLinks->create([
+                            'account' => $account->id,
+                            'refresh_url' => route('stripe.return.url'),
+                            'return_url' => route('stripe.refresh.url'),
+                            'type' => 'account_onboarding',
+                        ]);
+
+                        StripeConnectedAccount::create([
+                            'user_id' => Auth::user()->id,
+                            'stripe_account_id' => $account->id
+                        ]);
+        
+                        return $this->success('Great! Connected Account Created And Account Link Generated Successfully.', $links->url, null, 201);
+                    }else{
+                        return $this->error('Oops! Unable To Link Account.',null,null,400);
+                    }
                 }
-                
             }catch(\Stripe\Exception\ApiErrorException $e){ 
                return $this->error('Oops! Something Went Wrong.', null,null, 500); 
             }
@@ -54,7 +67,7 @@ class StripePaymentController extends Controller
     }
 
     public function returnUrl(Request $request){
-        return $this->success('Great! Return Url Accessed', null, null, 200);
+        return view('stripe-connected-account.stripe-return-url');
     }
 
     public function refreshUrl(Request $request){
