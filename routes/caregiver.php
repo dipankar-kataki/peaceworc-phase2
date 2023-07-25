@@ -47,6 +47,7 @@ use Illuminate\Support\Facades\Route;
     Route::post('resend-otp', [SignUpController::class, 'resendOtp']);
     Route::post('verify-otp', [SignUpController::class, 'verifyOtp']);
     Route::post('check-email-exist', [SignUpController::class, 'checkEmailExists']);
+    Route::get('return-url', [StripePaymentController::class, 'returnUrl'])->name('stripe.return.url');
 // });
 
 
@@ -164,7 +165,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'stripe'], function(){
         Route::post('create-connected-account', [StripePaymentController::class, 'createConnectedAccount']);
         Route::get('check-connected-account-status', [StripePaymentController::class, 'checkConnectedAccountStatus']);
-        Route::get('return-url', [StripePaymentController::class, 'returnUrl'])->name('stripe.return.url');
+        
         Route::get('refresh-url', [StripePaymentController::class, 'refreshUrl'])->name('stripe.refresh.url');
         Route::get('get-accounts', [StripePaymentController::class, 'getAccounts']);
         Route::post('delete-accounts', [StripePaymentController::class, 'deleteAccount']);
