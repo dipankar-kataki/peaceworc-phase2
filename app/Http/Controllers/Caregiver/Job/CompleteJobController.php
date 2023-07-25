@@ -109,6 +109,7 @@ class CompleteJobController extends Controller
                 $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $get_jobs->user_id)->first();
                 $details = [
                     'job_id' => $get_jobs->id,
+                    'agency_id' => $get_jobs->user_id,
                     'company_name' => ucwords($job_owner->company_name),
                     'company_photo' => $job_owner->photo,
                     'job_title' => $get_jobs->title,
