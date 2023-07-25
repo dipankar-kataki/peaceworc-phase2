@@ -106,4 +106,24 @@ class StripePaymentController extends Controller
         }
         
     }
+
+    public function checkConnectedAccountStatus(Request $request){
+        try{
+            $connected_account = StripeConnectedAccount::where('user_id', Auth::user()->id)->first();
+            if($connected_account == null){
+                return $this->error('Oops! No Payout Accounts Found', null, null, 400);
+            }else{
+                $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+            
+                // $account = $stripe->accounts->retrieve($connected_account->stripe_account_id);
+                $account = $stripe->accounts->retrieve('acct_1NXMkmPtsTfZkmsk');
+    
+               return $this->success('Great! All Connected Accounts Fetched Successfully', $account, null, 200);
+            }
+
+            
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong'.$e->getMessage(), null, null, 500);
+        }
+    }
 }
