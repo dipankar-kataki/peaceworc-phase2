@@ -44,8 +44,8 @@ class StripePaymentController extends Controller
                     if($account->id != null){
                         $links = $stripe->accountLinks->create([
                             'account' => $account->id,
-                            'refresh_url' => route('stripe.return.url'),
-                            'return_url' => route('stripe.refresh.url'),
+                            'refresh_url' => route('stripe.refresh.url'),
+                            'return_url' =>  route('stripe.return.url'),
                             'type' => 'account_onboarding',
                         ]);
 
