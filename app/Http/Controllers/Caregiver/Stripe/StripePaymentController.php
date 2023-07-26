@@ -71,7 +71,29 @@ class StripePaymentController extends Controller
     }
 
     public function refreshUrl(Request $request){
-        return $this->success('Great! Refresh Url Accessed', null, null, 200);
+        try{
+
+            $connected_account = StripeConnectedAccount::where('user_id', Auth::user()->id)->first();
+
+            if($connected_account == null){
+                return $this->error('Oops! No Payout Account Found.', null, null, 400);
+            }else{
+
+                $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+
+                $links = $stripe->accountLinks->create([
+                    'account' => $connected_account->stripe_account_id,
+                    'refresh_url' => route('stripe.refresh.url'),
+                    'return_url' =>  route('stripe.return.url'),
+                    'type' => 'account_onboarding',
+                ]);
+    
+                return $this->success('Great! Connected Account Created And Account Link Generated Successfully.', $links->url, null, 201);
+               
+            }
+        }catch(\Stripe\Exception\ApiErrorException $e){ 
+           return $this->error('Oops! Something Went Wrong.', null,null, 500); 
+        }
     }
 
     public function getAccounts(){
@@ -113,17 +135,52 @@ class StripePaymentController extends Controller
             if($connected_account == null){
                 return $this->error('Oops! No Payout Accounts Found', null, null, 400);
             }else{
-                $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+
+                $account_status = new \stdClass();
+
+
+                if( $connected_account->is_charges_enabled == 1 && $connected_account->is_payouts_enabled == 1 ){
+
+                    $account_status->is_charges_enabled = 1;
+                    $account_status->is_payouts_enabled = 1;
+
+                    return $this->success('Great! Account Is Active And Ready For Payouts.', (object)$account_status, null, 200);
+                }else{
+
+                    $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
             
-                // $account = $stripe->accounts->retrieve($connected_account->stripe_account_id);
-                $account = $stripe->accounts->retrieve('acct_1NXMkmPtsTfZkmsk');
-    
-               return $this->success('Great! All Connected Accounts Fetched Successfully', $account, null, 200);
+                    $account = $stripe->accounts->retrieve($connected_account->stripe_account_id);
+                    // $account = $stripe->accounts->retrieve('acct_1NXzvQPs13mkntzy');
+
+                    if ($account->details_submitted && $account->charges_enabled && $account->payouts_enabled) {
+
+                        StripeConnectedAccount::where('user_id', Auth::user()->id)->update([
+                            'is_charges_enabled' => 1,
+                            'is_payouts_enabled' => 1
+                        ]);
+
+                        $account_status->is_charges_enabled = 1;
+                        $account_status->is_payouts_enabled = 1;
+
+                        return $this->success('Great! Account Is Active And Ready For Payouts.', (object)$account_status, null, 200);
+                    } else {
+                        
+                        StripeConnectedAccount::where('user_id', Auth::user()->id)->update([
+                            'is_charges_enabled' => 0,
+                            'is_payouts_enabled' => 0
+                        ]);
+                        $account_status->is_charges_enabled = 0;
+                        $account_status->is_payouts_enabled = 0;
+
+                        return $this->error('Oops! Your Account Is Not Ready For Payouts', (object)$account_status, null, 200);
+                    }
+                }
+                
             }
 
             
         }catch(\Exception $e){
-            return $this->error('Oops! Something Went Wrong'.$e->getMessage(), null, null, 500);
+            return $this->error('Oops! Something Went Wrong', null, null, 500);
         }
     }
 }
