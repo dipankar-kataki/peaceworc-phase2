@@ -182,8 +182,7 @@ class StripePaymentController extends Controller
                 return $this->error('Oops! No Payout Accounts Found', null, null, 400);
             }else{
                 $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
-                // $account = $stripe->accounts->retrieve($connected_account->stripe_account_id);
-                $account = $stripe->accounts->retrieve('acct_1NXMkmPtsTfZkmsk');
+                $account = $stripe->accounts->retrieve($connected_account->stripe_account_id);
 
                 // Check if the account has a verified bank account
                 if ($account->external_accounts && $account->external_accounts->total_count > 0) {
