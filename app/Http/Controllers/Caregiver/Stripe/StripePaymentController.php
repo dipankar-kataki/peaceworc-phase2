@@ -14,56 +14,47 @@ class StripePaymentController extends Controller
 {
     use ApiResponse;
     public function createConnectedAccount(Request $request){
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email'
-        ]);
+        try{
 
-        if($validator->fails()){
-            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
-        }else{
-            try{
+            $connected_account = StripeConnectedAccount::where('user_id', Auth::user()->id)->first();
 
-                $connected_account = StripeConnectedAccount::where('user_id', Auth::user()->id)->first();
+            if($connected_account != null){
+                return $this->error('You Already Have A Payout Account', null, null, 400);
+            }else{
 
-                if($connected_account != null){
-                    return $this->error('You Already Have A Payout Account', null, null, 400);
-                }else{
-
-                    $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
-                    $account = $stripe->accounts->create([
-                        'type' => 'express',
-                        'country' => 'US',
-                        'email' => Auth::user()->email,
-                        // 'email' => $request->email,
-                        'capabilities' => [
-                            'card_payments' => ['requested' => true],
-                            'transfers' => ['requested' => true],
-                        ],
+                $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+                $account = $stripe->accounts->create([
+                    'type' => 'express',
+                    'country' => 'US',
+                    'email' => Auth::user()->email,
+                    // 'email' => $request->email,
+                    'capabilities' => [
+                        'card_payments' => ['requested' => true],
+                        'transfers' => ['requested' => true],
+                    ],
+                ]);
+    
+                if($account->id != null){
+                    $links = $stripe->accountLinks->create([
+                        'account' => $account->id,
+                        'refresh_url' => route('stripe.refresh.url'),
+                        'return_url' =>  route('stripe.return.url'),
+                        'type' => 'account_onboarding',
                     ]);
-        
-                    if($account->id != null){
-                        $links = $stripe->accountLinks->create([
-                            'account' => $account->id,
-                            'refresh_url' => route('stripe.refresh.url'),
-                            'return_url' =>  route('stripe.return.url'),
-                            'type' => 'account_onboarding',
-                        ]);
 
-                        StripeConnectedAccount::create([
-                            'user_id' => Auth::user()->id,
-                            'stripe_account_id' => $account->id
-                        ]);
-        
-                        return $this->success('Great! Connected Account Created And Account Link Generated Successfully.', $links->url, null, 201);
-                    }else{
-                        return $this->error('Oops! Unable To Link Account.',null,null,400);
-                    }
+                    StripeConnectedAccount::create([
+                        'user_id' => Auth::user()->id,
+                        'stripe_account_id' => $account->id
+                    ]);
+    
+                    return $this->success('Great! Connected Account Created And Account Link Generated Successfully.', $links->url, null, 201);
+                }else{
+                    return $this->error('Oops! Unable To Link Account.',null,null,400);
                 }
-            }catch(\Stripe\Exception\ApiErrorException $e){ 
-               return $this->error('Oops! Something Went Wrong.', null,null, 500); 
             }
+        }catch(\Stripe\Exception\ApiErrorException $e){ 
+            return $this->error('Oops! Something Went Wrong.', null,null, 500); 
         }
-        
     }
 
     public function returnUrl(Request $request){
