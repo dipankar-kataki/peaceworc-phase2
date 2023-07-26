@@ -88,7 +88,7 @@ class StripePaymentController extends Controller
                     'type' => 'account_onboarding',
                 ]);
     
-                return $this->success('Great! Connected Account Created And Account Link Generated Successfully.', $links->url, null, 201);
+                return $this->success('Great! Account Link Generated Successfully.', $links->url, null, 201);
                
             }
         }catch(\Stripe\Exception\ApiErrorException $e){ 
