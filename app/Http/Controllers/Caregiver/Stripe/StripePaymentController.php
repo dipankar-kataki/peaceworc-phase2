@@ -174,4 +174,47 @@ class StripePaymentController extends Controller
             return $this->error('Oops! Something Went Wrong', null, null, 500);
         }
     }
+
+    public function getMyAccountDetails(){
+        try{
+            $connected_account = StripeConnectedAccount::where('user_id', Auth::user()->id)->first();
+            if($connected_account == null){
+                return $this->error('Oops! No Payout Accounts Found', null, null, 400);
+            }else{
+                $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET_KEY'));
+                // $account = $stripe->accounts->retrieve($connected_account->stripe_account_id);
+                $account = $stripe->accounts->retrieve('acct_1NXMkmPtsTfZkmsk');
+
+                // Check if the account has a verified bank account
+                if ($account->external_accounts && $account->external_accounts->total_count > 0) {
+                    // Assuming you want to get the first bank account in the list
+                    $bankAccount = $account->external_accounts->data[0];
+
+                    // Retrieve the bank account details with a separate API call
+                    $bankAccountDetails = $stripe->accounts->retrieveExternalAccount(
+                        $connected_account->stripe_account_id,
+                        $bankAccount->id,
+                        []
+                    );
+
+                    // Get the bank account details
+                    $routingNumber = $bankAccountDetails->routing_number;
+                    $accountNumber = 'XXXXXXXXXXX'.$bankAccountDetails->last4;
+                    $bankName = $bankAccountDetails->bank_name;
+
+                    $account_details = new \stdClass();
+                    
+                    $account_details->routingNumber = $routingNumber;
+                    $account_details->accountNumber = $accountNumber;
+                    $account_details->bankName = $bankName;
+
+                   return $this->success('Great! Account Details Fetched Successfully', (object)$account_details, null, 200);
+                } else {
+                   return $this->error('Oops! Not Able To Fetch Account Details. Your Payout Account Not Active Yet.', null, null, 400);
+                }
+            }
+        }catch(\Exception $e){
+            return $this->error('Oops! Something Went Wrong', null, null, 500);
+        }
+    }
 }

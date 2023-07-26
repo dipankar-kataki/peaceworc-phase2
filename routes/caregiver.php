@@ -165,9 +165,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'stripe'], function(){
         Route::post('create-connected-account', [StripePaymentController::class, 'createConnectedAccount']);
         Route::get('check-connected-account-status', [StripePaymentController::class, 'checkConnectedAccountStatus']);
-        
         Route::get('refresh-url', [StripePaymentController::class, 'refreshUrl'])->name('stripe.refresh.url');
-        Route::get('get-accounts', [StripePaymentController::class, 'getAccounts']);
+        Route::get('get-all-connected-accounts', [StripePaymentController::class, 'getAccounts']);
+        Route::get('get-my-account-details', [StripePaymentController::class, 'getMyAccountDetails']);
         Route::post('delete-accounts', [StripePaymentController::class, 'deleteAccount']);
     });
 
