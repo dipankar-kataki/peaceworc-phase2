@@ -56,9 +56,12 @@ class ClientController extends Controller
                     $imageName = 'Agency/Uploads/Client/Profile/Image/' . $image;
                 }
                 
-                $get_client = ClientProfile::where('phone', $request->phone)->exists();
-                if($get_client){
+                $check_phone_exists = ClientProfile::where('phone', $request->phone)->exists();
+                $check_email_exists = ClientProfile::where('phone', $request->email)->exists();
+                if($check_phone_exists){
                     return $this->error('Oops! Phone Number Already Exist.', null, null, 400);
+                }else if($check_email_exists){
+                    return $this->error('Oops! Email Already Exist.', null, null, 400);
                 }else{
 
                     ClientProfile::create([
