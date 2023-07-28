@@ -57,7 +57,7 @@ class ClientController extends Controller
                 }
                 
                 $check_phone_exists = ClientProfile::where('phone', $request->phone)->exists();
-                $check_email_exists = ClientProfile::where('phone', $request->email)->exists();
+                $check_email_exists = ClientProfile::where('email', $request->email)->exists();
                 if($check_phone_exists){
                     return $this->error('Oops! Phone Number Already Exist.', null, null, 400);
                 }else if($check_email_exists){
