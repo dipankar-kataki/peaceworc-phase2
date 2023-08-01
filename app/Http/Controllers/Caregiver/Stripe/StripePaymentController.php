@@ -108,6 +108,8 @@ class StripePaymentController extends Controller
                 $connected_account->stripe_account_id,
                 []
             );
+            StripeConnectedAccount::where('stripe_account_id', $connected_account->stripe_account_id)->delete();
+
             return $this->success('Great! Account Deleted Successfully', null, null, 200);
         }catch(\Exception $e){
             return $this->error('Oops! Something Went Wrong.', null, null, 500);
