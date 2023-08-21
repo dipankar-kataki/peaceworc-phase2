@@ -34,10 +34,10 @@
           <th>Message</th>
         </tr>
         <tr>
-            <td><p>Name: {{ $details['name'] }}</p></td>
-            <td><p>Email: {{ $details['email'] }}</p></td>
-            <td><p>Subject: {{ $details['subject'] }}</p></td>
-            <td><p>Message: {{ $details['message'] }}</p></td>
+            <td><p>{{ $details['name'] }}</p></td>
+            <td><p>{{ $details['email'] }}</p></td>
+            <td><p>{{ $details['subject'] }}</p></td>
+            <td><p>{{ $details['message'] }}</p></td>
         </tr>
     </table>
 </body>
