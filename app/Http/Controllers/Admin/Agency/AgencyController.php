@@ -56,7 +56,7 @@ class AgencyController extends Controller
 
             $get_payments_made = AgencyPayment::with('job')->where('agency_id', $id)->get();
 
-            return view('agency.profile.index')->with(
+            return view('admin.agency.profile.index')->with(
                 [
                     'agency_details' => $agency_details,
                     'completion_rate' => $completion_rate, 
@@ -73,6 +73,6 @@ class AgencyController extends Controller
     }
 
     public function profile(){
-        return view('agency.profile.index');
+        return view('admin.agency.profile.index');
     }
 }

@@ -13,7 +13,7 @@ class AuthorizeOfficerController extends Controller
 
         }else{
             $get_auth_officer = AuthorizeOfficer::with('agency')->get();
-            return view('agency.auth-officer.list')->with(['get_auth_officer'=> $get_auth_officer]);
+            return view('admin.agency.auth-officer.list')->with(['get_auth_officer'=> $get_auth_officer]);
         }
     }
 }
