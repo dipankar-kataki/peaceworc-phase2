@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Site\SiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('auth.login');
-})->name('web.login');
+    return view('site.index');
+})->name('web.landing');
 
+Route::get('', [SiteController::class, 'index'])->name('site.index');
+// Route::get('blog/{id?}/{viewAs?}', [SiteController::class, 'blogs'])->name('site.blog');
+Route::post('contact', [SiteController::class, 'contact'])->name('site.contact');
+Route::get('terms-and-conditions', [SiteController::class, 'terms'])->name('site.terms');
+Route::get('privacy-policy', [SiteController::class, 'privacy'])->name('site.privacy');

@@ -23,7 +23,7 @@ class Authenticate extends Middleware
             else if (!Auth::check()){
                 return route('login-expire');
             }else{
-                return route('web.login');
+                return route('web.landing');
             }
         }
     }

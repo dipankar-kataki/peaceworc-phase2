@@ -1,0 +1,249 @@
+.navbar {
+    padding: 10px 40px;
+    transition: 0.5s all;
+}
+
+.navbar.active {
+    background: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.navbar .navbar-collapse .navbar-nav .nav-item {
+    margin: 0 10px;
+}
+
+.navbar .navbar-collapse .navbar-nav .nav-item .nav-link {
+    color: #fff;
+    text-transform: capitalize;
+}
+
+.navbar.active .navbar-collapse .navbar-nav .nav-item .nav-link {
+    color: #111;
+    text-transform: capitalize;
+}
+
+.navbar.active .navbar-brand img {
+    filter: unset;
+}
+
+.navbar .navbar-brand img {
+    filter: drop-shadow(0 0 10px #111);
+}
+
+#banner {
+    background: rgb(0, 232, 101);
+    background: linear-gradient(
+        327deg,
+        rgba(0, 232, 101, 1) 0%,
+        rgba(0, 105, 224, 1) 100%
+    );
+
+    height: 100vh;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#banner .rightBlock {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#banner .leftBlock {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#banner .rightBlock img {
+    width: 70%;
+}
+
+#banner .leftBlock h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+#banner .leftBlock p {
+    color: #fff;
+    font-weight: 400;
+}
+
+#banner .leftBlock .downloadButtons {
+    display: flex;
+}
+
+#banner .leftBlock button.android,
+#banner .leftBlock button.ios {
+    width: 240px;
+    border: 1px solid #fff;
+    border-radius: 50px;
+    background: transparent;
+    color: #fff;
+    padding: 5px 10px;
+}
+
+#banner .leftBlock button.android .fa-brands,
+#banner .leftBlock button.ios .fa-brands {
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+#banner .leftBlock button.android:hover,
+#banner .leftBlock button.ios:hover {
+    background: #fff;
+    color: rgb(66, 66, 66);
+    font-weight: 500;
+}
+
+#aboutSection .rightBlock ul {
+    list-style: none;
+    list-style-image: url("../image/banner/arrow-right.png");
+}
+
+#aboutSection .rightBlock ul li::marker {
+    margin-top: 10px;
+}
+
+#servicesBlock .card {
+    border: none;
+}
+
+#servicesBlock .servicesSlider .item .card p {
+    text-align: justify;
+}
+
+#servicesBlock .owl-carousel .owl-item img {
+    display: block;
+    width: 50%;
+    margin: auto;
+}
+
+#becomeCaregiver .btnJoin {
+    border: 1px solid rgb(160, 160, 160);
+    border-radius: 50px;
+    padding: 10px 50px;
+    position: relative;
+    overflow: hidden;
+    z-index: 99;
+    color: #111;
+}
+
+#becomeCaregiver .btnJoin::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -140px;
+    width: 100%;
+    height: 100%;
+    background: #111;
+    background: rgb(0, 232, 101);
+    background: linear-gradient(
+        327deg,
+        rgba(0, 232, 101, 1) 0%,
+        rgba(0, 105, 224, 1) 100%
+    );
+    transition: 0.5s all;
+    z-index: -1;
+}
+
+#becomeCaregiver .btnJoin:hover::before {
+    left: 0;
+}
+
+#becomeCaregiver .btnJoin:hover {
+    color: #fff;
+}
+
+#testimonialBlock .owl-carousel .owl-item img {
+    width: 50px;
+}
+
+#testimonialBlock .card {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    border: none;
+    margin: 20px;
+}
+
+#contactBlock .rightBlock .form-control[type="text"],
+#contactBlock .rightBlock .form-control[type="email"] {
+    height: 50px;
+}
+
+#contactBlock .rightBlock #contactForm .form-control[type="text"],
+#contactBlock .rightBlock #contactForm .form-control[type="email"],
+#contactBlock .rightBlock #contactForm textarea {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#contactBlock .rightBlock #contactForm button {
+    height: 50px;
+    background: rgb(0, 232, 101);
+    background: linear-gradient(
+        327deg,
+        rgba(0, 232, 101, 1) 0%,
+        rgba(0, 105, 224, 1) 100%
+    );
+    color: #fff;
+    width: 200px;
+}
+
+#blogDetails img {
+    height: 60vh;
+    object-fit: contain;
+}
+
+.header {
+    min-height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(0, 232, 101);
+    background: linear-gradient(
+        327deg,
+        rgba(0, 232, 101, 1) 0%,
+        rgba(0, 105, 224, 1) 100%
+    );
+}
+
+.header .header_title {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.ordered_list li::marker,
+.ordered_list .list_title {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.ordered_list .list_detsils {
+    font-size: 14px;
+    text-align: justify;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.link:hover {
+    color: #111 !important;
+}
+
+footer {
+    font-size: 12px;
+}

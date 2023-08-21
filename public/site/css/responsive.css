@@ -1,0 +1,80 @@
+@media (max-width: 575.98px) {
+  .navbar {
+    padding: 10px 10px;
+  }
+
+  .navbar .navbar-collapse {
+    margin-top: 10px;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.75);
+    border-radius: 12px;
+  }
+
+  .navbar .navbar-collapse .navbar-nav .nav-item .nav-link {
+    color: #111;
+    text-transform: capitalize;
+  }
+
+  #banner .leftBlock,
+  #banner .rightBlock {
+    padding: 20px;
+  }
+
+  #banner .leftBlock {
+    margin-top: 20px;
+  }
+
+  #banner .leftBlock h1 {
+    font-size: 1.5rem;
+  }
+
+  #banner .leftBlock p {
+    font-size: 12px;
+  }
+
+  #banner .leftBlock button.android,
+  #banner .leftBlock button.ios {
+    width: unset;
+    padding: 5px;
+    margin-right: 0 !important;
+  }
+
+  #banner .leftBlock .downloadButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #banner .rightBlock img {
+    width: 40%;
+  }
+
+  #banner .leftBlock, #banner .rightBlock{
+    padding-bottom: 0;
+  }
+
+  #becomeCaregiver .btnJoin::before{
+    left: 0;
+  }
+  
+  #becomeCaregiver .btnJoin{
+    color: #fff;
+  }
+
+  #blogDetails img{
+    height: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 767.98px) {
+}
+
+@media (max-width: 991.98px) {
+}
+
+@media (max-width: 1199.98px) {
+}
+
+@media (max-width: 1399.98px) {
+}
