@@ -6,14 +6,14 @@
                 <p>Care and Compassion at just a touch away. A platform where you can connect with our nurturers and experience the little joys in life. </p>
 
                 <div class="downloadButtons">
-                    <button class="btn android mb-2 me-2 d-flex justify-content-center align-items-center">
+                    <a href="#becomeCaregiver" class="btn android mb-2 me-2 d-flex justify-content-center align-items-center">
                         
                         <div class="p-2">
                             <small>Download Now</small> 
                             {{-- <br> <b>Android Device</b> --}}
                         </div>
                         <i class="fa fa-download"></i>
-                    </button>
+                    </a>
                     {{-- <button class="btn android mb-2 d-flex justify-content-center align-items-center"><i
                             class="fa-brands fa-apple"></i>
                         <div>
