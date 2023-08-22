@@ -82,7 +82,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#005a82",endCo
       transform: translatey(0px);
     }
     to{
-      transform: translatey(-5px);
+      transform: translatey(-7px);
     }
 }
 
@@ -162,7 +162,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#005a82",endCo
     content: "";
     position: absolute;
     top: 0;
-    left: -140px;
+    left: -180px;
     width: 100%;
     height: 100%;
     background: rgb(0,90,130);
@@ -179,7 +179,79 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#005a82",endCo
 }
 
 #becomeCaregiver .btnJoin:hover {
+    color: #fff !important;
+}
+
+#becomeCaregiver .leftBlock .downloadButtons {
+    display: flex;
+}
+#becomeCaregiver .leftBlock button.android, #becomeCaregiver .leftBlock button.ios {
+    width: 240px;
+    border: 1px solid #161616;
+    border-radius: 50px;
+    background: transparent;
+    color: #000000;
+    padding: 5px 10px;
+}
+
+#becomeCaregiver .leftBlock button.android .fa-brands, #becomeCaregiver .leftBlock button.ios .fa-brands {
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+/** For Agency**/
+
+
+#becomeAgency .btnJoin {
+    border: 1px solid rgb(160, 160, 160);
+    border-radius: 50px;
+    padding: 10px 50px;
+    position: relative;
+    overflow: hidden;
+    z-index: 99;
     color: #fff;
+}
+
+#becomeAgency .btnJoin::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -180px;
+    width: 100%;
+    height: 100%;
+    background: rgb(0,90,130);
+    background: -moz-linear-gradient(146deg, rgba(0,90,130,0.9472163865546218) 48%, rgba(2,199,218,0.9752275910364145) 80%);
+    background: -webkit-linear-gradient(146deg, rgba(0,90,130,0.9472163865546218) 48%, rgba(2,199,218,0.9752275910364145) 80%);
+    background: linear-gradient(146deg, rgba(0,90,130,0.9472163865546218) 48%, rgba(2,199,218,0.9752275910364145) 80%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#005a82",endColorstr="#02c7da",GradientType=1);
+    transition: 0.5s all;
+    z-index: -1;
+}
+
+#becomeAgency .btnJoin:hover::before {
+    left: 0;
+}
+
+#becomeAgency .btnJoin:hover {
+    color: #fff;
+}
+
+
+#becomeAgency .leftBlock .downloadButtons {
+    display: flex;
+}
+#becomeAgency .leftBlock button.android, #becomeAgency .leftBlock button.ios {
+    width: 240px;
+    border: 1px solid #ffffff;
+    border-radius: 50px;
+    background: transparent;
+    color: #ffffff;
+    padding: 5px 10px;
+}
+
+#becomeAgency .leftBlock button.android .fa-brands, #becomeAgency .leftBlock button.ios .fa-brands {
+    font-size: 30px;
+    margin-right: 10px;
 }
 
 #testimonialBlock .owl-carousel .owl-item img {
@@ -213,6 +285,15 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#005a82",endCo
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#005a82",endColorstr="#02c7da",GradientType=1);
     color: #fff;
     width: 200px;
+}
+.agency-mobile-img{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.agency-mobile-img img{
+    max-width:90%;
 }
 
 #blogDetails img {

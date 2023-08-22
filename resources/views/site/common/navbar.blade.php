@@ -23,7 +23,7 @@
                     <a class="nav-link" href="{{route('site.index')}}/#becomeCaregiver">Become a Caregiver</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{route('site.index')}}/#becomeCaregiver">Become an Agency</a>
+                    <a class="nav-link" href="{{route('site.index')}}/#becomeAgency">Become an Agency</a>
                 </li>
                 {{-- <li class="nav-item">
                     <a class="nav-link" href="{{route('site.blog')}}">Blogs</a>
