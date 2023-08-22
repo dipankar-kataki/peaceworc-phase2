@@ -19,7 +19,7 @@ Route::get('/', function () {
 })->name('web.landing');
 
 Route::get('admin', function () {
-    return view('auth.login');
+    return view('admin.auth.login');
 })->name('web.login');
 
 Route::get('', [SiteController::class, 'index'])->name('site.index');

@@ -22,7 +22,7 @@
 
             </div>
             <div class="col-sm-6 rightBlock">
-                <img src="site/image/banner/Sec-ban-removebg-preview.png" alt="">
+                <img src="site/image/banner/phone.png" alt="">
             </div>
         </div>
     </div>

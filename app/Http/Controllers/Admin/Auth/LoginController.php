@@ -28,12 +28,14 @@ class LoginController extends Controller
                     return $this->error('Login Failed. Credentials did not match with our records.', null, null, 400);
                 }else{
                     $user = User::where('email', $request->email)->firstOrFail();
-                    $auth_token =  $user->createToken('auth_token')->plainTextToken;
+                    // $auth_token =  $user->createToken('auth_token')->plainTextToken;
 
-                    return $this->success('Login Successful', null, $auth_token, 200 );
+                    // return $this->success('Login Successful', null, $auth_token, 200 );
+                    return view('admin.dashboard.index')->with(['user_data' => $user]);
+                    // return response()->json(['message' => 'Great! Login Successful.', 'url' => "{{route('admin.dashboard')}}", 'status' => 1]);
                 }
             }catch(\Exception $e){
-                return $this->error('Something Went Wrong While Login.', null, null, 500);
+                return response()->json(['message' => 'Oops! Something Went Wrong.',  'status' => 0]);
             }
         }
     }

@@ -48,9 +48,9 @@
     <!-- Begin page -->
     <div id="layout-wrapper">
 
-        @include('header.index')
+        @include('admin.header.index')
       <!-- ========== App Menu ========== -->
-        @include('sidebar.index')
+        @include('admin.sidebar.index')
       <!-- Left Sidebar End -->
       <!-- Vertical Overlay-->
       <div class="vertical-overlay"></div>
@@ -64,7 +64,7 @@
               <div class="container-fluid">
 
                   <!-- start page title -->
-                    @include('page-title.index')
+                    @include('admin.page-title.index')
                   <!-- end page title -->
 
                   <!-- Main Content -->
@@ -76,7 +76,7 @@
           </div>
           <!-- End Page-content -->
 
-          @include('footer.index')
+          @include('admin.footer.index')
       </div>
       <!-- end main content-->
 

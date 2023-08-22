@@ -81,7 +81,7 @@
                                             </div>
 
                                             <div class="mt-4">
-                                                <form id="loginForm">
+                                                <form id="loginForm"  method="POST" action="{{route('admin.login')}}">
                                                     @csrf
                                                     <div class="mb-3">
                                                         <label for="email" class="form-label">Email</label>
@@ -100,7 +100,7 @@
                                                     </div>
 
                                                     <div class="mt-4">
-                                                        <button class="btn btn-success w-100" id="signInBtn" type="button">Sign In</button>
+                                                        <button class="btn btn-success w-100" id="signInBtn" type="submit">Sign In</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -155,7 +155,7 @@
 
 
 
-        <script>
+        {{-- <script>
             const signInBtn = document.getElementById('signInBtn');
             signInBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -185,7 +185,7 @@
                             }, 500);
 
                             setTimeout(() => {
-                                window.location.replace(res.url);
+                                window.location.replace("admin/dashboard");
                             }, 1000);
                             
                         }else{
@@ -213,6 +213,6 @@
                 
                 xhr.send(formData);
             });
-        </script>
+        </script> --}}
     </body>
 </html>
