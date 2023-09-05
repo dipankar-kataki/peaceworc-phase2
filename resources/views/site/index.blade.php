@@ -354,9 +354,12 @@
         <div class="row">
             <!-- Map -->
             <div class="col-sm-6 leftBlock">
-                <iframe
+                <div class="contact-us-img">
+                    <img src="{{asset('site/image/photo/contact-us.jpg')}}" alt="contact-us">
+                </div>
+                {{-- <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114612.57101497147!2d91.63284247523802!3d26.14318577239997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a5a287f9133ff%3A0x2bbd1332436bde32!2sGuwahati%2C%20Assam!5e0!3m2!1sen!2sin!4v1645676847133!5m2!1sen!2sin"
-                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe> --}}
             </div>
 
             <!-- Form -->

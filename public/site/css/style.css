@@ -345,3 +345,15 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#005a82",endCo
 footer {
     font-size: 12px;
 }
+
+.contact-us-img{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.contact-us-img img{
+    max-width:80%;
+}

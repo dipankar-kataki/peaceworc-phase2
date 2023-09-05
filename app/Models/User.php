@@ -57,7 +57,7 @@ class User extends Authenticatable
     public function getRoleAttribute($value){
         
         if($value == 1){
-            return 'Peaceworc Admin';
+            return 'Web Administrator';
         }
         if($value == 2){
             return 'Caregiver';
