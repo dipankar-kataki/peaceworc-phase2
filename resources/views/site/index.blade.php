@@ -265,7 +265,7 @@
         <section class="pt-5 text-center container">
             <div class="row">
                 <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-light">Reviews from our happy client</h1>
+                    <h1 class="fw-light">Reviews from our happy customers</h1>
                     <div class="heading my-3">
                         <span>Average Ratings</span>
                         <div class="reviews">4.5
@@ -288,15 +288,15 @@
                         <img src="{{ asset('site/image/banner/avatar.png') }}" width="50" alt="">
                         <p class="fw-bold mb-0 ms-3">Client Name</p>
                     </div>
-                    <div class="review d-flex justify-cntent-center align-items-center">4.0
+                    {{-- <div class="review d-flex justify-cntent-center align-items-center">4.0
                         <div class="review-star ms-3">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="far fa-star text-warning"></i>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, veniam excepturi accusamus, iste
                     corrupti architecto nobis dolore eligendi incidunt sed tenetur assumenda maxime laboriosam optio ex
@@ -308,15 +308,15 @@
                         <img src="{{ asset('site/image/banner/avatar.png') }}" width="50" alt="">
                         <p class="fw-bold mb-0 ms-3">Client Name</p>
                     </div>
-                    <div class="review d-flex justify-cntent-center align-items-center">4.0
+                    {{-- <div class="review d-flex justify-cntent-center align-items-center">4.0
                         <div class="review-star ms-3">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="far fa-star text-warning"></i>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, veniam excepturi accusamus, iste
                     corrupti architecto nobis dolore eligendi incidunt sed tenetur assumenda maxime laboriosam optio ex
@@ -328,7 +328,7 @@
                         <img src="{{ asset('site/image/banner/avatar.png') }}" width="50" alt="">
                         <p class="fw-bold mb-0 ms-3">Client Name</p>
                     </div>
-                    <div class="review d-flex justify-cntent-center align-items-center">4.0
+                    {{-- <div class="review d-flex justify-cntent-center align-items-center">4.0
                         <div class="review-star ms-3">
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
@@ -336,7 +336,7 @@
                             <i class="fas fa-star"></i>
                             <i class="far fa-star"></i>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, veniam excepturi accusamus, iste
                     corrupti architecto nobis dolore eligendi incidunt sed tenetur assumenda maxime laboriosam optio ex
