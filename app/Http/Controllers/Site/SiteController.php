@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\ManageSiteLayout;
 use Illuminate\Http\Request;
 use App\Mail\GetInTouchMail;
 // use App\Models\Blog;
@@ -15,9 +16,12 @@ class SiteController extends Controller
     
     public function index(Request $request)
     {
-        // $blogs = Blog::where('is_activate', 1)->orderBy('created_at', 'DESC')->take(3)->get();
-        // return view('site.index')->with(['blogs' => $blogs]);
-        return view('site.index');
+        try{
+            $site_layout = ManageSiteLayout::get();
+            return view('site.index')->with(['site_layout' => $site_layout]);
+        }catch(Exception $e){
+            echo 'Oops! Something Went Wrong.' . $e;
+        }
     }
 
     public function contact(Request $request)
