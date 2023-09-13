@@ -47,7 +47,7 @@
                 <div class="owl-carousel owl-theme servicesSlider">
                     <div class="item">
                         <div class="card">
-                            <img src="{{ asset('site/image/services/ElderlyCare.png') }}" width="300" alt="Elderly Care">
+                            <img src="{{ asset('site/image/services/Elderly-Care.png') }}" width="300" alt="Elderly Care">
                             <div class="card-body">
                                 <h5 class="card-title text-center">Elderly Care</h5>
                                 <p class="card-text">Elderly people are always fascinated by a trusted companion. Old age
@@ -61,7 +61,7 @@
 
                     <div class="item">
                         <div class="card">
-                            <img src="{{ asset('site/image/services/BabyCare.png') }}" width="300" alt="Baby Care">
+                            <img src="{{ asset('site/image/services/Baby-Care.png') }}" width="300" alt="Baby Care">
                             <div class="card-body">
                                 <h5 class="card-title text-center">Baby Care</h5>
                                 <p class="card-text">A newborn constantly seeks attention and care. Managing babies and
@@ -75,7 +75,7 @@
 
                     <div class="item">
                         <div class="card">
-                            <img src="{{ asset('site/image/services/DisabledCare.png') }}" width="300" alt="Disabled-Care">
+                            <img src="{{ asset('site/image/services/Disabled-Care.png') }}" width="300" alt="Disabled-Care">
                             <div class="card-body">
                                 <h5 class="card-title text-center">Disabled-Care</h5>
                                 <p class="card-text">Our motivated caregivers provide utmost tenderness to the
@@ -89,7 +89,7 @@
 
                     <div class="item">
                         <div class="card">
-                            <img src="{{ asset('site/image/services/PatientsCare.png') }}" width="300" alt="Patients Care">
+                            <img src="{{ asset('site/image/services/Patients-Care.png') }}" width="300" alt="Patients Care">
                             <div class="card-body">
                                 <h5 class="card-title text-center">Patients Care</h5>
                                 <p class="card-text">Recovering from a prolonged illness takes its due course of time. Good
