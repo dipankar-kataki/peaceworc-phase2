@@ -51,8 +51,7 @@
                             <div class="card-body">
                                 <h5 class="card-title text-center">Elderly Care</h5>
                                 <p class="card-text">Elderly people are always fascinated by a trusted companion. Old age
-                                    and
-                                    illness are what make the life of the elderly quite challenging. The urge to be cared for
+                                    and illness are what make the life of the elderly quite challenging. The urge to be cared for
                                     and nurtured. Caring for the elderly, for those who are suffering from any sort of disease,
                                     and assisting them in their day-to-day activities is what our caregivers are good at.</p>
                             </div>
@@ -65,8 +64,7 @@
                             <div class="card-body">
                                 <h5 class="card-title text-center">Baby Care</h5>
                                 <p class="card-text">A newborn constantly seeks attention and care. Managing babies and
-                                    work at
-                                    a time can be an untiring task. Juggling work and looking after the newborn is a big
+                                    work at a time can be an untiring task. Juggling work and looking after the newborn is a big
                                     challenge altogether. Our thoroughly professional and trusted caregivers help you ease the
                                     mental pressure, by taking care of the baby while you are at your workplace.</p>
                             </div>
@@ -77,10 +75,9 @@
                         <div class="card">
                             <img src="{{ asset('site/image/services/Disabled-Care.png') }}" width="300" alt="Disabled-Care">
                             <div class="card-body">
-                                <h5 class="card-title text-center">Disabled-Care</h5>
+                                <h5 class="card-title text-center">Disabled Care</h5>
                                 <p class="card-text">Our motivated caregivers provide utmost tenderness to the
-                                    specially-abled
-                                    individual. Assisting them in their day-to-day activities, making them learn the basic life
+                                    specially-abled individual. Assisting them in their day-to-day activities, making them learn the basic life
                                     skills, and productively garnering their interests and likelihoods, are some of the
                                     essential traits a caregiver possesses.</p>
                             </div>
@@ -93,8 +90,7 @@
                             <div class="card-body">
                                 <h5 class="card-title text-center">Patients Care</h5>
                                 <p class="card-text">Recovering from a prolonged illness takes its due course of time. Good
-                                    care
-                                    at home after hospital leads to a quick and smooth path for a patient's recovery. A
+                                    care at home after hospital leads to a quick and smooth path for a patient's recovery. A
                                     patient's caregiver's work might not only be restricted to just providing proper nourishment
                                     and nutrition, sometimes just reading out their favorite book to them or watching television
                                     together, work wonders for the sick.</p>
