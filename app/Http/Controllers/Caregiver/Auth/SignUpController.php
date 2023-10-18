@@ -85,7 +85,7 @@ class SignUpController extends Controller
                 }
                 
             }catch(\Exception $e){
-                return $this->error('Opps! Something Went Wrong.', null, null, 500);
+                return $this->error('Opps! Something Went Wrong.' .$e, null, null, 500);
             }
         }
         
