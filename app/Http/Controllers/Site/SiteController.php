@@ -75,7 +75,7 @@ class SiteController extends Controller
             if ($response->successful() && $result->success == true) {
                 // $request->authenticate();
 
-                Mail::to('dipankar.kataki@ekodusinc.com')->send(new GetInTouchMail($details));
+                Mail::to('info@peaceworc.com')->send(new GetInTouchMail($details));
                 $icon = "success";
                 $title = "Success";
                 $text = "Email is sent";
