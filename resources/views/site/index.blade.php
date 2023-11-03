@@ -6,6 +6,7 @@
 @section('siteTitle', 'PeaceWorc | Home')
 
 @section('main')
+
     <!-- Banner -->
     @include('site.common.banner') 
     @foreach ($site_layout as $layout)
@@ -374,13 +375,18 @@
                                     </div>
                                 @enderror
                             </div>
-                            <button type="submit" class="btn shadow-none" id="submitForm">Submit</button>
+                            <!-- Google Recaptcha -->
+                            <div class="g-recaptcha mt-4" data-sitekey={{config('services.recaptcha.key')}}></div>
+
+                            <button type="submit" class="btn shadow-none mt-4" id="submitForm">Submit</button>
                         </form>
                     </div>
                 </div>
             </div>  
         @endif
     @endforeach
+
+    
     
 @endsection
 
@@ -453,5 +459,14 @@
                 },
             });
         });
+    </script>
+
+    <script>
+        function onClick(e) {
+        e.preventDefault();
+        grecaptcha.enterprise.ready(async () => {
+            const token = await grecaptcha.enterprise.execute('6LeedO8oAAAAAN61Noim9dCh4arLNOQTfNRP6iR-', {action: 'LOGIN'});
+        });
+        }
     </script>
 @endsection

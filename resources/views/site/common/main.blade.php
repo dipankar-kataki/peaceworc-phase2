@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="{{ asset('site/plugins/owl/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('site/css/main.css') }}">
 
+    <script async src="https://www.google.com/recaptcha/api.js"></script>
+
     @yield('customHeader')
 
     <title>@yield('siteTitle')</title>

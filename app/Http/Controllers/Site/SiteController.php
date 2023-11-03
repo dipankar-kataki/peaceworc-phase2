@@ -10,6 +10,8 @@ use App\Mail\GetInTouchMail;
 use Exception;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
+use Symfony\Component\HttpFoundation\IpUtils;
 
 class SiteController extends Controller
 {
@@ -48,11 +50,43 @@ class SiteController extends Controller
             'message' => $request->message,
         ];
 
+        $recaptcha_response = $request->input('g-recaptcha-response');
+
+        if (is_null($recaptcha_response)) {
+            $icon = "error";
+            $title = "Error";
+            $text = "Please Complete the Recaptcha to proceed. ";
+        }
+
+        $url = "https://www.google.com/recaptcha/api/siteverify";
+
+        $body = [
+            'secret' => config('services.recaptcha.secret'),
+            'response' => $recaptcha_response,
+            'remoteip' => IpUtils::anonymize($request->ip()) //anonymize the ip to be GDPR compliant. Otherwise just pass the default ip address
+        ];
+
+        $response = Http::asForm()->post($url, $body);
+
+        $result = json_decode($response);
+
         try {
-            Mail::to('dipankar.kataki@ekodusinc.com')->send(new GetInTouchMail($details));
-            $icon = "success";
-            $title = "Success";
-            $text = "Email is sent";
+
+            if ($response->successful() && $result->success == true) {
+                // $request->authenticate();
+
+                Mail::to('dipankar.kataki@ekodusinc.com')->send(new GetInTouchMail($details));
+                $icon = "success";
+                $title = "Success";
+                $text = "Email is sent";
+            } else {
+                $icon = "error";
+                $title = "Error";
+                $text = "Please Complete the Recaptcha Again to proceed. ";
+            }
+
+
+            
         } catch (Exception $e) {
             $icon = "error";
             $title = "Error";
