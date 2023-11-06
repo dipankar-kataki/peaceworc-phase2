@@ -69,9 +69,9 @@ class PostJobController extends Controller
                             //Checking if the selected date is an old date or current date. If current date or upcoming approve the condition.
 
                             if( $requested_start_date_time_for_the_job < $current_time ){ 
-                                return $this->error('Oops! Selected Start Date Is An Old Date. Please Provide Current Date Or Upcomming Date.', null, null, 400);
+                                return $this->error('Oops! The selected start date or time has already passed. Please choose a new date or time.', null, null, 400);
                             }else if( $requested_end_date_time_for_the_job < $current_time ){ 
-                                return $this->error('Oops! Selected End Date Is An Old Date. Please Provide Current Date Or Upcomming Date.', null, null, 400);
+                                return $this->error('Oops! The selected end date or time has already passed. Please choose a new date or time.', null, null, 400);
                             }else{ 
 
                                 $to = Carbon::createFromFormat('Y-m-d H:s:i', $current_time);
