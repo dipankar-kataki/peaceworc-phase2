@@ -55,69 +55,86 @@ class PostJobController extends Controller
                     if($get_status->is_business_info_complete == 0 ||  $get_status->is_authorize_info_added == 0){
                         return $this->error('Oops! The Agency Profile Has To Be Completed First Before Posting A Job.', null, null, 400);
                     }else{
-                            $job_date = DateTime::createFromFormat("m-d-Y" , $request->start_date);
+                            $job_start_date = DateTime::createFromFormat("m-d-Y" , $request->start_date);
+
+                            $job_end_date = DateTime::createFromFormat("m-d-Y" , $request->end_date);
     
-                            $full_job_date_time = Carbon::parse($job_date->format('Y-m-d').''.$request->start_time);
+                            $requested_start_date_time_for_the_job = Carbon::parse($job_start_date->format('Y-m-d').''.$request->start_time);
+
+                            $requested_end_date_time_for_the_job = Carbon::parse($job_end_date->format('Y-m-d').''.$request->end_time);
+
+
                             $current_time = Carbon::now();
-    
-                            $to = Carbon::createFromFormat('Y-m-d H:s:i', $current_time);
-                            $from = Carbon::createFromFormat('Y-m-d H:s:i', $full_job_date_time);
-    
-                            $diff_in_hours = $to->diffInHours($from);
-    
-                            $status = 0;
-    
-                            if( $diff_in_hours <= 5){
-                                $status = JobStatus::QuickCall;
-                            }else if($diff_in_hours > 5){
-                               $status = JobStatus::Open;
-                            }
+
+                            //Checking if the selected date is an old date or current date. If current date or upcoming approve the condition.
+
+                            if( $requested_start_date_time_for_the_job < $current_time ){ 
+                                return $this->error('Oops! Selected Start Date Is An Old Date. Please Provide Current Date Or Upcomming Date.', null, null, 400);
+                            }else if( $requested_end_date_time_for_the_job < $current_time ){ 
+                                return $this->error('Oops! Selected End Date Is An Old Date. Please Provide Current Date Or Upcomming Date.', null, null, 400);
+                            }else{ 
+
+                                $to = Carbon::createFromFormat('Y-m-d H:s:i', $current_time);
+                                $from = Carbon::createFromFormat('Y-m-d H:s:i', $requested_start_date_time_for_the_job);
+        
+                                $diff_in_hours = $to->diffInHours($from);
+        
+                                $status = 0;
+        
+                                if( $diff_in_hours <= 5){
+                                    $status = JobStatus::QuickCall;
+                                }else if($diff_in_hours > 5){
+                                $status = JobStatus::Open;
+                                }
                             
     
-                        try{
-                            
-                            $create = AgencyPostJob::create([
-                                'user_id' => Auth::user()->id,
-                                'client_id' => $request->client_id,
-                                'title' => $request->title,
-                                'care_type' => $request->care_type,
-                                'care_items' => json_encode($request->care_items),
-                                'start_date' => $job_date->format('Y-m-d'),
-                                'start_time' => $request->start_time,
-                                'end_date' => $job_date->format('Y-m-d'),
-                                'end_time' => $request->end_time,
-                                'amount' => $request->amount,
-                                'address' => $request->address,
-                                'short_address' => $request->short_address,
-                                'street' => $request->street,
-                                'appartment_or_unit' => $request->appartment_or_unit,
-                                'floor_no' => $request->floor_no,
-                                'city' => $request->city,
-                                'state' => $request->state,
-                                'zip_code' => $request->zip_code,
-                                'country' => $request->country,
-                                'lat' => $request->lat,
-                                'long' => $request->long,
-                                'description' => $request->description,
-                                'medical_history' => json_encode($request->medical_history),
-                                'expertise' => json_encode($request->expertise),
-                                'other_requirements' => json_encode($request->other_requirements),
-                                'check_list' => json_encode($request->check_list),
-                                'status' => $status,
-                            ]);
+                                try{
+                                    
+                                    $create = AgencyPostJob::create([
+                                        'user_id' => Auth::user()->id,
+                                        'client_id' => $request->client_id,
+                                        'title' => $request->title,
+                                        'care_type' => $request->care_type,
+                                        'care_items' => json_encode($request->care_items),
+                                        'start_date' => $job_start_date->format('Y-m-d'),
+                                        'start_time' => $request->start_time,
+                                        'end_date' => $job_end_date->format('Y-m-d'),
+                                        'end_time' => $request->end_time,
+                                        'amount' => $request->amount,
+                                        'address' => $request->address,
+                                        'short_address' => $request->short_address,
+                                        'street' => $request->street,
+                                        'appartment_or_unit' => $request->appartment_or_unit,
+                                        'floor_no' => $request->floor_no,
+                                        'city' => $request->city,
+                                        'state' => $request->state,
+                                        'zip_code' => $request->zip_code,
+                                        'country' => $request->country,
+                                        'lat' => $request->lat,
+                                        'long' => $request->long,
+                                        'description' => $request->description,
+                                        'medical_history' => json_encode($request->medical_history),
+                                        'expertise' => json_encode($request->expertise),
+                                        'other_requirements' => json_encode($request->other_requirements),
+                                        'check_list' => json_encode($request->check_list),
+                                        'status' => $status,
+                                    ]);
 
-                            if($create){
-                                $get_job_details = AgencyPostJob::where('user_id', Auth::user()->id)->latest()->first();
-                                return $this->success('Great! Job Posted Successfully', $get_job_details, null, 200);
+                                    if($create){
+                                        $get_job_details = AgencyPostJob::where('user_id', Auth::user()->id)->latest()->first();
+                                        return $this->success('Great! Job Posted Successfully', $get_job_details, null, 200);
 
-                            }else{
-                                return $this->error('Oops! Something Went Wrong. Failed To Post Job.', null, null, 500);
+                                    }else{
+                                        return $this->error('Oops! Something Went Wrong. Failed To Post Job.', null, null, 500);
+                                    }
+
+
+                                }catch(\Exception $e){
+                                    return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                                }
                             }
-
-
-                        }catch(\Exception $e){
-                            return $this->error('Oops! Something Went Wrong.', null, null, 500);
-                        }
+    
+                            
                     }
                 }
                 
