@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Caregiver\Auth\ForgotPasswordController;
 use App\Http\Controllers\Caregiver\Auth\LoginController;
 use App\Http\Controllers\Caregiver\Auth\LogOutController;
 use App\Http\Controllers\Caregiver\Auth\SignUpController;
@@ -46,8 +47,12 @@ use Illuminate\Support\Facades\Route;
     Route::post('login', [LoginController::class, 'login']);
     Route::post('resend-otp', [SignUpController::class, 'resendOtp']);
     Route::post('verify-otp', [SignUpController::class, 'verifyOtp']);
-    Route::post('check-email-exist', [SignUpController::class, 'checkEmailExists']);
     Route::get('return-url', [StripePaymentController::class, 'returnUrl'])->name('stripe.return.url');
+    Route::group(['prefix' => 'forgot-password'], function(){
+        Route::post('send-verify-email-link', [ForgotPasswordController::class, 'sendVerifyEmailLink']);
+        Route::post('verify-otp', [ForgotPasswordController::class, 'verifyOTP']);
+        Route::post('create-new-password', [ForgotPasswordController::class, 'createNewPassword']);
+    });
 // });
 
 
