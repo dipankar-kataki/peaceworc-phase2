@@ -49,7 +49,7 @@ use Illuminate\Support\Facades\Route;
     Route::post('verify-otp', [SignUpController::class, 'verifyOtp']);
     Route::get('return-url', [StripePaymentController::class, 'returnUrl'])->name('stripe.return.url');
     Route::group(['prefix' => 'forgot-password'], function(){
-        Route::post('send-verify-email-link', [ForgotPasswordController::class, 'sendVerifyEmailLink']);
+        Route::post('send-otp-email', [ForgotPasswordController::class, 'sendOTPEmail']);
         Route::post('verify-otp', [ForgotPasswordController::class, 'verifyOTP']);
         Route::post('create-new-password', [ForgotPasswordController::class, 'createNewPassword']);
     });

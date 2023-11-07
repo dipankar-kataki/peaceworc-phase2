@@ -138,7 +138,10 @@ class SignUpController extends Controller
                 if($get_user_details == null){
                     return $this->success('Oops! Invalid Email Id. OTP not verified', null, null, 400);
                 }else{
-                    $otp_validity_time =  $get_user_details->otp_validity;
+                    if($get_user_details->otp != $request->otp){
+                        return $this->error('Oops! Invalid OTP.', null, null, 400);
+                    }else{
+                        $otp_validity_time =  $get_user_details->otp_validity;
     
                         $current_time = new DateTime();
 
@@ -177,6 +180,8 @@ class SignUpController extends Controller
                             return $this->success('Great! OTP Verified. SignUp Successful.', $verified_user_id, $auth_token, 201);
 
                         }
+                    }
+    
                 }
             }catch(\Exception $e){
                 return $this->error('Oops!. Something Went Wrong.', null, null, 500);
