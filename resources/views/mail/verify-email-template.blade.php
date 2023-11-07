@@ -58,9 +58,9 @@
         </table>
         <div style="text-align: center; margin: 25px auto 0px auto;font-family: 'Roboto', sans-serif;">
             <h4 style="font-weight: 500; line-height: 1.5;font-family: 'Roboto', sans-serif;">Need Help ?</h4>
-            <p style="color: #878a99; line-height: 1.5;">Please send and feedback or bug info to <a href="#" style="font-weight: 500;">info@peaceworc.com</a></p>
+            <p style="color: #878a99; line-height: 1.5;">Please send any feedback or bug information to <a href="info@peaceworc.com" style="font-weight: 500;">info@peaceworc.com</a></p>
             <p style="font-family: 'Roboto', sans-serif; font-size: 14px;color: #98a6ad; margin: 0px;">
-                {{date('Y')}} &copy; www.peaceworc.com. All rights reserved.
+                {{date('Y')}} &copy; <a href="www.peaceworc.com">www.peaceworc.com</a>. All rights reserved.
             </p>
         </div>
     </div>

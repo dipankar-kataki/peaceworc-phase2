@@ -138,7 +138,7 @@ class ForgotPasswordController extends Controller
                         'password' => Hash::make($request->password),
                     ]);
 
-                    // Mail::to($user_details->email_id)->send(new ChangePasswordMail);
+                    Mail::to($user_details->email)->send(new ChangePasswordMail);
 
                     return $this->success('Great! Password Changed successfully.', null, null, 200);
                 }
