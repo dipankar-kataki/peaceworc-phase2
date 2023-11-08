@@ -123,24 +123,29 @@ class ForgotPasswordController extends Controller
                 if($get_user_details == null){
                     return $this->error('Oops! Invalid Email Id. Failed To Update Password.', null, null, 400);
                 }else{
-                    User::where('email', $request->email)->update([
-                        'password' => Hash::make($request->password)
-                    ]);
+
+                    if (Hash::check($request->password, $get_user_details->password)) {
+                        return $this->error('Oops! You have already used this password. Please create a new strong password.', null, null, 400);
+                    }else{
+
+                        User::where('email', $request->email)->update([
+                            'password' => Hash::make($request->password)
+                        ]);
+        
+                        AppDeviceToken::where('user_id', $get_user_details->id)->update([
+                            'fcm_token' => $request->fcm_token,
+                        ]);
+                        
+                        Mail::to($get_user_details->email)->send(new ChangePasswordMail);
     
-                    AppDeviceToken::where('user_id', $get_user_details->id)->update([
-                        'fcm_token' => $request->fcm_token,
-                    ]);
+                        $message = "Hurray! Password Recovered Successfully.";
+                        $token = $request->fcm_token;
+                
+                        $this->sendWelcomeNotification($token, $message);
+                        
+                        return $this->success('Great! Password Updated Successfully', null, null, 201);
+                    }
                     
-                    Mail::to($get_user_details->email)->send(new ChangePasswordMail);
-
-                    $message = "Hurray! Password Recovered Successfully.";
-                    $token = $request->fcm_token;
-            
-                    $this->sendWelcomeNotification($token, $message);
-
-
-
-                    return $this->success('Great! Password Updated Successfully', null, null, 201);
                 }
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong.', null, null, 500);

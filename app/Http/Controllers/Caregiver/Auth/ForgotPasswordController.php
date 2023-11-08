@@ -122,6 +122,7 @@ class ForgotPasswordController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:6|required_with:confirm_password|same:confirm_password',
             'confirm_password' => 'required|min:6',
+            'fcm_token' => 'required'
         ]);
 
         if($validator->fails()){
@@ -136,24 +137,28 @@ class ForgotPasswordController extends Controller
                     return $this->error('Oops! Invalid Email Id. Failed to update password.', null, null, 400);
                 }else{
 
-                    User::where('email', $request->email)->update([
-                        'password' => Hash::make($request->password),
-                    ]);
-
-                    AppDeviceToken::where('user_id', $user_details->id)->update([
-                        'fcm_token' => $request->fcm_token,
-                    ]);
-                    
-                    Mail::to($user_details->email)->send(new ChangePasswordMail);
-
-                    $message = "Hurray! Password Recovered Successfully.";
-                    $token = $request->fcm_token;
-            
-                    $this->sendWelcomeNotification($token, $message);
-
-
-
-                    return $this->success('Great! Password Changed successfully.', null, null, 200);
+                    if (Hash::check($request->password, $user_details->password)) {
+                        return $this->error('Oops! You have already used this password. Please create a new strong password.', null, null, 400);
+                    }else{
+                        User::where('email', $request->email)->update([
+                            'password' => Hash::make($request->password),
+                        ]);
+    
+                        AppDeviceToken::where('user_id', $user_details->id)->update([
+                            'fcm_token' => $request->fcm_token,
+                        ]);
+                        
+                        Mail::to($user_details->email)->send(new ChangePasswordMail);
+    
+                        $message = "Hurray! Password Recovered Successfully.";
+                        $token = $request->fcm_token;
+                
+                        $this->sendWelcomeNotification($token, $message);
+    
+    
+    
+                        return $this->success('Great! Password Changed successfully.', null, null, 200);
+                    }
                 }
             }catch(\Exception $e){
                 return $this->error('Oops! Something went wrong.', null, null, 500);

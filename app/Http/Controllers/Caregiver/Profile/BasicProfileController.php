@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Caregiver\Profile;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ChangePasswordMail;
+use App\Models\AppDeviceToken;
 use App\Models\CaregiverCertificate;
 use App\Models\CaregiverEducation;
 use App\Models\CaregiverProfileRegistration;
@@ -16,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class BasicProfileController extends Controller
@@ -36,28 +39,43 @@ class BasicProfileController extends Controller
                 $get_details = User::where('id', Auth::user()->id)->first();
 
                 if (!Hash::check($request->current_password, $get_details->password)) {
-                    return $this->error('Oops! Current Password Not Matched', null, null, 400);
+                    return $this->error('Oops! Current password not matched', null, null, 400);
                 }else{
                     
                     try{
-                        $update = User::where('id', Auth::user()->id)->update([
-                            'password' => Hash::make($request->password)
-                        ]);
-        
-                        if($update){
-                            return $this->success('Great! Password Successfully.', null, null, 201);
+
+                        if(Hash::check($request->password, $get_details->password)){
+                            return $this->error('Oops! You have already used this password. Please create a new strong password.', null, null, 400);
                         }else{
-                            return $this->error('Oops! Something Went Wrong. Failed To Change Password.', null, null, 500);
+                            
+                            $update = User::where('id', Auth::user()->id)->update([
+                                'password' => Hash::make($request->password)
+                            ]);
+    
+                            $fcm_token = AppDeviceToken::where('user_id', $get_details->id)->first();
+                        
+                            Mail::to($get_details->email)->send(new ChangePasswordMail);
+    
+                            $message = "Hurray! Password changed successfully.";
+                            $token = $fcm_token;
+                    
+                            $this->sendWelcomeNotification($token, $message);
+            
+                            if($update){
+                                return $this->success('Great! Password changed successfully.', null, null, 201);
+                            }else{
+                                return $this->error('Oops! Something Went Wrong. Failed to change password.', null, null, 500);
+                            }
                         }
+                        
                     }catch(\Exception $e){
-                        Log::error('Failed To Change Caregiver Password ===>', $e->getMessage());
-                        return $this->error('Oops! Something Went Wrong. Server Error.', null, null, 500);
+                        return $this->error('Oops! Something went wrong. Failed to change password.', null, null, 500);
                     }
                     
                     
                 }
             }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong. Server Error.', null, null, 500);
+                return $this->error('Oops! Something went wrong. Server Error.', null, null, 500);
             }
             
         }
