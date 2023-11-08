@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Agency\Auth;
 
 use App\Events\SendOtpMailEvent;
 use App\Http\Controllers\Controller;
+use App\Mail\ChangePasswordMail;
 use App\Models\AppDeviceToken;
 use App\Models\User;
 use App\Traits\ApiResponse;
@@ -12,6 +13,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class ForgotPasswordController extends Controller
@@ -91,7 +93,7 @@ class ForgotPasswordController extends Controller
                                 'email_verified_at' => date('Y-m-d h:i:s')
                             ]);
 
-                            return $this->success('Great! OTP Verified.', null, null, 201);
+                            return $this->success('Great! OTP verified successfully.', null, null, 201);
 
                         }
                     }
@@ -128,11 +130,15 @@ class ForgotPasswordController extends Controller
                     AppDeviceToken::where('user_id', $get_user_details->id)->update([
                         'fcm_token' => $request->fcm_token,
                     ]);
-    
+                    
+                    Mail::to($get_user_details->email)->send(new ChangePasswordMail);
+
                     $message = "Hurray! Password Recovered Successfully.";
                     $token = $request->fcm_token;
             
                     $this->sendWelcomeNotification($token, $message);
+
+
 
                     return $this->success('Great! Password Updated Successfully', null, null, 201);
                 }

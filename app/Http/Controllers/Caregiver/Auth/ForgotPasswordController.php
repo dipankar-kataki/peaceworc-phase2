@@ -7,8 +7,10 @@ use App\Events\SendOtpMailEvent;
 use App\Http\Controllers\Controller;
 use App\Mail\ChangePasswordMail;
 use App\Mail\PasswordChangeMail;
+use App\Models\AppDeviceToken;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use App\Traits\WelcomeNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +20,7 @@ use DateTime;
 
 class ForgotPasswordController extends Controller
 {
-    use ApiResponse;
+    use ApiResponse, WelcomeNotification;
     public function sendOTPEmail(Request $request){
         $validator = Validator::make($request->all(), [
             "email"=> "required|email",
@@ -137,6 +139,16 @@ class ForgotPasswordController extends Controller
                     User::where('email', $request->email)->update([
                         'password' => Hash::make($request->password),
                     ]);
+
+                    AppDeviceToken::where('user_id', $user_details->id)->update([
+                        'fcm_token' => $request->fcm_token,
+                    ]);
+    
+                    $message = "Hurray! Password Recovered Successfully.";
+                    $token = $request->fcm_token;
+            
+                    $this->sendWelcomeNotification($token, $message);
+
 
                     Mail::to($user_details->email)->send(new ChangePasswordMail);
 
