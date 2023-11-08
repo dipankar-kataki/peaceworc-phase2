@@ -143,14 +143,15 @@ class ForgotPasswordController extends Controller
                     AppDeviceToken::where('user_id', $user_details->id)->update([
                         'fcm_token' => $request->fcm_token,
                     ]);
-    
+                    
+                    Mail::to($user_details->email)->send(new ChangePasswordMail);
+
                     $message = "Hurray! Password Recovered Successfully.";
                     $token = $request->fcm_token;
             
                     $this->sendWelcomeNotification($token, $message);
 
 
-                    Mail::to($user_details->email)->send(new ChangePasswordMail);
 
                     return $this->success('Great! Password Changed successfully.', null, null, 200);
                 }
