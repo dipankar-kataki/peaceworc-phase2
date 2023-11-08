@@ -16,12 +16,14 @@ class Kernel extends ConsoleKernel
 
     protected $commands = [
         Commands\JobRemover::class,
+        Commands\AutoJobStatusSwitcher::class,
     ];
 
 
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('jobRemover:cron')->everyMinute();
+        $schedule->command('autoJobStatusSwitcher:cron')->everyMinute();
     }
 
     /**
