@@ -81,13 +81,15 @@ class JobRemover extends Command
             ->where('status', JobStatus::QuickCall)
             ->where('end_date', '<', Carbon::now())
             ->update(['status' => JobStatus::JobExpired]);
-
+            
+            Log::info('Command Exceuted In : '.Carbon::now() );
             
             
 
         }catch(\Exception $e){
             Log::info('Oops! Something went wrong in auto job remover');
             var_dump('Error ==>'. $e->getMessage());
+            Log::info('Command Exceuted In : '.Carbon::now() );
         }
         
 
