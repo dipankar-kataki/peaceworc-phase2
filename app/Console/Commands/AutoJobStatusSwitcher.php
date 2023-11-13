@@ -79,7 +79,7 @@ class AutoJobStatusSwitcher extends Command
             
 
         }catch(\Exception $e){
-            Log::error("Oops! Something went wrong.");
+            Log::error("Oops! Something went wrong in auto job switcher.");
             var_dump('Error ==>', $e->getMessage());
             Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
         }
