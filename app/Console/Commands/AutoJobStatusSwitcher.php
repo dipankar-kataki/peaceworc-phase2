@@ -69,14 +69,14 @@ class AutoJobStatusSwitcher extends Command
                     }else{
                         Log::info('Oops! Jobs switching time not arrived.');
 
-                        Log::info('Command Exceuted In : '.Carbon::now() );
+                        Log::info('Job Switcher Command Exceuted In : '.Carbon::now() );
                     }
     
                     
                 }
             }else{
                 Log::info('Oops! No open jobs available.');
-                Log::info('Command Exceuted In : '.Carbon::now() );
+                Log::info('Job Switcher Command Exceuted In : '.Carbon::now() );
             }
 
             
@@ -85,7 +85,7 @@ class AutoJobStatusSwitcher extends Command
             Log::error("Oops! Something went wrong in auto job switcher.");
             var_dump('Error ==>', $e->getMessage());
             Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
-            Log::info('Command Exceuted In : '.Carbon::now() );
+            Log::info('Job Switcher Error Command Exceuted In : '.Carbon::now() );
         }
     }
 }

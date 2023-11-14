@@ -58,38 +58,20 @@ class JobRemover extends Command
         try{
 
 
-            // $data = AgencyPostJob::where('payment_status', 1)->where('status', JobStatus::QuickCall)->get();
-
-            // if(!$get_jobs->isEmpty()){
-
-            //     foreach($get_jobs as $job){
-
-            //         $current_date_time = Carbon::now();
-            //         $end_date_time = Carbon::parse($job->end_date.' '.$job->end_time);
-
-            //         if($current_date_time->gt($end_date_time) ){
-            //             AgencyPostJob::where('id', $job->id)->update([
-            //                 'status' => JobStatus::JobExpired
-            //             ]);
-
-            //             // echo json_encode('Job id =>'. $job->id.' removed');
-            //         }
-            //     }
-            // }
-
             AgencyPostJob::where('payment_status', 1)
             ->where('status', JobStatus::QuickCall)
             ->where('end_date', '<', Carbon::now())
             ->update(['status' => JobStatus::JobExpired]);
+
             
-            Log::info('Command Exceuted In : '.Carbon::now() );
+            Log::info('Job Remover Command Exceuted In ===> : '.Carbon::now() );
             
             
 
         }catch(\Exception $e){
             Log::info('Oops! Something went wrong in auto job remover');
             var_dump('Error ==>'. $e->getMessage());
-            Log::info('Command Exceuted In : '.Carbon::now() );
+            Log::info('Job Remover Error Command Exceuted In : '.Carbon::now() );
         }
         
 
