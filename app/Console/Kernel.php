@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
 
     protected $commands = [
         Commands\JobRemover::class,
-        Commands\AutoJobStatusSwitcher::class,
+        Commands\NotStartedUpcomingJobStatusSwitcher::class,
+        Commands\OpenJobStatusSwitcher::class,
     ];
 
 
