@@ -7,16 +7,15 @@ use App\Models\AgencyPostJob;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
-use DateTime;
 
-class AutoJobStatusSwitcher extends Command
+class OpenJobStatusSwitcher extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'autoJobStatusSwitcher:cron';
+    protected $signature = 'openJobStatusSwitcher:cron';
 
     /**
      * The console command description.
@@ -66,16 +65,17 @@ class AutoJobStatusSwitcher extends Command
 
                         Log::info('Great! Job updated as Quick Call.');
 
-                        Log::info('Job Switcher Command Exceuted In : '.Carbon::now() );
+                        Log::info('Open Job Switcher Command Exceuted In : '.Carbon::now() );
+                        Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
     
                     }
                 }
             }
             
         }catch(\Exception $e){
-            Log::error("Oops! Something went wrong in auto job switcher.");
+            Log::error("Oops! Something went wrong in auto open job switcher.");
             var_dump('Error ==>', $e->getMessage());
-            Log::info('Job Switcher Error Command Exceuted In : '.Carbon::now() );
+            Log::info('Open Job Switcher Error Command Exceuted In : '.Carbon::now() );
             Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");         
         }
     }

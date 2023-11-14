@@ -3,11 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Common\JobStatus;
-use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
-use App\Models\AppDeviceToken;
-use App\Models\User;
-use App\Traits\ApiResponse;
 use App\Traits\JobNotCompleteNotification;
 use App\Traits\WelcomeNotification;
 use Carbon\Carbon;
@@ -58,12 +54,12 @@ class JobRemover extends Command
         try{
 
 
-            $updateJob = AgencyPostJob::where('payment_status', 1)
+            $removeExpiredQuickCallJob = AgencyPostJob::where('payment_status', 1)
             ->where('status', JobStatus::QuickCall)
             ->where('end_date', '<', Carbon::now())
             ->update(['status' => JobStatus::JobExpired]);
 
-            if($updateJob){
+            if($removeExpiredQuickCallJob){
                 Log::info('Job Updated as Expired');
                 Log::info('Job Remover Command Exceuted In ===> : '.Carbon::now() );
             }

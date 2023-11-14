@@ -23,7 +23,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('jobRemover:cron')->everyMinute();
-        $schedule->command('autoJobStatusSwitcher:cron')->everyMinute();
+        $schedule->command('openJobStatusSwitcher:cron')->everyMinute();
+        $schedule->command('notStartedUpcomingJobStatusSwitcher:cron')->everyMinute();
     }
 
     /**
