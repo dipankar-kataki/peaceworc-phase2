@@ -63,7 +63,7 @@ class JobRemover extends Command
             ->where('end_date', '<', Carbon::now())
             ->update(['status' => JobStatus::JobExpired]);
 
-            
+            Log::info('Job Updated as Expired');
             Log::info('Job Remover Command Exceuted In ===> : '.Carbon::now() );
             
             
