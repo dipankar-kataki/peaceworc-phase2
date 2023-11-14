@@ -14,6 +14,7 @@ use App\Http\Controllers\Agency\Job\CancelledJob\CancelledJobController;
 use App\Http\Controllers\Agency\Job\CareType\CareTypeController;
 use App\Http\Controllers\Agency\Job\ClosedJob\ClosedJobController;
 use App\Http\Controllers\Agency\Job\CompletedJob\CompletedJobController;
+use App\Http\Controllers\Agency\Job\ExpiredJob\ExpiredJobController;
 use App\Http\Controllers\Agency\Job\PostJobController;
 use App\Http\Controllers\Agency\Job\Search\SearchJobController;
 use App\Http\Controllers\Agency\Owner\OwnerProfileController;

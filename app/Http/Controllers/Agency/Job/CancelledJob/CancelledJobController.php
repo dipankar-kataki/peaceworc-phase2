@@ -13,7 +13,10 @@ class CancelledJobController extends Controller
     use ApiResponse;
     public function getCanceledJob(){
         try{
-            $get_canceled_jobs = AgencyPostJob::where('status', JobStatus::JobCancelled)->get();
+            $get_canceled_jobs = AgencyPostJob::where(function ($query) {
+                $query->where('status', JobStatus::JobCancelled)
+                      ->orWhere('status', JobStatus::JobExpired);
+            })->paginate(10);
             return $this->success('Great! Jobs Fetched Successfully', $get_canceled_jobs, null, 200);
         }catch(\Exception $e){
             return $this->error('Oops! Something Went Wrong.', null, null, 500);
