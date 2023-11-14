@@ -46,8 +46,6 @@ class AutoJobStatusSwitcher extends Command
 
             $jobs = AgencyPostJob::where('payment_status', 1)->where('status', JobStatus::Open)->get();
 
-            print_r($jobs);
-
             if(!$jobs->isEmpty()){
                 foreach($jobs as $item){
     
@@ -65,27 +63,20 @@ class AutoJobStatusSwitcher extends Command
                         AgencyPostJob::where('id', $item->id)->update([
                             'status' => JobStatus::QuickCall
                         ]);
-    
-                    }else{
-                        Log::info('Oops! Jobs switching time not arrived.');
+
+                        Log::info('Great! Job updated as Quick Call.');
 
                         Log::info('Job Switcher Command Exceuted In : '.Carbon::now() );
-                    }
     
-                    
+                    }
                 }
-            }else{
-                Log::info('Oops! No open jobs available.');
-                Log::info('Job Switcher Command Exceuted In : '.Carbon::now() );
             }
-
             
-
         }catch(\Exception $e){
             Log::error("Oops! Something went wrong in auto job switcher.");
             var_dump('Error ==>', $e->getMessage());
-            Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
             Log::info('Job Switcher Error Command Exceuted In : '.Carbon::now() );
+            Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");         
         }
     }
 }
