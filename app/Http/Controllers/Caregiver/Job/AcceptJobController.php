@@ -10,7 +10,10 @@ use App\Models\CaregiverStatusInformation;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class AcceptJobController extends Controller
 {
@@ -26,69 +29,143 @@ class AcceptJobController extends Controller
         }else{
             try{
 
-                // $check_if_profile_status_data_exists = CaregiverStatusInformation::where('user_id', Auth::user()->id)->first();
-                // if($check_if_profile_status_data_exists != null){
-    
-                //     if($check_if_profile_status_data_exists->is_basic_info_added == 1 && $check_if_profile_status_data_exists->is_documents_uploaded == 1){
-                //        $get_request_job = AgencyPostJob::where('id', $request->job_id)->first();
+                $check_if_profile_status_data_exists = CaregiverStatusInformation::where('user_id', Auth::user()->id)->first();
 
-                //        $get_job_status = $get_request_job->status;
+                if($check_if_profile_status_data_exists != null){
+    
+                    if($check_if_profile_status_data_exists->is_basic_info_added == 1  && $check_if_profile_status_data_exists->is_documents_uploaded == 1){
+                       $get_request_job = AgencyPostJob::where('id', $request->job_id)->first();
 
-                //        if($get_job_status ==  JobStatus::QuickCall){
-                //             $check_active_quick_call_job_exists = AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->where('status', Job)->exists(); 
-                //        }
+                       $get_job_type = $get_request_job->job_type;
 
-                //     }else{
-                //         return $this->error('Oops! Profile not approved. Please wait for your profile to get approved to accept jobs.');
-                //     }
-                // }
+                       if($get_job_type ==  JobStatus::QuickCall){
+                            $check_active_quick_call_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->get(); 
+                            if(!$check_active_quick_call_job->isEmpty()){
+                                foreach($check_active_quick_call_job as $active_job){
+                                    if($active_job->job->job_type == JobStatus::QuickCall){
+                                        return $this->error('Oops! A caregiver can accept one quick call at a time.', null, null, 400);
+                                    }else{
+                                        $get_last_accepted_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->last(); 
     
+                                        $end_date_time_of_last_accepted_job = Carbon::parse($get_last_accepted_job->end_date.''.$get_last_accepted_job->end_time);
+
+                                        $about_to_accept_job_start_date_time = Carbon::parse($get_request_job->start_date.''.$get_request_job->start_time);
+
+                                        $difference_in_hours = $end_date_time_of_last_accepted_job->diffInHours($about_to_accept_job_start_date_time);
+
+                                        if($difference_in_hours > 3){
+
+                                            try{
+                                                DB::beginTransaction();
+
+                                                AcceptJob::create([
+                                                    'user_id' => Auth::user()->id,
+                                                    'job_id' => $request->job_id,
+                                                    'status' => JobStatus::JobAccepted
+                                                ]);
     
+                                                AgencyPostJob::where('id', $request->job_id)->update([
+                                                    'status' => JobStatus::JobAccepted
+                                                ]);
+
+                                                DB::commit();
+
+                                                return $this->success('Great! Job accepted successfully.', null, null, 201);
     
+
+                                            }catch(\Exception $e){
+                                                DB::rollBack();
+                                                Log::error('Error in accept job transaction');
+
+                                                return $this->error('Oops! Failed to accept the job. Something went wrong.', null, null, 500);
+                                                
+                                            }
+                                            
+
+                                        }else{
+                                            return $this->error('Oops! Failed to accept the job. There must be a minimum 3-hour difference from the end of the last job to accept a new one.', null, null, 200);
+                                        }
+                                    }
     
-    
-    
-    
-    
-                $check_if_profile_completion_status_exists = CaregiverStatusInformation::where('user_id',Auth::user()->id )->first();
-                if($check_if_profile_completion_status_exists != null){
-                    if($check_if_profile_completion_status_exists){
-                        if($check_if_profile_completion_status_exists->is_basic_info_added == 0 || $check_if_profile_completion_status_exists->is_documents_uploaded == 0){
-                            return $this->error('Oops! Profile Incomplete. Failed To Accept job.', null, null, 500);
-                        }else{
-    
-                            $check_if_job_is_already_accepted = AcceptJob::where('job_id', $request->job_id)->exists();
-                            if($check_if_job_is_already_accepted){
-                                return $this->error('Oops! This Job Has Already Been Awarded.', null, null, 500);
+                                }
                             }else{
-                                $create = AcceptJob::create([
-                                    'user_id' => Auth::user()->id,
-                                    'job_id' => $request->job_id,
-                                    'status' => JobStatus::JobAccepted
-                                ]);
-                    
-                                if($create){
+                                try{
+                                    DB::beginTransaction();
+
+                                    AcceptJob::create([
+                                        'user_id' => Auth::user()->id,
+                                        'job_id' => $request->job_id,
+                                        'status' => JobStatus::JobAccepted
+                                    ]);
+
                                     AgencyPostJob::where('id', $request->job_id)->update([
                                         'status' => JobStatus::JobAccepted
                                     ]);
+
+                                    DB::commit();
+
+                                    return $this->success('Great! Job accepted successfully.', null, null, 201);
+
+
+                                }catch(\Exception $e){
+                                    DB::rollBack();
+                                    Log::error('Error in accept job transaction');
+
+                                    return $this->error('Oops! Failed to accept the job. Something went wrong.', null, null, 500);
+                                    
                                 }
-                                return $this->success('Great! Job Accepted Successfully', null, null, 201);
+                            }
+                            
+
+                        }else{
+                            $get_last_accepted_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->last(); 
+                            $end_date_time_of_last_accepted_job = Carbon::parse($get_last_accepted_job->end_date.''.$get_last_accepted_job->end_time);
+                            
+                            $about_to_accept_job_start_date_time = Carbon::parse($get_request_job->start_date.''.$get_request_job->start_time);
+                            $difference_in_hours = $end_date_time_of_last_accepted_job->diffInHours($about_to_accept_job_start_date_time);
+
+                            if($difference_in_hours > 3){
+
+                                try{
+                                    DB::beginTransaction();
+
+                                    AcceptJob::create([
+                                        'user_id' => Auth::user()->id,
+                                        'job_id' => $request->job_id,
+                                        'status' => JobStatus::JobAccepted
+                                    ]);
+
+                                    AgencyPostJob::where('id', $request->job_id)->update([
+                                        'status' => JobStatus::JobAccepted
+                                    ]);
+
+                                    DB::commit();
+
+                                    return $this->success('Great! Job accepted successfully.', null, null, 201);
+
+
+                                }catch(\Exception $e){
+                                    // If an error occurs, rollback the transaction
+                                    DB::rollBack();
+                                    // Log the error
+                                    Log::error('Error in accept job transaction');
+
+                                    return $this->error('Oops! Failed to accept the job. Something went wrong.', null, null, 500);
+                                }
+                                
+
+                            }else{
+                                return $this->error('Oops! Failed to accept the job. There must be a minimum 3-hour difference from the end of the last job to accept a new one.', null, null, 200);
                             }
                         }
+
                     }else{
-                        return $this->error('Oops! Profile Incomplete. Failed To Accept job.', null, null, 500);
+                        return $this->error('Oops! Profile not approved. Please wait for your profile to get approved to accept jobs.', null, null, 200);
                     }
-                }else{
-                    return $this->error('Oops! Profile Incomplete. Failed To Accept job.', null, null, 500);
                 }
-                
-                
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong. Failed To Accept job.'.$e, null, null, 500);
             }
-        }
-        
-        
-           
+        }  
     }
 }

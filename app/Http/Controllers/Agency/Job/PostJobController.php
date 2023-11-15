@@ -84,7 +84,7 @@ class PostJobController extends Controller
                                 if( $diff_in_hours <= 5){
                                     $status = JobStatus::QuickCall;
                                 }else if($diff_in_hours > 5){
-                                $status = JobStatus::Open;
+                                    $status = JobStatus::Open;
                                 }
                             
     
@@ -118,6 +118,7 @@ class PostJobController extends Controller
                                         'other_requirements' => json_encode($request->other_requirements),
                                         'check_list' => json_encode($request->check_list),
                                         'status' => $status,
+                                        'job_type' => $status,
                                     ]);
 
                                     if($create){
