@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Caregiver\Bidding;
 
 use App\Common\JobStatus;
 use App\Http\Controllers\Controller;
+use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
 use App\Models\CaregiverBidding;
 use App\Models\CaregiverStatusInformation;
@@ -71,38 +72,61 @@ class BiddingController extends Controller
 
                         
 
-                            if($time_diff_in_hours > 72){
+                            if( $time_diff_in_hours > 72 ||  ( $time_diff_in_hours > 7 && $time_diff_in_hours < 72 ) ){
                                 $bidding_start_time = $current_time;
                                 $bidding_end_time = $current_time->copy()->addHours(12);
 
-                            }else if( $time_diff_in_hours > 7 && $time_diff_in_hours < 72 ){
+                            
                                 $bidding_start_time = $current_time;
                                 $bidding_end_time = $current_time->copy()->addHours(3);
 
+                                try{
+                                    DB::beginTransaction();
+    
+                                    AgencyPostJob::where('id', $request->job_id)->update([
+                                        'bidding_start_time' => $bidding_start_time,
+                                        'bidding_end_time' => $bidding_end_time
+                                    ]);
+    
+                                    CaregiverBidding::create([
+                                        'user_id' => Auth::user()->id,
+                                        'job_id' => $request->job_id,
+                                        'status' => JobStatus::BiddingStarted,
+                                    ]);
+    
+                                    DB::commit();
+    
+                                    return $this->success('Great! You have successfully placed your bid.', null, null, 201);
+    
+                                }catch(\Exception $e){
+                                    DB::rollBack();
+                                    return $this->error('Oops! Something went wrong. Failed to place bid.', null, null, 500);
+                                }
+
+                            }else{
+                                try{
+
+                                    DB::beginTransaction();
+
+                                    AgencyPostJob::where('id', $request->job_id)->update([
+                                        'status' => JobStatus::JobAccepted
+                                    ]);
+
+                                    AcceptJob::create([
+                                        'user_id' => Auth::user()->id,
+                                        'job_id' => $request->job_id,
+                                        'status' => JobStatus::JobAccepted
+                                    ]);
+
+                                    DB::commit();
+
+                                }catch(\Exception $e){
+                                    DB::rollBack();
+                                    return $this->error('Oops! Something went wrong. Not able to place bid.', null, null, 400);
+                                }
                             }
 
-                            try{
-                                DB::beginTransaction();
-
-                                AgencyPostJob::where('id', $request->job_id)->update([
-                                    'bidding_start_time' => $bidding_start_time,
-                                    'bidding_end_time' => $bidding_end_time
-                                ]);
-
-                                CaregiverBidding::create([
-                                    'user_id' => Auth::user()->id,
-                                    'job_id' => $request->job_id,
-                                    'status' => JobStatus::BiddingStarted,
-                                ]);
-
-                                DB::commit();
-
-                                return $this->success('Great! You have successfully placed your bid.', null, null, 201);
-
-                            }catch(\Exception $e){
-                                DB::rollBack();
-                                return $this->error('Oops! Something went wrong. Failed to place bid.', null, null, 500);
-                            }
+                            
                         }
                     }else{
                         return $this->error('Oops! Please complete your profile to start bidding.', null, null, 400);
