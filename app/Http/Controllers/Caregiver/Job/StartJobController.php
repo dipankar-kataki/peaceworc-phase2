@@ -10,6 +10,8 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class StartJobController extends Controller
@@ -54,15 +56,30 @@ class StartJobController extends Controller
 
 
                         if($check_if_job_exists_inside_schedule){
-                            AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->update([
-                                'status' => JobStatus::OnGoing
-                            ]);
-        
-                            AgencyPostJob::where('id', $request->job_id)->update([
-                                'status' => JobStatus::OnGoing
-                            ]);
-        
-                            return $this->success('Great! Job Started Successfully', null, null, 201);
+                            try{
+
+                                DB::beginTransaction();
+
+                                AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->update([
+                                    'status' => JobStatus::OnGoing
+                                ]);
+            
+                                AgencyPostJob::where('id', $request->job_id)->update([
+                                    'status' => JobStatus::OnGoing
+                                ]);
+
+                                DB::commit();
+
+                                return $this->success('Great! Job Started Successfully', null, null, 201);
+
+                            }catch(\Exception $e){
+
+                                DB::rollBack();
+                                Log::error('Oops! Failed to start job.');
+                                return $this->error('Oops! Something went wrong. Not able to start the job.', null, null, 500);
+                                
+                            }
+                            
                         }else{
                             return $this->error('Oops! Something Went Wrong. Failed To Start Job', null, null, 500);
                         }

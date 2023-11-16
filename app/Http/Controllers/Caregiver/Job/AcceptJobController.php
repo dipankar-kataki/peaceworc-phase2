@@ -43,7 +43,7 @@ class AcceptJobController extends Controller
                             if(!$check_active_quick_call_job->isEmpty()){
                                 foreach($check_active_quick_call_job as $active_job){
                                     if($active_job->job->job_type == JobStatus::QuickCall){
-                                        return $this->error('Oops! A caregiver can accept one quick call at a time.', null, null, 400);
+                                        return $this->error('Oops! A caregiver can accept one quick call job at a time.', null, null, 400);
                                     }else{
                                         $get_last_accepted_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->last(); 
     

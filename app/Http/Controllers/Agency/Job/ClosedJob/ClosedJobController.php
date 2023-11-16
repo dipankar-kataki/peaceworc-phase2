@@ -8,6 +8,7 @@ use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ClosedJobController extends Controller
@@ -25,6 +26,8 @@ class ClosedJobController extends Controller
         }else{
             try{
 
+                DB::beginTransaction();
+
                 AgencyPostJob::where('id', $request->job_id)->update([
                     'status' => JobStatus::Closed
                 ]);
@@ -33,9 +36,14 @@ class ClosedJobController extends Controller
                     'status' => JobStatus::Closed
                 ]);
 
+                DB::commit();
+
                 return $this->success('Great! Job Closed Successfully.', null, null, 201);
 
             }catch(\Exception $e){
+
+                DB::rollBack();
+                
                 return $this->error('Oops! Something Went Wrong', null, null, 500);
             }
         }

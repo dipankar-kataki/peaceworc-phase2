@@ -18,10 +18,12 @@ class CompletedJobController extends Controller
 
     public function getCompletedJob(){
         try{
-            $get_upcoming_job = AgencyPostJob::where('user_id', Auth::user()->id)->whereIn('status', [JobStatus::Completed, JobStatus::Closed])->latest()->paginate('5');
+            
+            $get_job = AgencyPostJob::where('user_id', Auth::user()->id)->whereIn('status', [JobStatus::Completed, JobStatus::Closed])->latest()->paginate('5');
             $all_details = [];
-            foreach($get_upcoming_job as $job){
-                $check_accepted_by = AcceptJob::where('job_id', $job->id)->where('status', JobStatus::Completed)->latest()->get();
+            
+            foreach($get_job as $job){
+                $check_accepted_by = AcceptJob::where('job_id', $job->id)->whereIn('status', [JobStatus::Completed, JobStatus::Closed])->latest()->get();
 
                 foreach($check_accepted_by as $accepted_by){
 
@@ -58,7 +60,7 @@ class CompletedJobController extends Controller
             }
             return $this->success('Great! Completed Jobs Fetched Successfully.',  $all_details, null, 200);
         }catch(\Exception $e){
-            return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            return $this->error('Oops! Something Went Wrong.'. $e->getMessage().' '.'Line No ==>'.$e->getLine(), null, null, 500);
         }
     }
 }
