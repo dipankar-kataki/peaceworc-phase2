@@ -11,6 +11,7 @@ use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class BiddingController extends Controller
@@ -27,70 +28,87 @@ class BiddingController extends Controller
         }else{
 
             try{
-                $check_if_profile_completion_status_exists = CaregiverStatusInformation::where('user_id',Auth::user()->id )->first();
 
-                if($check_if_profile_completion_status_exists != null){
-                    if($check_if_profile_completion_status_exists->is_basic_info_added == 0 || $check_if_profile_completion_status_exists->is_documents_uploaded == 0){
-                        return $this->error('Oops! Profile Incomplete. Failed To Bid.', null, null, 400);
-                    }else{
-                        $check_if_bidded = CaregiverBidding::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->exists();
-                        if($check_if_bidded){
-                            return $this->error('Oops! Bid Already Recorded For This Job. ', null, null, 400);
+                $get_profile = CaregiverStatusInformation::where('user_id', Auth::user()->id)->first();
+                if($get_profile != null){
+                    if($get_profile->is_basic_info_added == 1 && $get_profile->is_documents_uploaded == 1){
+
+                        $get_requested_job = AgencyPostJob::where('id', $request->job_id)->first();
+
+                        if($get_requested_job->bidding_start_time != null && $get_requested_job->bidding_end_time != null){
+                            $check_if_user_has_already_bidded = CaregiverBidding::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->exists();
+
+                            if( $check_if_user_has_already_bidded ){
+                                return $this->error('Oops! You have already placed your bid.', null, null, 400);
+                            }else{
+                                CaregiverBidding::create([
+                                    'user_id' => Auth::user()->id,
+                                    'job_id' => $request->job_id,
+                                    'status' => JobStatus::BiddingStarted
+                                ]);
+
+                                return $this->success('Great! You have successfully placed your bid.', null, null, 201);
+
+                            }
                         }else{
+
+                            $current_time = Carbon::now();
+                            $requested_job_start_date_time = Carbon::parse($get_requested_job->start_date.''.$get_requested_job->start_time);
+
+                            $time_diff = $requested_job_start_date_time->diff($current_time);
+
+                            $time_diff_in_days =  $time_diff->format('%d');
+                            $time_diff_in_hours =  null;
+
+                            $bidding_start_time = null;
+                            $bidding_end_time = null;
+
+                            if($time_diff_in_days != 0){
+                                $time_diff_in_hours = ( $time_diff_in_days * 24);
+                            }else{
+                                $time_diff_in_hours =  $time_diff->format('%h');
+                            }
+
+                        
+
+                            if($time_diff_in_hours > 72){
+                                $bidding_start_time = $current_time;
+                                $bidding_end_time = $current_time->copy()->addHours(12);
+
+                            }else if( $time_diff_in_hours > 7 && $time_diff_in_hours < 72 ){
+                                $bidding_start_time = $current_time;
+                                $bidding_end_time = $current_time->copy()->addHours(3);
+
+                            }
+
                             try{
-                                $get_job = AgencyPostJob::where('id', $request->job_id)->first();
-        
-                                if($get_job->bidding_start_time != null && $get_job->bidding_end_time != null){
-                                    $create = CaregiverBidding::create([
-                                        'user_id' => Auth::user()->id,
-                                        'job_id' => $request->job_id,
-                                        'status' => JobStatus::BiddingStarted
-                                    ]);
-                                }else{
-                                    
-                                    $full_job_date_time = Carbon::parse($get_job->date.''.$get_job->start_time);
-                                    $current_time = Carbon::now();
-            
-                                    $to = Carbon::createFromFormat('Y-m-d H:s:i', $current_time);
-                                    $from = Carbon::createFromFormat('Y-m-d H:s:i', $full_job_date_time);
-            
-                                    $diff_in_hours = $to->diffInHours($from);
-                                    
-                                    $bidding_start_time = 0;
-                                    $bidding_end_time = 0;
-            
-                                    if( $diff_in_hours > 72){
-                                        $bidding_start_time = $current_time;
-                                        $bidding_end_time = Carbon::now()->addHours(12);
-                                    }else if($diff_in_hours <= 72 && $diff_in_hours > 5){
-                                        $bidding_start_time = $current_time;
-                                        $bidding_end_time = Carbon::now()->addHours(3);
-                                    }
-            
-                                    $create = CaregiverBidding::create([
-                                        'user_id' => Auth::user()->id,
-                                        'job_id' => $request->job_id,
-                                        'status' => JobStatus::BiddingStarted,
-                                    ]);
-            
-                                    if($create){
-            
-                                        AgencyPostJob::where('id', $request->job_id)->update([
-                                            'status' => JobStatus::BiddingStarted,
-                                            'bidding_start_time' => $bidding_start_time,
-                                            'bidding_end_time' => $bidding_end_time
-                                        ]);
-                                    }
-                                }
-        
-                                return $this->success('Great! Bid Successfully Recorded. ', null, null, 200);
+                                DB::beginTransaction();
+
+                                AgencyPostJob::where('id', $request->job_id)->update([
+                                    'bidding_start_time' => $bidding_start_time,
+                                    'bidding_end_time' => $bidding_end_time
+                                ]);
+
+                                CaregiverBidding::create([
+                                    'user_id' => Auth::user()->id,
+                                    'job_id' => $request->job_id,
+                                    'status' => JobStatus::BiddingStarted,
+                                ]);
+
+                                DB::commit();
+
+                                return $this->success('Great! You have successfully placed your bid.', null, null, 201);
+
                             }catch(\Exception $e){
-                                return $this->error('Oops! Something Went Wrong. ', null, null, 500);
+                                DB::rollBack();
+                                return $this->error('Oops! Something went wrong. Failed to place bid.', null, null, 500);
                             }
                         }
+                    }else{
+                        return $this->error('Oops! Please complete your profile to start bidding.', null, null, 400);
                     }
                 }else{
-                    return $this->error('Oops! Profile Incomplete. Failed To Bid.', null, null, 400);
+                    return $this->error('Oops! Please complete your profile to start bidding.', null, null, 400);
                 }
                 
             }catch(\Exception $e){
