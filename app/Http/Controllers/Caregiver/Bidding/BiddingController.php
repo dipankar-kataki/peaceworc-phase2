@@ -143,6 +143,8 @@ class BiddingController extends Controller
 
                                     DB::commit();
 
+                                    return $this->success('Great! You have been awarded the job. Please start the job at appropriate time.', null, null, 201);
+
                                 }catch(\Exception $e){
                                     DB::rollBack();
                                     return $this->error('Oops! Something went wrong. Not able to place bid.', null, null, 400);
