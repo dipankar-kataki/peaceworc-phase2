@@ -11,7 +11,7 @@ class GenerateBiddingList extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'GenerateBiddingList:cron';
 
     /**
      * The console command description.

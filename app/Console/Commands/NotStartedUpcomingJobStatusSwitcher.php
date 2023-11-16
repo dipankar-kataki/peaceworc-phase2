@@ -7,6 +7,7 @@ use App\Common\StrikeReason;
 use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
 use App\Models\AppDeviceToken;
+use App\Models\CaregiverFlag;
 use App\Models\Strike;
 use App\Traits\WelcomeNotification;
 use Carbon\Carbon;
@@ -57,6 +58,18 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                 foreach($get_upcoming_jobs as $upcoming){
 
                     $job_start_date = Carbon::parse($upcoming->job->start_date.''.$upcoming->job->start_time);
+
+                    $get_flags = CaregiverFlag::where('user_id', $upcoming->user_id)->where('status', 1)->count();
+
+                    
+
+                    if($get_flags > 0){
+
+                        $get_users_last_flag = CaregiverFlag::where('user_id', $upcoming->user_id)->where('status', 1)->last(); 
+                        // $banned
+
+                    }
+
                     $diff_between_start_date_and_current_date_in_minutes = 0;
                     $diff_between_start_date_and_current_date_in_hour = 0;
 
