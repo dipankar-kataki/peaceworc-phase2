@@ -80,12 +80,7 @@ class CompleteJobController extends Controller
             try{
                 $get_job = AcceptJob::with('job')->where('job_id', $request->job_id)->first();
                 $job_start_date_time = Carbon::parse($get_job->job_start_date.''.$get_job->start_time);
-                $get_rewards = Reward::where('job_id', $request->job_id)->where('user_id', Auth::user()->id)->first();
-                $my_existing_rewards = 0;
-
-                if($get_rewards != null){
-                    $my_existing_rewards = (int)$get_rewards->total_rewards ;
-                }
+                
                 
 
                 $time_diff_in_hours = $get_job->job_accepted_time->diffInHours($job_start_date_time);
@@ -94,11 +89,11 @@ class CompleteJobController extends Controller
 
 
                 if( $time_diff_in_hours <= 3 && $time_diff_in_hours > 2){
-                    $earned_rewards =  $my_existing_rewards + 3;
+                    $earned_rewards = 3;
                 }else if( $time_diff_in_hours <= 2  && $time_diff_in_hours > 1){
-                    $earned_rewards =  $my_existing_rewards + 5;
+                    $earned_rewards = 5;
                 }else if( $time_diff_in_hours <= 1){
-                    $earned_rewards =  $my_existing_rewards + 15;
+                    $earned_rewards = 15;
                 }
                 
 
