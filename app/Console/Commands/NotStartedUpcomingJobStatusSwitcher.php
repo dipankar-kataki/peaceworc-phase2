@@ -3,12 +3,15 @@
 namespace App\Console\Commands;
 
 use App\Common\JobStatus;
+use App\Common\StrikeReason;
 use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
 use App\Models\AppDeviceToken;
+use App\Models\Strike;
 use App\Traits\WelcomeNotification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class NotStartedUpcomingJobStatusSwitcher extends Command
@@ -65,7 +68,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
 
                         $get_caregiver_device_token  = AppDeviceToken::where('user_id', $upcoming->user_id)->first();
 
-                        if($diff_between_start_date_and_current_date_in_minutes <= 15){
+                        if($diff_between_start_date_and_current_date_in_minutes <= 30){
 
                             $message= "Hey there you have one job which is not started yet. Please start your job.";
                             $token = $get_caregiver_device_token->fcm_token;
@@ -83,20 +86,42 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                             $new_start_date = $job_start_date->addHours(5);
                             $new_start_time = $new_start_date->toTimeString();
 
-                            AcceptJob::where('job_id', $upcoming->job_id)->update([
-                                'status' => JobStatus::QuickCall
-                            ]);
+                            try{
+                                DB::beginTransaction(); 
 
-                            AgencyPostJob::where('id', $upcoming->job_id)->update([
-                                'status' => JobStatus::QuickCall,
-                                'start_date' => $new_start_date->toDateString(),
-                                'start_time' => $new_start_time
-                            ]);
+                                AcceptJob::where('job_id', $upcoming->job_id)->update([
+                                    'status' => JobStatus::QuickCall
+                                ]);
+    
+                                AgencyPostJob::where('id', $upcoming->job_id)->update([
+                                    'status' => JobStatus::QuickCall,
+                                    'start_date' => $new_start_date->toDateString(),
+                                    'start_time' => $new_start_time
+                                ]);
 
-                            Log::info('Great! Not started upcoming job status changed to quick call and a new start date-time added.');
+                                Strike::create([
+                                    'user_id' => $upcoming->user_id,
+                                    'job_id' => $upcoming->job_id,
+                                    'strike_reason' => StrikeReason::JobNotStarted,
+                                ]);
 
-                            Log::info('Not started upcoming job switcher command exceuted In : '.Carbon::now() );
-                            Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
+
+
+                                DB::commit();
+    
+                                Log::info('Great! Not started upcoming job status changed to quick call and a new start date-time added.');
+    
+                                Log::info('Not started upcoming job switcher command exceuted In : '.Carbon::now() );
+                                Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
+                            }catch(\Exception $e){
+                                DB::rollBack();
+
+                                Log::error("Oops! Something went wrong in not started upcoming job switcher.");
+                                var_dump('Error ==>', $e->getMessage());
+                                Log::info('Not started upcoming job switcher error command exceuted In : '.Carbon::now() );
+                                Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
+                            }
+                            
                         }
     
                         // echo 'Diff in minutes --->'. $diff_between_start_date_and_current_date_in_minutes.'---'.'Diff in Hours --->'. $diff_between_start_date_and_current_date_in_hour."\n";

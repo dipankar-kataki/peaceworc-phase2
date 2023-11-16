@@ -11,4 +11,12 @@ class Strike extends Model
 
     protected $table ='strikes';
     protected $guarded = [];
+
+    public function getStrikeReasonAttribute($value){
+        if($value == 1){
+            return 'Job not started after accepting.';
+        }else if($value == 2){
+            return 'Job not accepted after bidding.';
+        }
+    }
 }

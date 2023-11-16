@@ -7,12 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
 use App\Models\AgencyProfileRegistration;
+use App\Models\Reward;
 use App\Traits\ApiResponse;
 use App\Traits\JobDistance;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class CompleteJobController extends Controller
@@ -72,20 +75,56 @@ class CompleteJobController extends Controller
         ]);
 
         if($validator->fails()){
-            return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
-                AgencyPostJob::where('id', $request->job_id)->update([
-                    'status' => JobStatus::Completed
-                ]);
+                $get_job = AcceptJob::with('job')->where('job_id', $request->job_id)->first();
+                $job_start_date_time = Carbon::parse($get_job->job_start_date.''.$get_job->start_time);
 
-                AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->update([
-                    'status' => JobStatus::Completed
-                ]);
-                return $this->success('Great! Job Completed Successfully.', null, null, 201);
+                $time_diff_in_hours = $get_job->job_accepted_time->diffInHours($job_start_date_time);
+
+                $earned_rewards = 1;
+
+                if( $time_diff_in_hours <= 3 && $time_diff_in_hours > 2){
+                    $earned_rewards = 3;
+                }else if( $time_diff_in_hours <= 2  && $time_diff_in_hours > 1){
+                    $earned_rewards = 5;
+                }else if( $time_diff_in_hours <= 1){
+                    $earned_rewards = 15;
+                }
+
+                try{
+                
+
+                    DB::beginTransaction();
+    
+                    AgencyPostJob::where('id', $request->job_id)->update([
+                        'status' => JobStatus::Completed
+                    ]);
+    
+                    AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->update([
+                        'status' => JobStatus::Completed
+                    ]);
+    
+                    Reward::create([
+                        'user_id' => Auth::user()->id,
+                        'job_id' => $request->job_id,
+                        'total_rewards' => $earned_rewards
+                    ]);
+    
+                    DB::commit();
+    
+                    return $this->success('Great! Job Completed Successfully.', null, null, 201);
+                }catch(\Exception $e){
+                    
+                    DB::rollBack();
+                    Log::error('Oops! Failed to complete job. Error in complete job.');
+                    return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                }
             }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                return $this->error('Oops! Something went wrong.', null, null, 500);
             }
+            
         }
     }
 

@@ -61,7 +61,8 @@ class AcceptJobController extends Controller
                                                 AcceptJob::create([
                                                     'user_id' => Auth::user()->id,
                                                     'job_id' => $request->job_id,
-                                                    'status' => JobStatus::JobAccepted
+                                                    'status' => JobStatus::JobAccepted,
+                                                    'job_accepted_time' => Carbon::now()
                                                 ]);
     
                                                 AgencyPostJob::where('id', $request->job_id)->update([
@@ -95,7 +96,8 @@ class AcceptJobController extends Controller
                                     AcceptJob::create([
                                         'user_id' => Auth::user()->id,
                                         'job_id' => $request->job_id,
-                                        'status' => JobStatus::JobAccepted
+                                        'status' => JobStatus::JobAccepted,
+                                        'job_accepted_time' => Carbon::now()
                                     ]);
 
                                     AgencyPostJob::where('id', $request->job_id)->update([
@@ -132,7 +134,8 @@ class AcceptJobController extends Controller
                                     AcceptJob::create([
                                         'user_id' => Auth::user()->id,
                                         'job_id' => $request->job_id,
-                                        'status' => JobStatus::JobAccepted
+                                        'status' => JobStatus::JobAccepted,
+                                        'job_accepted_time' => Carbon::now()
                                     ]);
 
                                     AgencyPostJob::where('id', $request->job_id)->update([

@@ -80,6 +80,7 @@ class BiddingController extends Controller
                                     DB::beginTransaction();
     
                                     AgencyPostJob::where('id', $request->job_id)->update([
+                                        'status' => JobStatus::BiddingStarted,
                                         'bidding_start_time' => $bidding_start_time,
                                         'bidding_end_time' => $bidding_end_time
                                     ]);
@@ -107,6 +108,7 @@ class BiddingController extends Controller
                                     DB::beginTransaction();
     
                                     AgencyPostJob::where('id', $request->job_id)->update([
+                                        'status' => JobStatus::BiddingStarted,
                                         'bidding_start_time' => $bidding_start_time,
                                         'bidding_end_time' => $bidding_end_time
                                     ]);
@@ -138,7 +140,8 @@ class BiddingController extends Controller
                                     AcceptJob::create([
                                         'user_id' => Auth::user()->id,
                                         'job_id' => $request->job_id,
-                                        'status' => JobStatus::JobAccepted
+                                        'status' => JobStatus::JobAccepted,
+                                        'job_accepted_time' => Carbon::now()
                                     ]);
 
                                     DB::commit();
