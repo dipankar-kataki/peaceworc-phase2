@@ -2,12 +2,14 @@
 
 namespace App\Console\Commands;
 
+use App\Common\FlagReason;
 use App\Common\JobStatus;
 use App\Common\StrikeReason;
 use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
 use App\Models\AppDeviceToken;
 use App\Models\CaregiverFlag;
+use App\Models\Reward;
 use App\Models\Strike;
 use App\Traits\WelcomeNotification;
 use Carbon\Carbon;
@@ -58,26 +60,71 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                 foreach($get_upcoming_jobs as $upcoming){
 
                     $job_start_date = Carbon::parse($upcoming->job->start_date.''.$upcoming->job->start_time);
+                    $get_rewards = Reward::where('user_id', $upcoming->user_id)->sum('total_rewards');
+                    $my_rewards = 0;
+                    if($get_rewards != null){
+                        $my_rewards = $get_rewards;
+                    }
 
                     $get_flags = CaregiverFlag::where('user_id', $upcoming->user_id)->count();
+                    $get_strikes = Strike::where('user_id', $upcoming->user_id)->count();
                     $banned_from_bidding = null;
                     $banned_from_quick_call = null;
-                    $loss_of_star = null;
+                    $loss_of_rewards = 0;
+                    $flag_number = 0;
+                    $strike_number = 0;
 
                     
+                    
+                        if($get_flags > 0){
 
-                    if($get_flags > 0){
-
-                        $get_users_last_flag = CaregiverFlag::where('user_id', $upcoming->user_id)->last(); 
-                        if($get_users_last_flag->flag_number == 1){
+                            $get_users_last_flag = CaregiverFlag::where('user_id', $upcoming->user_id)->where('status', 1)->last(); 
+                            if($get_users_last_flag->flag_number == 1){
+                                $banned_from_bidding = Carbon::now()->addHours(48);
+                                $banned_from_quick_call = Carbon::now()->addDays(15);
+                                $loss_of_rewards = round((1/3)*$my_rewards);
+                                $flag_number = 2;
+    
+    
+                            }else if($get_users_last_flag->flag_number == 2){
+                                $banned_from_bidding = Carbon::now()->addHours(72);
+                                $banned_from_quick_call = Carbon::now()->addDays(21);
+                                $loss_of_rewards = round((1/3)*$my_rewards);
+                                $flag_number = 3;
+    
+                            }
+                        }else{
                             $banned_from_bidding = Carbon::now()->addHours(24);
                             $banned_from_quick_call = Carbon::now()->addDays(7);
-                            $loss_of_star = 0;
+                            $loss_of_rewards = 0;
+                            $flag_number = 1;
                         }
+                    
+                        if($get_strikes > 0){
 
-                        // $banned
-
-                    }
+                            $get_users_last_strike = Strike::where('user_id', $upcoming->user_id)->where('status', 1)->last(); 
+                            if($get_users_last_strike->strike_number == 1){
+                                $banned_from_bidding = Carbon::now()->addWeek();
+                                $banned_from_quick_call = Carbon::now()->addDays(45);
+                                $loss_of_rewards = round((1/3)*$my_rewards);
+                                $strike_number = 2;
+    
+    
+                            }else if($get_users_last_strike->strike_number == 2){
+                                $banned_from_bidding = Carbon::now()->addWeeks(2);
+                                $banned_from_quick_call = Carbon::now()->addDays(60);
+                                $loss_of_rewards = round((1/3)*$my_rewards);
+                                $strike_number = 3;
+    
+                            }
+                        }else{
+                            $banned_from_bidding = Carbon::now()->addHours(96);
+                            $banned_from_quick_call = Carbon::now()->addDays(30);
+                            $loss_of_rewards = 0;
+                            $strike_number = 1;
+                        }
+                    
+                    
 
                     $diff_between_start_date_and_current_date_in_minutes = 0;
                     $diff_between_start_date_and_current_date_in_hour = 0;
@@ -121,11 +168,51 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                     'start_time' => $new_start_time
                                 ]);
 
-                                Strike::create([
+                                if($get_strikes != 0 && $get_flags == 0){
+                                    Strike::create([
+                                        'user_id' => $upcoming->user_id,
+                                        'job_id' => $upcoming->job_id,
+                                        'strike_reason' => StrikeReason::JobNotStarted,
+                                        'start_date_time' => Carbon::now(),
+                                        'end_date_time' => $banned_from_quick_call,
+                                        'banned_from_bidding' => $banned_from_bidding,
+                                        'banned_from_quick_call' => $banned_from_quick_call,
+                                        'rewards_loose' => $loss_of_rewards,
+                                        'strike_number' => $strike_number
+                                    ]);
+                                }else if($get_strikes == 0 && $get_flags != 0){
+                                    CaregiverFlag::create([
+                                        'user_id' => $upcoming->user_id,
+                                        'job_id' => $upcoming->job_id,
+                                        'flag_reason' => FlagReason::JobNotStarted,
+                                        'start_date_time' => Carbon::now(),
+                                        'end_date_time' => $banned_from_quick_call,
+                                        'banned_from_bidding' => $banned_from_bidding,
+                                        'banned_from_quick_call' => $banned_from_quick_call,
+                                        'rewards_loose' => $loss_of_rewards,
+                                        'flag_number' => $flag_number
+                                    ]);
+                                }else if($get_strikes == 0 && $get_flags == 0){
+                                    CaregiverFlag::create([
+                                        'user_id' => $upcoming->user_id,
+                                        'job_id' => $upcoming->job_id,
+                                        'flag_reason' => FlagReason::JobNotStarted,
+                                        'start_date_time' => Carbon::now(),
+                                        'end_date_time' => $banned_from_quick_call,
+                                        'banned_from_bidding' => $banned_from_bidding,
+                                        'banned_from_quick_call' => $banned_from_quick_call,
+                                        'rewards_loose' => $loss_of_rewards,
+                                        'flag_number' => $flag_number
+                                    ]);
+                                }
+
+                                Reward::create([
                                     'user_id' => $upcoming->user_id,
                                     'job_id' => $upcoming->job_id,
-                                    'strike_reason' => StrikeReason::JobNotStarted,
+                                    'total_rewards' => 0
                                 ]);
+
+                                
 
 
 
