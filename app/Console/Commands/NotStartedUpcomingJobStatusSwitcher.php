@@ -78,7 +78,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                     
                         if($get_flags > 0){
 
-                            $get_users_last_flag = CaregiverFlag::where('user_id', $upcoming->user_id)->where('status', 1)->last(); 
+                            $get_users_last_flag = CaregiverFlag::where('user_id', $upcoming->user_id)->where('status', 1)->latest()->first(); 
                             if($get_users_last_flag->flag_number == 1){
                                 $banned_from_bidding = Carbon::now()->addHours(48);
                                 $banned_from_quick_call = Carbon::now()->addDays(15);
@@ -102,7 +102,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                     
                         if($get_strikes > 0){
 
-                            $get_users_last_strike = Strike::where('user_id', $upcoming->user_id)->where('status', 1)->last(); 
+                            $get_users_last_strike = Strike::where('user_id', $upcoming->user_id)->where('status', 1)->latest()->first(); 
                             if($get_users_last_strike->strike_number == 1){
                                 $banned_from_bidding = Carbon::now()->addWeek();
                                 $banned_from_quick_call = Carbon::now()->addDays(45);

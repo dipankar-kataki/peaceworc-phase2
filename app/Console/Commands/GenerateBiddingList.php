@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Common\JobStatus;
+use App\Models\AcceptJob;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class GenerateBiddingList extends Command
 {
@@ -18,7 +21,7 @@ class GenerateBiddingList extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'This command will generate bidding list for the caregivers who has bidded for a job.';
 
     /**
      * Create a new command instance.
@@ -37,6 +40,13 @@ class GenerateBiddingList extends Command
      */
     public function handle()
     {
-        return 0;
+       try{
+            $get_jobs = AcceptJob::where('status', JobStatus::BiddingEnded)->get();
+       }catch(\Exception $e){
+            Log::error('Oops! Something went wrong in generating bidding list cron job.');
+            var_dump('Error ==>', $e->getMessage());
+            Log::info('Generate bidding list cron error. Command exceuted In : '.Carbon::now() );
+            Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
+       }
     }
 }

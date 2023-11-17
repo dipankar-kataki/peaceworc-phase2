@@ -8,6 +8,7 @@ use App\Models\AcceptJob;
 use App\Models\AgencyInformationStatus;
 use App\Models\AgencyPostJob;
 use App\Models\CaregiverProfileRegistration;
+use App\Models\ClientProfile;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
@@ -49,8 +50,11 @@ class PostJobController extends Controller
             try{
 
                 $get_status = AgencyInformationStatus::where('user_id', Auth::user()->id)->first();
+                $check_if_client_exists = ClientProfile::where('id', $request->client_id)->where('agency_id', Auth::user()->id)->exists();
                 if($get_status == null){
                     return $this->error('Oops! The Agency Profile Has To Be Completed First Before Posting A Job.', null, null, 400);
+                }else if(!$check_if_client_exists){
+                    return $this->error('Oops! No such client is associated with this agency.', null, null, 400);
                 }else{
                     if($get_status->is_business_info_complete == 0 ||  $get_status->is_authorize_info_added == 0){
                         return $this->error('Oops! The Agency Profile Has To Be Completed First Before Posting A Job.', null, null, 400);
@@ -86,6 +90,8 @@ class PostJobController extends Controller
                                 }else if($diff_in_hours > 5){
                                     $status = JobStatus::Open;
                                 }
+
+                                // return $this->success('Time difference in hours --->'.$diff_in_hours, $status, null, 200);
                             
     
                                 try{
@@ -122,7 +128,7 @@ class PostJobController extends Controller
                                     ]);
 
                                     if($create){
-                                        $get_job_details = AgencyPostJob::where('user_id', Auth::user()->id)->latest()->first();
+                                        $get_job_details = AgencyPostJob::where('user_id', Auth::user()->id)->where('id', $create->id)->first();
                                         return $this->success('Great! Job Posted Successfully', $get_job_details, null, 200);
 
                                     }else{
@@ -131,7 +137,7 @@ class PostJobController extends Controller
 
 
                                 }catch(\Exception $e){
-                                    return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                                    return $this->error('Oops! Something Went Wrong.'.$e->getMessage(), null, null, 500);
                                 }
                             }
     
