@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         Commands\JobRemover::class,
         Commands\NotStartedUpcomingJobStatusSwitcher::class,
         Commands\OpenJobStatusSwitcher::class,
+        Commands\UpdateBiddedJobStatus::class,
         Commands\GenerateBiddingList::class,
 
     ];
@@ -28,7 +29,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('jobRemover:cron')->everyMinute();
         $schedule->command('openJobStatusSwitcher:cron')->everyMinute();
         $schedule->command('notStartedUpcomingJobStatusSwitcher:cron')->everyMinute();
-        $schedule->command('GenerateBiddingList:cron')->everyMinute();
+        $schedule->command('updateBiddedJobStatus:cron')->everyMinute();
+        $schedule->command('generateBiddingList:cron')->everyThreeMinutes();
     }
 
     /**

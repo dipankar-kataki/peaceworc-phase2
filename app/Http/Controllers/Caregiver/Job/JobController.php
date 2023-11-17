@@ -235,83 +235,97 @@ class JobController extends Controller
 
             if($_GET['id'] == 0){
 
-                $get_my_bidded_jobs = CaregiverBidding::where('status', JobStatus::BiddingStarted)->where('user_id', Auth::user()->id)->get();
-                foreach($get_my_bidded_jobs as $key => $my_jobs){
-                    $get_agency_jobs = AgencyPostJob::where('status', JobStatus::BiddingStarted)->where('id', $my_jobs->job_id)->get();
-                    foreach($get_agency_jobs as $job){
-                        $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $job->user_id)->first();
+                try{
+                    $get_my_bidded_jobs = CaregiverBidding::where('status', JobStatus::BiddingStarted)->where('user_id', Auth::user()->id)->get();
+                    foreach($get_my_bidded_jobs as $key => $my_jobs){
+                        $get_agency_jobs = AgencyPostJob::where('status', JobStatus::BiddingStarted)->where('id', $my_jobs->job_id)->get();
+                        foreach($get_agency_jobs as $job){
+                            $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $job->user_id)->first();
+                            $details = [
+                                'job_id' => $job->id,
+                                'company_name' => ucwords($job_owner->company_name),
+                                'company_photo' => $job_owner->photo,
+                                'job_title' => $job->title,
+                                'care_type' => $job->care_type,
+                                'care_items' => $job->care_items,
+                                'start_date' => $job->start_date,
+                                'start_time' => $job->start_time,
+                                'end_date' => $job->end_date,
+                                'end_time' => $job->end_time,
+                                'amount' => $job->amount,
+                                'address' => ($job->floor_no != null ? $job->floor_no.', ' : '').''.($job->appartment_or_unit != null ? $job->appartment_or_unit.', ' : '').''.$job->address,
+                                'short_address' => $job->short_address,
+                                'lat' => $job->lat,
+                                'long' => $job->long,
+                                'description' => $job->description,
+                                'medical_history' => $job->medical_history,
+                                'expertise' => $job->expertise,
+                                'other_requirements' => $job->other_requirements,
+                                'check_list' => $job->check_list,
+                                'status' => $job->status,
+                                'bidding_start_time' => $job->bidding_start_time,
+                                'bidding_end_time' => $job->bidding_end_time,
+                                'created_at' => $job->created_at->diffForHumans(),
+        
+                            ];
+        
+                            array_push($get_job_details, $details);
+                        }
+
+                        
+                    }
+
+                    return $this->success('Great! Job Fetched Successfully', array_reverse($get_job_details), null, 200);
+                }catch(\Exception $e){
+                    return $this->error('Oops! Something went wrong.', null, null, 500);
+                }
+
+                
+            }else{
+
+                try{
+                    $get_jobs = AgencyPostJob::where('status', JobStatus::BiddingStarted)->where('id', $_GET['id'])->first();
+                    if(!$get_jobs){
+                        return $this->error('Oops! No bidding details found for this job.', null, null, 400);
+                    }else{
+                        
+                        $get_job_details = [];
+                        $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $get_jobs->user_id)->first();
                         $details = [
-                            'job_id' => $job->id,
+                            'job_id' => $get_jobs->id,
                             'company_name' => ucwords($job_owner->company_name),
                             'company_photo' => $job_owner->photo,
-                            'job_title' => $job->title,
-                            'care_type' => $job->care_type,
-                            'care_items' => $job->care_items,
-                            'start_date' => $job->start_date,
-                            'start_time' => $job->start_time,
-                            'end_date' => $job->end_date,
-                            'end_time' => $job->end_time,
-                            'amount' => $job->amount,
-                            'address' => ($job->floor_no != null ? $job->floor_no.', ' : '').''.($job->appartment_or_unit != null ? $job->appartment_or_unit.', ' : '').''.$job->address,
-                            'short_address' => $job->short_address,
-                            'lat' => $job->lat,
-                            'long' => $job->long,
-                            'description' => $job->description,
-                            'medical_history' => $job->medical_history,
-                            'expertise' => $job->expertise,
-                            'other_requirements' => $job->other_requirements,
-                            'check_list' => $job->check_list,
-                            'status' => $job->status,
-                            'bidding_start_time' => $job->bidding_start_time,
-                            'bidding_end_time' => $job->bidding_end_time,
-                            'created_at' => $job->created_at->diffForHumans(),
+                            'job_title' => $get_jobs->title,
+                            'care_type' => $get_jobs->care_type,
+                            'care_items' => $get_jobs->care_items,
+                            'start_date' => $get_jobs->start_date,
+                            'start_time' => $get_jobs->start_time,
+                            'end_date' => $get_jobs->end_date,
+                            'end_time' => $get_jobs->end_time,
+                            'amount' => $get_jobs->amount,
+                            'address' => ($get_jobs->floor_no != null ? $get_jobs->floor_no.', ' : '').''.($get_jobs->appartment_or_unit != null ? $get_jobs->appartment_or_unit.', ' : '').''.$get_jobs->address,
+                            'short_address' => $get_jobs->short_address,
+                            'lat' => $get_jobs->lat,
+                            'long' => $get_jobs->long,
+                            'description' => $get_jobs->description,
+                            'medical_history' => $get_jobs->medical_history,
+                            'expertise' => $get_jobs->expertise,
+                            'other_requirements' => $get_jobs->other_requirements,
+                            'check_list' => $get_jobs->check_list,
+                            'status' => $get_jobs->status,
+                            'bidding_start_time' => $get_jobs->bidding_start_time,
+                            'bidding_end_time' => $get_jobs->bidding_end_time,
+                            'created_at' => $get_jobs->created_at->diffForHumans(),
     
                         ];
     
                         array_push($get_job_details, $details);
+    
+                        return $this->success('Great! Job Fetched Successfully', $get_job_details, null, 200);
                     }
-
-                    
+                }catch(\Exception $e){
+                    return $this->error('Oops! Something went wrong.', null, null, 500);
                 }
-
-                return $this->success('Great! Job Fetched Successfully', array_reverse($get_job_details), null, 200);
-            }else{
-                
-                $get_jobs = AgencyPostJob::where('status', JobStatus::BiddingStarted)->where('id', $_GET['id'])->first();
-                $get_job_details = [];
-               
-                    $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $get_jobs->user_id)->first();
-                    $details = [
-                        'job_id' => $get_jobs->id,
-                        'company_name' => ucwords($job_owner->company_name),
-                        'company_photo' => $job_owner->photo,
-                        'job_title' => $get_jobs->title,
-                        'care_type' => $get_jobs->care_type,
-                        'care_items' => $get_jobs->care_items,
-                        'start_date' => $get_jobs->start_date,
-                        'start_time' => $get_jobs->start_time,
-                        'end_date' => $get_jobs->end_date,
-                        'end_time' => $get_jobs->end_time,
-                        'amount' => $get_jobs->amount,
-                        'address' => ($get_jobs->floor_no != null ? $get_jobs->floor_no.', ' : '').''.($get_jobs->appartment_or_unit != null ? $get_jobs->appartment_or_unit.', ' : '').''.$get_jobs->address,
-                        'short_address' => $get_jobs->short_address,
-                        'lat' => $get_jobs->lat,
-                        'long' => $get_jobs->long,
-                        'description' => $get_jobs->description,
-                        'medical_history' => $get_jobs->medical_history,
-                        'expertise' => $get_jobs->expertise,
-                        'other_requirements' => $get_jobs->other_requirements,
-                        'check_list' => $get_jobs->check_list,
-                        'status' => $get_jobs->status,
-                        'bidding_start_time' => $get_jobs->bidding_start_time,
-                        'bidding_end_time' => $get_jobs->bidding_end_time,
-                        'created_at' => $get_jobs->created_at->diffForHumans(),
-
-                    ];
-
-                    array_push($get_job_details, $details);
-
-                return $this->success('Great! Job Fetched Successfully', $get_job_details, null, 200);
             }
         }
     }
