@@ -7,6 +7,7 @@ use App\Mail\ChangePasswordMail;
 use App\Models\AppDeviceToken;
 use App\Models\CaregiverCertificate;
 use App\Models\CaregiverEducation;
+use App\Models\CaregiverFlag;
 use App\Models\CaregiverProfileRegistration;
 use App\Models\CaregiverStatusInformation;
 use App\Models\Flag;
@@ -96,21 +97,17 @@ class BasicProfileController extends Controller
                 $get_profile_status = null;
             }
             
-            $rewards = Reward::where('user_id', Auth::user()->id)->first();
-            if($rewards == null){
-              $rewards = 0;
-            }else{
-               $rewards =  $rewards->total_rewards;
-            }
+            $get_rewards_earned = CaregiverProfileRegistration::where('user_id', Auth::user()->id)->first();
+        
 
             $strikes = Strike::where('user_id', Auth::user()->id)->count();
 
-            $flags = Flag::where('user_id', Auth::user()->id)->count();
+            $flags = CaregiverFlag::where('user_id', Auth::user()->id)->count();
 
             $details = [
                 'profile_completion_status' => $get_profile_status,
                 'basic_info' => $get_details,
-                'rewards' => $rewards,
+                'rewards' => $get_rewards_earned,
                 'strikes' => $strikes,
                 'flags' => $flags,
                 'education' => $get_education,

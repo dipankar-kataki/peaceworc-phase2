@@ -23,6 +23,8 @@ use App\Http\Controllers\Caregiver\Registration\ProfileRegistrationController;
 use App\Http\Controllers\Caregiver\Status\StatusInformationController;
 use App\Http\Controllers\Caregiver\Stripe\StripePaymentController;
 use App\Http\Controllers\Chatting\ChattingController;
+use App\Http\Controllers\TempTesting\SendNotificationController;
+use App\Traits\FullScreenNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -180,10 +182,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('logout', [LogOutController::class, 'logout']);
 });
 
-Route::post('check-notification', function(){
-   
+Route::post('test-full-screen-notification', [SendNotificationController::class, 'testFullNotification']);
 
-    $token = 'eFzpDxSrQtO0IY9ZqJ3Z3_:APA91bHoEBGqPtshiLp23Q9vneYRElws6OSpGB4o0-ThmWasGVXuc_vX6zV2Vqpd6f8jdkooFWcDwFgdkD4dECvMBO6vsj5TBM74Nh7LCteZzvIUXJ1ksqV0MjlzqQD84KIt9M1V_UM9';
+Route::post('check-notification', function(\Illuminate\Http\Request $request){
+
+
+    $token[] = 'fo596PJvSGOOTs0j-kC0yl:APA91bFTyenroHQjHeZ_MNgxKMFCG_aFsUFonVkL8VPoPCEU1xU34f5LHEKcBrcQLLa53fShl-3clPNGNqhQjSGwiynqLZh9QOXxNxvv_tPwXK-jo2mUCOJTd4HdpNeC6UwZHE_0hym4';
 
 
     $server_key = env('FIREBASE_SERVER_KEY');
@@ -193,33 +197,64 @@ Route::post('check-notification', function(){
     ];
 
     $notify_data = [
-        'body' => 'WelcomE Back Bro',
+        'body' => 'Message from peaceworc',
         'title' => 'Peaceworc'
     ];
 
     $registrationIds = $token;
-        
-    // if(count($token) > 1){
-    //     $fields = array
-    //     (
-    //         'registration_ids' => $registrationIds, //  for  multiple users
-    //         'notification'  => $notify_data,
-    //         'data'=> [],
-    //         'priority'=> 'high'
-    //     );
-    // }
-    // else{
+
+    if(count($token) > 1){
+        $fields = array
+        (
+            'registration_ids' => $registrationIds, //  for  multiple users
+            'notification'  => $notify_data,
+            'data'=> [],
+            'priority'=> 'high'
+        );
+    }
+    else{
         
         $fields = array
         (
-            'to' => $registrationIds, //  for  only one users
+            'to' => $token, //  for  only one users
             'notification'  => $notify_data,
             'data'=> [
-                'message' => 'WelcomE back Fatele' 
+                'job_id' => $request->data['job_id'],
+                'job_title' => $request->data['job_title'],
+                'job_amount' => $request->data['job_amount'],
+                'job_start_date' => $request->data['job_start_date'],
+                'job_start_time' => $request->data['job_start_time'],
+                'job_end_date' => $request->data['job_end_date'],
+                'job_end_time' =>  $request->data['job_end_time,'],
+                'care_type' =>  $request->data['care_type'],
+                'care_items' =>  $request->data['care_items'],
+                'notification_type' => $request->data['notification_type']
             ],
             'priority'=> 'high'
         );
-    // }
+    }
+        
+    // // if(count($token) > 1){
+    // //     $fields = array
+    // //     (
+    // //         'registration_ids' => $registrationIds, //  for  multiple users
+    // //         'notification'  => $notify_data,
+    // //         'data'=> [],
+    // //         'priority'=> 'high'
+    // //     );
+    // // }
+    // // else{
+        
+    //     $fields = array
+    //     (
+    //         'to' => $registrationIds, //  for  only one users
+    //         'notification'  => $notify_data,
+    //         'data'=> [
+    //             'message' => 'WelcomE back Fatele' 
+    //         ],
+    //         'priority'=> 'high'
+    //     );
+    // // }
         
     $headers[] = 'Content-Type: application/json';
     $headers[] = 'Authorization: key='. $server_key;

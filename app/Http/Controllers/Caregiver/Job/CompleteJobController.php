@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
 use App\Models\AgencyProfileRegistration;
+use App\Models\CaregiverProfileRegistration;
 use App\Models\Reward;
 use App\Traits\ApiResponse;
 use App\Traits\JobDistance;
@@ -80,6 +81,7 @@ class CompleteJobController extends Controller
             try{
                 $get_job = AcceptJob::with('job')->where('job_id', $request->job_id)->first();
                 $job_start_date_time = Carbon::parse($get_job->job_start_date.''.$get_job->start_time);
+                $get_total_rewards_earned = CaregiverProfileRegistration::where('user_id', $get_job->user_id)->first();
                 
                 
 
@@ -113,8 +115,14 @@ class CompleteJobController extends Controller
                     Reward::create([
                         'user_id' => Auth::user()->id,
                         'job_id' => $request->job_id,
-                        'total_rewards' => $earned_rewards
+                        'total_rewards' => $get_total_rewards_earned->rewards_earned + $earned_rewards
                     ]);
+
+                    CaregiverProfileRegistration::where('user_id', $get_job->user_id)->update([
+                        'rewards_earned' => $get_total_rewards_earned->rewards_earned + $earned_rewards
+                    ]);
+
+
     
                     DB::commit();
     

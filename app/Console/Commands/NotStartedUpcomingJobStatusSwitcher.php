@@ -9,6 +9,7 @@ use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
 use App\Models\AppDeviceToken;
 use App\Models\CaregiverFlag;
+use App\Models\CaregiverProfileRegistration;
 use App\Models\Reward;
 use App\Models\Strike;
 use App\Traits\WelcomeNotification;
@@ -61,6 +62,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
 
                     $job_start_date = Carbon::parse($upcoming->job->start_date.''.$upcoming->job->start_time);
                     $get_rewards = Reward::where('user_id', $upcoming->user_id)->sum('total_rewards');
+                    $get_final_rewards_earned = CaregiverProfileRegistration::where('user_id', $upcoming->user_id)->first();
                     $my_rewards = 0;
                     if($get_rewards != null){
                         $my_rewards = $get_rewards;
@@ -169,6 +171,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                 ]);
 
                                 if($get_strikes != 0 && $get_flags == 0){
+
                                     Strike::create([
                                         'user_id' => $upcoming->user_id,
                                         'job_id' => $upcoming->job_id,
@@ -180,6 +183,8 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                         'rewards_loose' => $loss_of_rewards,
                                         'strike_number' => $strike_number
                                     ]);
+
+
                                 }else if($get_strikes == 0 && $get_flags != 0){
                                     CaregiverFlag::create([
                                         'user_id' => $upcoming->user_id,
@@ -192,6 +197,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                         'rewards_loose' => $loss_of_rewards,
                                         'flag_number' => $flag_number
                                     ]);
+
                                 }else if($get_strikes == 0 && $get_flags == 0){
                                     CaregiverFlag::create([
                                         'user_id' => $upcoming->user_id,
@@ -206,11 +212,17 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                     ]);
                                 }
 
+                                CaregiverProfileRegistration::where('user_id', $upcoming->user_id)->update([
+                                    'rewards_earned' => $get_final_rewards_earned->rewards_earned == 0 ? 0 : abs(round($get_final_rewards_earned->rewards_earned - $loss_of_rewards) )
+                                ]);
+
                                 Reward::create([
                                     'user_id' => $upcoming->user_id,
                                     'job_id' => $upcoming->job_id,
-                                    'total_rewards' => 0
+                                    'total_rewards' => $get_final_rewards_earned->rewards_earned == 0 ? 0 : abs(round($get_final_rewards_earned->rewards_earned - $loss_of_rewards) )
                                 ]);
+
+
 
                                 
 

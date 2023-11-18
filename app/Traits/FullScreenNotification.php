@@ -4,7 +4,8 @@ namespace App\Traits;
 
 trait FullScreenNotification{
 
-    protected function sendNotification(Array $token, Array $data){
+    protected function sendNotification(String $token, Array $data){
+
 
         $server_key = env('FIREBASE_SERVER_KEY');
             
@@ -14,25 +15,24 @@ trait FullScreenNotification{
 
         $notify_data = [
             'body' => $data['message'],
-            'title' => 'Peaceworc'
+            'title' => $data['title']
         ];
 
         $registrationIds = $token;
             
-        if(count($token) > 1){
-            $fields = array
-            (
-                'registration_ids' => $registrationIds, //  for  multiple users
-                'notification'  => $notify_data,
-                'data'=> [],
-                'priority'=> 'high'
-            );
-        }
-        else{
+        // if(count($token) > 1){
+        //     $fields = array
+        //     (
+        //         'registration_ids' => $registrationIds, //  for  multiple users
+        //         'notification'  => $notify_data,
+        //         'data'=> [],
+        //         'priority'=> 'high'
+        //     );
+        // }
+        // else{
             
-            $fields = array
-            (
-                'to' => $registrationIds[0], //  for  only one users
+            $fields = array(
+                'to' => $token, //  for  only one users
                 'notification'  => $notify_data,
                 'data'=> [
                     'job_id' => $data['job_id'],
@@ -48,7 +48,7 @@ trait FullScreenNotification{
                 ],
                 'priority'=> 'high'
             );
-        }
+        // }
             
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'Authorization: key='. $server_key;

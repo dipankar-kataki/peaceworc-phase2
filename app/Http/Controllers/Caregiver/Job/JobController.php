@@ -236,9 +236,9 @@ class JobController extends Controller
             if($_GET['id'] == 0){
 
                 try{
-                    $get_my_bidded_jobs = CaregiverBidding::where('status', JobStatus::BiddingStarted)->where('user_id', Auth::user()->id)->get();
+                    $get_my_bidded_jobs = CaregiverBidding::whereIn('status', [JobStatus::BiddingStarted, JobStatus::BiddingEnded])->where('user_id', Auth::user()->id)->get();
                     foreach($get_my_bidded_jobs as $key => $my_jobs){
-                        $get_agency_jobs = AgencyPostJob::where('status', JobStatus::BiddingStarted)->where('id', $my_jobs->job_id)->get();
+                        $get_agency_jobs = AgencyPostJob::whereIn('status', [JobStatus::BiddingStarted, JobStatus::BiddingEnded])->where('id', $my_jobs->job_id)->get();
                         foreach($get_agency_jobs as $job){
                             $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $job->user_id)->first();
                             $details = [
@@ -284,7 +284,7 @@ class JobController extends Controller
             }else{
 
                 try{
-                    $get_jobs = AgencyPostJob::where('status', JobStatus::BiddingStarted)->where('id', $_GET['id'])->first();
+                    $get_jobs = AgencyPostJob::whereIn('status', [JobStatus::BiddingStarted, JobStatus::BiddingEnded])->where('id', $_GET['id'])->first();
                     if(!$get_jobs){
                         return $this->error('Oops! No bidding details found for this job.', null, null, 400);
                     }else{
