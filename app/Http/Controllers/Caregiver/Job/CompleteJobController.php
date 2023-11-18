@@ -80,59 +80,67 @@ class CompleteJobController extends Controller
         }else{
             try{
                 $get_job = AcceptJob::with('job')->where('job_id', $request->job_id)->first();
-                $job_start_date_time = Carbon::parse($get_job->job_start_date.''.$get_job->start_time);
-                $get_total_rewards_earned = CaregiverProfileRegistration::where('user_id', $get_job->user_id)->first();
-                
-                
+                $job_end_date_time = Carbon::parse($get_job->job->end_date.''.$get_job->job->end_time);
 
-                $time_diff_in_hours = $get_job->job_accepted_time->diffInHours($job_start_date_time);
-
-                $earned_rewards = 1;
-
-
-                if( $time_diff_in_hours <= 3 && $time_diff_in_hours > 2){
-                    $earned_rewards = 3;
-                }else if( $time_diff_in_hours <= 2  && $time_diff_in_hours > 1){
-                    $earned_rewards = 5;
-                }else if( $time_diff_in_hours <= 1){
-                    $earned_rewards = 15;
-                }
-                
-
-                try{
-                
-
-                    DB::beginTransaction();
-    
-                    AgencyPostJob::where('id', $request->job_id)->update([
-                        'status' => JobStatus::Completed
-                    ]);
-    
-                    AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->update([
-                        'status' => JobStatus::Completed
-                    ]);
-    
-                    Reward::create([
-                        'user_id' => Auth::user()->id,
-                        'job_id' => $request->job_id,
-                        'total_rewards' => $get_total_rewards_earned->rewards_earned + $earned_rewards
-                    ]);
-
-                    CaregiverProfileRegistration::where('user_id', $get_job->user_id)->update([
-                        'rewards_earned' => $get_total_rewards_earned->rewards_earned + $earned_rewards
-                    ]);
-
-
-    
-                    DB::commit();
-    
-                    return $this->success('Great! Job Completed Successfully.', null, null, 201);
-                }catch(\Exception $e){
+                if( $job_end_date_time->gt( Carbon::now() ) ){
+                    return $this->error('Oops! Failed to complete job. Job end time not arrived yet. Please wait.', null, null, 400);
+                }else{
+                    $job_start_date_time = Carbon::parse($get_job->job->start_date.''.$get_job->job->start_time);
+                    $get_total_rewards_earned = CaregiverProfileRegistration::where('user_id', $get_job->user_id)->first();
                     
-                    DB::rollBack();
-                    Log::error('Oops! Failed to complete job. Error in complete job.');
-                    return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                    
+
+                    $time_diff_in_hours = Carbon::parse($get_job->job_accepted_time)->diffInHours($job_start_date_time);
+
+                    $earned_rewards = 1;
+
+
+                    if( $time_diff_in_hours <= 3 && $time_diff_in_hours > 2){
+                        $earned_rewards = 3;
+                    }else if( $time_diff_in_hours <= 2  && $time_diff_in_hours > 1){
+                        $earned_rewards = 5;
+                    }else if( $time_diff_in_hours <= 1){
+                        $earned_rewards = 15;
+                    }
+                    
+
+                    try{
+                    
+
+                        DB::beginTransaction();
+        
+                        AgencyPostJob::where('id', $request->job_id)->update([
+                            'status' => JobStatus::Completed
+                        ]);
+        
+                        AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->update([
+                            'status' => JobStatus::Completed
+                        ]);
+        
+                        Reward::create([
+                            'user_id' => Auth::user()->id,
+                            'job_id' => $request->job_id,
+                            'total_rewards' => $get_total_rewards_earned->rewards_earned + $earned_rewards
+                        ]);
+
+                        CaregiverProfileRegistration::where('user_id', $get_job->user_id)->update([
+                            'rewards_earned' => $get_total_rewards_earned->rewards_earned + $earned_rewards
+                        ]);
+
+
+        
+                        DB::commit();
+        
+                        return $this->success('Great! Job Completed Successfully.', null, null, 201);
+                    }catch(\Exception $e){
+                        
+                        DB::rollBack();
+                        Log::error('Oops! Failed to complete job. Error in complete job.');
+                        return $this->error('Oops! Something Went Wrong.', null, null, 500);
+                    }
                 }
+
+                
             }catch(\Exception $e){
                 return $this->error('Oops! Something went wrong.', null, null, 500);
             }
