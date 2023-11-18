@@ -86,7 +86,7 @@ class GenerateBiddingList extends Command
                         $check_if_the_last_bidder_have_any_certificate = CaregiverCertificate::where('user_id', $get_last_bidder->user_id)->count();
                         $get_bid_placing_time_of_the_last_bidder = CaregiverBidding::where('job_id', $bid_ended_job->job_id)->where('user_id', $get_last_bidder->user_id)->first();
 
-                        if (($get_total_rewards_of_the_bidder > $get_total_rewards_of_the_last_bidder) && ($get_total_strikes_of_the_bidder < $get_total_strikes_of_the_last_bidder) && ($get_total_flags_of_the_bidder < $get_total_flags_of_the_last_bidder) && ($check_if_bidder_have_any_certificate > $check_if_the_last_bidder_have_any_certificate) && ($get_bid_placing_time_of_the_bidder->created_at->gt($get_bid_placing_time_of_the_last_bidder->created_at))) {
+                        if (($get_total_rewards_of_the_bidder > $get_total_rewards_of_the_last_bidder) && ($get_total_strikes_of_the_bidder < $get_total_strikes_of_the_last_bidder) && ($get_total_flags_of_the_bidder < $get_total_flags_of_the_last_bidder) && ($check_if_bidder_have_any_certificate > $check_if_the_last_bidder_have_any_certificate) && (Carbon::parse($get_bid_placing_time_of_the_bidder->created_at)->gt( Carbon::parse($get_bid_placing_time_of_the_last_bidder->created_at) ) )) {
                             try {
                                 DB::beginTransaction();
 

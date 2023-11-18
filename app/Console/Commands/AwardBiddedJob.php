@@ -37,6 +37,10 @@ class AwardBiddedJob extends Command
      */
     public function handle()
     {
-        return 0;
+        // try{
+
+        // }catch(){
+
+        // }
     }
 }
