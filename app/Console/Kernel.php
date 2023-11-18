@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('notStartedUpcomingJobStatusSwitcher:cron')->everyMinute();
         $schedule->command('updateBiddedJobStatus:cron')->everyMinute();
         $schedule->command('generateBiddingList:cron')->everyThreeMinutes();
-        $schedule->command('awardBiddedJob:cron')->everyFiveMinutes();
+        $schedule->command('awardBiddedJob:cron')->everyMinute();
     }
 
     /**
