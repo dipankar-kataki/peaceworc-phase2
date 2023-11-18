@@ -182,6 +182,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('logout', [LogOutController::class, 'logout']);
 });
 
+
+/* Below code id for testing purpose only */
+
 Route::post('test-full-screen-notification', [SendNotificationController::class, 'testFullNotification']);
 
 Route::post('check-notification', function(\Illuminate\Http\Request $request){
