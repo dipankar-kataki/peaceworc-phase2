@@ -36,7 +36,7 @@ class MapLocationController extends Controller
                 
             }
 
-            return $this->success('Great! Coordinated Fetched Successfully', $get_locations, null, 200);
+            return $this->success('Great! Coordinates Fetched Successfully', $get_locations, null, 200);
 
         }
 
