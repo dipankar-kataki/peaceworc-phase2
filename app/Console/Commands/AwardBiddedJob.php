@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class AwardBiddedJob extends Command
 {
@@ -39,8 +40,11 @@ class AwardBiddedJob extends Command
     {
         // try{
 
-        // }catch(){
-
+        // }catch(\Exception $e){
+        //     Log::error('Oops! Something went wrong in awarding bidded cron job.');
+        //     var_dump('Error ==>', $e->getMessage());
+        //     Log::info('Awarding bidded job cron error. Command exceuted In : ' . Carbon::now());
+        //     Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
         // }
     }
 }

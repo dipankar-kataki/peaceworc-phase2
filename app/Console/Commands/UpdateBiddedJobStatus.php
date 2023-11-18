@@ -47,7 +47,7 @@ class UpdateBiddedJobStatus extends Command
             $get_bidded_jobs = AgencyPostJob::where('status', JobStatus::BiddingStarted)->get();
             foreach( $get_bidded_jobs as $job){
 
-                if(!$job->bidding_end_time->gt(Carbon::now())){
+                if(!Carbon::parse($job->bidding_end_time)->gt(Carbon::now())){
                     try{
                         DB::beginTransaction();
 
