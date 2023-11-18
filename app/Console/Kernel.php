@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         Commands\OpenJobStatusSwitcher::class,
         Commands\UpdateBiddedJobStatus::class,
         Commands\GenerateBiddingList::class,
+        Commands\AwardBiddedJob::class,
 
     ];
 
@@ -31,6 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('notStartedUpcomingJobStatusSwitcher:cron')->everyMinute();
         $schedule->command('updateBiddedJobStatus:cron')->everyMinute();
         $schedule->command('generateBiddingList:cron')->everyThreeMinutes();
+        $schedule->command('awardBiddedJob:cron')->everyFiveMinutes();
     }
 
     /**
