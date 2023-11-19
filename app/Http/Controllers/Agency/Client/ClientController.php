@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agency\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\AgencyPostJob;
 use App\Models\ClientProfile;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -155,11 +156,17 @@ class ClientController extends Controller
             return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
         }else{
             try{
-                ClientProfile::where('id', $request->client_id)->update([
-                    'status' => 0
-                ]);
-
-                return $this->success('Great! Client Deleted Successfully.', null, null, 200);
+                $check_if_client_exist_in_job_table = AgencyPostJob::where('client_id', $request->client_id)->exists();
+                if($check_if_client_exist_in_job_table){
+                    return $this->error('Oops! This client cannot be deleted as it is associated with a job.', null, null, 400);
+                }else{
+                    ClientProfile::where('id', $request->client_id)->update([
+                        'status' => 0
+                    ]);
+    
+                    return $this->success('Great! Client Deleted Successfully.', null, null, 200);
+                }
+                
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong.', null, null, 500);
             }

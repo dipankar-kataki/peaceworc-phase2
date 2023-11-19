@@ -200,6 +200,32 @@ class BasicProfileController extends Controller
         }
     }
 
+    public function deleteEducation(Request $request){
+
+        $validator = Validator::make($request->all(),[
+            'education_id' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops! Validation Failed. '.$validator->errors()->first(), null, null, 400);
+        }else{
+            try{
+                $check_if_education_exists = CaregiverEducation::where('id', $request->education_id)->where('user_id', Auth::user()->id)->exists();
+
+                if(!$check_if_education_exists){
+                    return $this->error('Oops! Failed to delete education. Details does not exist.', null, null, 400);
+                }else{
+                    $find_education = CaregiverEducation::where('user_id', Auth::user()->id)->where('id', $request->education_id)->first();
+                    $find_education->delete();
+
+                    return $this->success('Great! Education details deleted successfully', null, null, 200);
+                }
+            }catch(\Exception $e){
+                return $this->error('Oops! Something went wrong.', null, null, 500);
+            }
+        }
+    }
+
     public function addCertificate(Request $request){
         $validator = Validator::make($request->all(), [
             'certificate_or_course' => 'required',
@@ -266,6 +292,31 @@ class BasicProfileController extends Controller
                 
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong.', null, null, 500);
+            }
+        }
+    }
+
+    public function deleteCertificate(Request $request){
+        $validator = Validator::make($request->all(), [
+            'certificate_id' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops! Validation Failed. '.$validator->errors()->first(), null, null, 400);
+        }else{
+            try{
+                $check_if_certificate_exists = CaregiverCertificate::where('id', $request->certificate_id)->where('user_id', Auth::user()->id)->exists();
+
+                if(!$check_if_certificate_exists){
+                    return $this->error('Oops! Failed to delete certificate. Details does not exist.', null, null, 400);
+                }else{
+                    $find_certificate = CaregiverCertificate::where('user_id', Auth::user()->id)->where('id', $request->certificate_id)->first();
+                    $find_certificate->delete();
+
+                    return $this->success('Great! Certificate deleted successfully', null, null, 200);
+                }
+            }catch(\Exception $e){
+                return $this->error('Oops! Something went wrong.', null, null, 500);
             }
         }
     }

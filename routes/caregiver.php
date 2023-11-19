@@ -84,11 +84,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::group(['prefix' => 'education'],function(){
             Route::post('add', [BasicProfileController::class, 'addEducation']);
             Route::post('edit', [BasicProfileController::class, 'editEducation']);
+            Route::post('delete', [BasicProfileController::class, 'deleteEducation']);
         });
 
         Route::group(['prefix' => 'certificate'],function(){
             Route::post('add', [BasicProfileController::class, 'addCertificate']);
             Route::post('edit', [BasicProfileController::class, 'editCertificate']);
+            Route::post('delete', [BasicProfileController::class, 'deleteCertificate']);
         });
 
         Route::post('change-photo', [BasicProfileController::class, 'changePhoto']);

@@ -187,15 +187,15 @@ class PostJobController extends Controller
     public function deleteJob(){
 
         if(!isset($_GET['id'])){
-            return $this->error('Oops! Something Went Wrong. Failed To Delete Job.', null, null, 500);
+            return $this->error('Oops! Something Went Wrong. Failed To Delete Job.', null, null, 400);
         }else{
             if($_GET['id'] == null){
-                return $this->error('Oops! Something Went Wrong. Invalid Request', null, null, 500);
+                return $this->error('Oops! Something Went Wrong. Invalid Request', null, null, 400);
             }else{
                 try{
                     $check_if_job_exists = AgencyPostJob::where('id', $_GET['id'])->exists();
                     if(!$check_if_job_exists){
-                        return $this->error('Oops! Failed To Delete. Job Not Found', null, null, 500);
+                        return $this->error('Oops! Failed To Delete. Job Not Found', null, null, 400);
                     }else{
                         $check_if_job_is_accepted = AcceptJob::where('job_id', $_GET['id'])->exists();
 
