@@ -14,7 +14,7 @@ class AddColumnFlagNumberToCaregiverFlagsTable extends Migration
     public function up()
     {
         Schema::table('caregiver_flags', function (Blueprint $table) {
-            $table->integer('flag_number')->after('rewards_loose');
+            $table->integer('flag_number')->default(0)->after('rewards_loose');
         });
     }
 

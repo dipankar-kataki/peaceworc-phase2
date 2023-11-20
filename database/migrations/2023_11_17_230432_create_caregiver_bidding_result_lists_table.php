@@ -17,7 +17,7 @@ class CreateCaregiverBiddingResultListsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('job_id');
             $table->unsignedBigInteger('user_id');
-            $table->integer('caregiver_bid_win_position');
+            $table->integer('caregiver_bid_win_position')->default(0);
             $table->boolean('is_bidded_job_awarded')->default(0);
             $table->timestamps();
 

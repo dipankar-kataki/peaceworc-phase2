@@ -18,7 +18,7 @@ class AddColumnStrikeStartTimeAndEndTimeToStrikesTable extends Migration
             $table->string('end_date_time')->after('start_date_time');
             $table->time('banned_from_bidding')->after('end_date_time');
             $table->time('banned_from_quick_call')->after('banned_from_bidding');
-            $table->integer('rewards_loose')->after('banned_from_quick_call');  
+            $table->integer('rewards_loose')->default(0)->after('banned_from_quick_call');  
         });
     }
 
