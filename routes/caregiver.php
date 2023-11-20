@@ -17,6 +17,7 @@ use App\Http\Controllers\Caregiver\Job\StartJobController;
 use App\Http\Controllers\Caregiver\Job\UpcomingController;
 use App\Http\Controllers\Caregiver\Location\LocationController;
 use App\Http\Controllers\Caregiver\MapLocation\MapLocationController;
+use App\Http\Controllers\Caregiver\Notification\CaregiverNotificationController;
 use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
 use App\Http\Controllers\Caregiver\Rating\RatingController;
 use App\Http\Controllers\Caregiver\Registration\ProfileRegistrationController;
@@ -93,6 +94,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post('delete', [BasicProfileController::class, 'deleteCertificate']);
         });
 
+        
+
         Route::post('change-photo', [BasicProfileController::class, 'changePhoto']);
 
         Route::post('change-password', [BasicProfileController::class, 'changePassword']);
@@ -157,6 +160,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'rating'], function(){
         Route::get('get', [RatingController::class, 'getCaregiverRating']);
         Route::post('add-agency-rating', [RatingController::class, 'addAgencyRating']);
+    });
+
+    Route::group(['prefix' => 'notification'], function(){
+        Route::get('unread-notification', [CaregiverNotificationController::class, 'getUnreadNotification']);
+        Route::post('mark-as-read', [CaregiverNotificationController::class, 'markNotificationAsRead']);
+        Route::get('unread-count', [CaregiverNotificationController::class, 'getUnreadNotificationCount']);
     });
 
 
