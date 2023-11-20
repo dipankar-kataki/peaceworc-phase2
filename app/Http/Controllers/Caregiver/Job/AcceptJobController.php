@@ -125,10 +125,39 @@ class AcceptJobController extends Controller
                                 
 
                             }else{
-                                $get_last_accepted_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->latest()->first(); 
+                                $check_if_user_has_accepted_any_job = AcceptJob::where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->exists();
 
-                                return $this->success('Great! ', $get_last_accepted_job, null, 200 );
-                                if( $get_last_accepted_job != null){
+                                if(!$check_if_user_has_accepted_any_job){
+                                    try{
+                                        DB::beginTransaction();
+
+                                        AcceptJob::create([
+                                            'user_id' => Auth::user()->id,
+                                            'job_id' => $request->job_id,
+                                            'status' => JobStatus::JobAccepted,
+                                            'job_accepted_time' => Carbon::now()
+                                        ]);
+
+                                        AgencyPostJob::where('id', $request->job_id)->update([
+                                            'status' => JobStatus::JobAccepted
+                                        ]);
+
+                                        DB::commit();
+
+                                        return $this->success('Great! Job accepted successfully.', null, null, 201);
+
+
+                                    }catch(\Exception $e){
+                                        // If an error occurs, rollback the transaction
+                                        DB::rollBack();
+                                        // Log the error
+                                        Log::error('Error in accept job transaction');
+
+                                        return $this->error('Oops! Failed to accept the job. Something went wrong.', null, null, 500);
+                                    }
+                                }else{
+                                    $get_last_accepted_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->latest()->first(); 
+
 
                                     $end_date_time_of_last_accepted_job = Carbon::parse($get_last_accepted_job->end_date.''.$get_last_accepted_job->end_time);
                                 
@@ -169,35 +198,9 @@ class AcceptJobController extends Controller
                                     }else{
                                         return $this->error('Oops! Failed to accept the job. There must be a minimum 3-hour difference from the end of the last job to accept a new one.', null, null, 200);
                                     }
-                                }else{
-                                    try{
-                                        DB::beginTransaction();
-
-                                        AcceptJob::create([
-                                            'user_id' => Auth::user()->id,
-                                            'job_id' => $request->job_id,
-                                            'status' => JobStatus::JobAccepted,
-                                            'job_accepted_time' => Carbon::now()
-                                        ]);
-
-                                        AgencyPostJob::where('id', $request->job_id)->update([
-                                            'status' => JobStatus::JobAccepted
-                                        ]);
-
-                                        DB::commit();
-
-                                        return $this->success('Great! Job accepted successfully.', null, null, 201);
-
-
-                                    }catch(\Exception $e){
-                                        // If an error occurs, rollback the transaction
-                                        DB::rollBack();
-                                        // Log the error
-                                        Log::error('Error in accept job transaction');
-
-                                        return $this->error('Oops! Failed to accept the job. Something went wrong.', null, null, 500);
-                                    }
                                 }
+
+                                
 
                                 
                             }
