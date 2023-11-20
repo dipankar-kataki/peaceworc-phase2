@@ -107,7 +107,7 @@ class BasicProfileController extends Controller
             $details = [
                 'profile_completion_status' => $get_profile_status,
                 'basic_info' => $get_details,
-                'rewards' => $get_rewards_earned->rewards_earned,
+                'rewards' => $get_rewards_earned->rewards_earned ?? 0,
                 'strikes' => $strikes,
                 'flags' => $flags,
                 'education' => $get_education,
