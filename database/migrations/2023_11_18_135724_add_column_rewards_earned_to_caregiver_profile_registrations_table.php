@@ -14,7 +14,7 @@ class AddColumnRewardsEarnedToCaregiverProfileRegistrationsTable extends Migrati
     public function up()
     {
         Schema::table('caregiver_profile_registrations', function (Blueprint $table) {
-            $table->integer('rewards_earned')->after('certificate');
+            $table->integer('rewards_earned')->default(0)->after('certificate');
         });
     }
 
