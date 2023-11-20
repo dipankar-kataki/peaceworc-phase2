@@ -19,9 +19,7 @@ class AcceptJobController extends Controller
 {
     use ApiResponse;
     public function acceptJob(Request $request){
-
-        // return 'Url hiting';
-
+        
         $validator = Validator::make($request->all(),[
             'job_id' => 'required'
         ]);
@@ -175,6 +173,8 @@ class AcceptJobController extends Controller
                     }else{
                         return $this->error('Oops! Profile not approved. Please wait for your profile to get approved to accept jobs.', null, null, 200);
                     }
+                }else{
+                    return $this->error('Oops! Profile not approved yet. Please complete your profile to accept job.', null, null, 400);
                 }
             }catch(\Exception $e){
                 return $this->error('Oops! Something Went Wrong. Failed To Accept job.', null, null, 500);
