@@ -127,6 +127,7 @@ class AcceptJobController extends Controller
                             }else{
                                 $get_last_accepted_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->latest()->first(); 
 
+                                return $this->success('Great! ', $get_last_accepted_job, null, 200 );
                                 if( $get_last_accepted_job != null){
 
                                     $end_date_time_of_last_accepted_job = Carbon::parse($get_last_accepted_job->end_date.''.$get_last_accepted_job->end_time);
