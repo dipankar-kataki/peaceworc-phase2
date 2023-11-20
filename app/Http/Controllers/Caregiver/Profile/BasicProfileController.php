@@ -115,7 +115,7 @@ class BasicProfileController extends Controller
             ];
             return $this->success('Great! Profile Fetched Successfully.', $details, null, 200);
         }catch(\Exception $e){
-            return $this->error('Oops! Something Went Wrong.'.$e, null, null, 500);
+            return $this->error('Oops! Something Went Wrong.', null, null, 500);
         }
     }
 

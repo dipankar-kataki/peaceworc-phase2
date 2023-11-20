@@ -20,6 +20,8 @@ class AcceptJobController extends Controller
     use ApiResponse;
     public function acceptJob(Request $request){
 
+        return 'Url hiting';
+
         $validator = Validator::make($request->all(),[
             'job_id' => 'required'
         ]);
@@ -175,7 +177,7 @@ class AcceptJobController extends Controller
                     }
                 }
             }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong. Failed To Accept job.'.$e, null, null, 500);
+                return $this->error('Oops! Something Went Wrong. Failed To Accept job.', null, null, 500);
             }
         }  
     }
