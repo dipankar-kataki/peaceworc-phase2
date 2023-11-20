@@ -20,7 +20,7 @@ class AcceptJobController extends Controller
     use ApiResponse;
     public function acceptJob(Request $request){
 
-        return 'Url hiting';
+        // return 'Url hiting';
 
         $validator = Validator::make($request->all(),[
             'job_id' => 'required'
