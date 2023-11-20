@@ -177,7 +177,7 @@ class AcceptJobController extends Controller
                     return $this->error('Oops! Profile not approved yet. Please complete your profile to accept job.', null, null, 400);
                 }
             }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong. Failed To Accept job.'. $e->getMessage(), null, null, 500);
+                return $this->error('Oops! Something Went Wrong. Failed To Accept job.'. $e->getMessage().'line no -->'.$e->getLine(), null, null, 500);
             }
         }  
     }
