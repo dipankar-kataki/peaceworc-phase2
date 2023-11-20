@@ -50,7 +50,7 @@ class AcceptJobController extends Controller
                                         if($active_job->job->job_type == JobStatus::QuickCall){
                                             return $this->error('Oops! A caregiver can accept one quick call job at a time.', null, null, 400);
                                         }else{
-                                            $get_last_accepted_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->last(); 
+                                            $get_last_accepted_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->latest()->first(); 
         
                                             $end_date_time_of_last_accepted_job = Carbon::parse($get_last_accepted_job->end_date.''.$get_last_accepted_job->end_time);
 
@@ -125,7 +125,7 @@ class AcceptJobController extends Controller
                                 
 
                             }else{
-                                $get_last_accepted_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->last(); 
+                                $get_last_accepted_job = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->latest()->first(); 
                                 $end_date_time_of_last_accepted_job = Carbon::parse($get_last_accepted_job->end_date.''.$get_last_accepted_job->end_time);
                                 
                                 $about_to_accept_job_start_date_time = Carbon::parse($get_request_job->start_date.''.$get_request_job->start_time);
