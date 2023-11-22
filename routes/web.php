@@ -22,7 +22,7 @@ Route::get('/', function () {
 //     return view('admin.auth.login');
 // })->name('web.login');
 
-// Route::get('', [SiteController::class, 'index'])->name('site.index');
-// Route::post('contact', [SiteController::class, 'contact'])->name('site.contact');
-// Route::get('terms-and-conditions', [SiteController::class, 'terms'])->name('site.terms');
-// Route::get('privacy-policy', [SiteController::class, 'privacy'])->name('site.privacy');
+Route::get('', [SiteController::class, 'index'])->name('site.index');
+Route::post('contact', [SiteController::class, 'contact'])->name('site.contact');
+Route::get('terms-and-conditions', [SiteController::class, 'terms'])->name('site.terms');
+Route::get('privacy-policy', [SiteController::class, 'privacy'])->name('site.privacy');
