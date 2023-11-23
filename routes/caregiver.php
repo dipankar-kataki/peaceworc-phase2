@@ -6,6 +6,7 @@ use App\Http\Controllers\Caregiver\Auth\LogOutController;
 use App\Http\Controllers\Caregiver\Auth\SignUpController;
 use App\Http\Controllers\Caregiver\Bidding\BiddingController;
 use App\Http\Controllers\Caregiver\Document\DocumentUploadController;
+use App\Http\Controllers\Caregiver\Flag\CaregiverFlagController;
 use App\Http\Controllers\Caregiver\Job\AcceptJobController;
 use App\Http\Controllers\Caregiver\Job\CompleteJobController;
 use App\Http\Controllers\Caregiver\Job\GetBiddingResultsController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\Caregiver\Profile\BasicProfileController;
 use App\Http\Controllers\Caregiver\Rating\RatingController;
 use App\Http\Controllers\Caregiver\Registration\ProfileRegistrationController;
 use App\Http\Controllers\Caregiver\Status\StatusInformationController;
+use App\Http\Controllers\Caregiver\Strike\CaregiverStrikeController;
 use App\Http\Controllers\Caregiver\Stripe\StripePaymentController;
 use App\Http\Controllers\Chatting\ChattingController;
 use App\Http\Controllers\TempTesting\SendNotificationController;
@@ -168,6 +170,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('unread-count', [CaregiverNotificationController::class, 'getUnreadNotificationCount']);
     });
 
+    Route::group(['prefix' => 'strike'], function(){
+        Route::get('get-active-strike', [CaregiverStrikeController::class, 'getActiveStrikes']);
+    });
+
+    Route::group(['prefix' => 'flag'], function(){
+        Route::get('get-active-flag', [CaregiverFlagController::class, 'getActiveFlags']);
+    });
 
     Route::group(['prefix' => 'map-locations'], function(){
         Route::get('get-locations', [MapLocationController::class, 'getJobLocations']);
