@@ -2,12 +2,15 @@
 
 namespace App\Console\Commands;
 
+use App\Common\AgencyNotificationType;
 use App\Common\JobStatus;
+use App\Models\AgencyNotification;
 use App\Models\AgencyPostJob;
 use App\Traits\JobNotCompleteNotification;
 use App\Traits\WelcomeNotification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class JobRemover extends Command
@@ -61,12 +64,34 @@ class JobRemover extends Command
                 foreach($removeExpiredQuickCallJob as $job){
                    $end_date_time = Carbon::parse($job->end_date.''.$job->end_time);
                    if(!$end_date_time->gt($current_time)){
-                        AgencyPostJob::where('id', $job->id)->update([
-                            'status' => JobStatus::JobExpired
-                        ]);
 
-                        Log::info('Job -->'. $job->id.' Updated as Expired');
-                        Log::info('Job Remover Command Exceuted In ===> : '.Carbon::now() );
+                        try{
+                            DB::beginTransaction();
+
+                            AgencyPostJob::where('id', $job->id)->update([
+                                'status' => JobStatus::JobExpired
+                            ]);
+
+                            AgencyNotification::create([
+                                'user_id' => $job->user_id,
+                                'content' => 'Hey There, the Job named "'.$job->title.'" has expired.',
+                                'type' => AgencyNotificationType::Job,
+                            ]);
+
+                            DB::commit();
+    
+                            Log::info('Job -->'. $job->id.' Updated as Expired');
+                            Log::info('Job Remover Command Exceuted In ===> : '.Carbon::now() );
+
+                        }
+                        catch(\Exception $e){
+                            DB::rollBack();
+
+                            Log::info('Oops! Something went wrong in auto job remover');
+                            var_dump('Error ==>'. $e->getMessage());
+                            Log::info('Job Remover Error Command Exceuted In : '.Carbon::now() );
+                        }
+                        
                    }
 
                 }

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Common\CaregiverNotificationType;
 use App\Common\JobStatus;
 use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
@@ -9,6 +10,7 @@ use App\Models\CaregiverBidding;
 use App\Models\CaregiverBiddingResultList;
 use App\Models\CaregiverCertificate;
 use App\Models\CaregiverFlag;
+use App\Models\CaregiverNotification;
 use App\Models\CaregiverProfileRegistration;
 use App\Models\Reward;
 use App\Models\Strike;
@@ -68,6 +70,8 @@ class GenerateBiddingList extends Command
                 $taskCounter = 0;
                 $ongoing_job_id = 0;
                 $bidding_end_time = 0;
+                $bidder_user_id = 0;
+                $bidded_job_title = null;
 
                 foreach ($get_bidding_ended_jobs as $bid_ended_job) {
                     $get_total_rewards_of_the_bidder = CaregiverProfileRegistration::where('user_id', $bid_ended_job->user_id)->first();
@@ -178,6 +182,8 @@ class GenerateBiddingList extends Command
                     $taskCounter++;
 
                     $bidding_end_time = $bid_ended_job->job->bidding_end_time;
+                    $bidder_user_id = $bid_ended_job->user_id;
+                    $bidded_job_title = $bid_ended_job->job->title;
 
                 }
 
@@ -195,6 +201,13 @@ class GenerateBiddingList extends Command
     
                                 CaregiverBidding::where('job_id', $ongoing_job_id)->update([
                                     'is_bidding_list_generated' => 1
+                                ]);
+
+                                CaregiverNotification::create([
+                                    'user_id' => $bidder_user_id,
+                                    'content' => 'Hey there, the bidding list has been generated for the job "'.$bidded_job_title.'". Please wait for the results to be declared.',
+                                    'type' => CaregiverNotificationType::Job,
+                                    
                                 ]);
     
                                 DB::commit();

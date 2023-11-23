@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCaregiverNotificationsTable extends Migration
+class CreateAgencyNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCaregiverNotificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('caregiver_notifications', function (Blueprint $table) {
+        Schema::create('agency_notifications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->text('content');
@@ -21,8 +21,6 @@ class CreateCaregiverNotificationsTable extends Migration
             $table->boolean('mark_as_read')->default(0);
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -33,6 +31,6 @@ class CreateCaregiverNotificationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('caregiver_notifications');
+        Schema::dropIfExists('agency_notifications');
     }
 }
