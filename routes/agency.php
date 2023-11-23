@@ -17,6 +17,7 @@ use App\Http\Controllers\Agency\Job\CompletedJob\CompletedJobController;
 use App\Http\Controllers\Agency\Job\ExpiredJob\ExpiredJobController;
 use App\Http\Controllers\Agency\Job\PostJobController;
 use App\Http\Controllers\Agency\Job\Search\SearchJobController;
+use App\Http\Controllers\Agency\Notification\AgencyNotificationController;
 use App\Http\Controllers\Agency\Owner\OwnerProfileController;
 use App\Http\Controllers\Agency\Payments\AgencyPaymentController;
 use App\Http\Controllers\Agency\Rating\RatingController;
@@ -114,6 +115,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'rating'], function(){
         Route::get('get', [RatingController::class, 'getAgencyRating']);
         Route::post('add-caregiver-rating', [RatingController::class, 'addCaregiverRating']);
+    });
+
+    Route::group(['prefix' => 'notification'], function(){
+        Route::get('unread-notification', [AgencyNotificationController::class, 'getUnreadNotification']);
+        Route::post('mark-as-read', [AgencyNotificationController::class, 'markNotificationAsRead']);
+        Route::get('unread-count', [AgencyNotificationController::class, 'getUnreadNotificationCount']);
     });
 
     Route::group(['prefix' => 'client'], function(){

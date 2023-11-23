@@ -13,7 +13,7 @@ class AgencyNotification extends Model
     protected $table = 'agency_notifications';
     protected $guarded = [];
 
-    public function getTypeAtrribute($value){
+    public function getTypeAttribute($value){
         if($value == 1){
             return 'Job';
         }else if($value == 2){
