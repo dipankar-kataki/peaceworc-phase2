@@ -8,6 +8,7 @@ use App\Http\Controllers\Caregiver\Bidding\BiddingController;
 use App\Http\Controllers\Caregiver\Document\DocumentUploadController;
 use App\Http\Controllers\Caregiver\Flag\CaregiverFlagController;
 use App\Http\Controllers\Caregiver\Job\AcceptJobController;
+use App\Http\Controllers\Caregiver\Job\AwardedJobController;
 use App\Http\Controllers\Caregiver\Job\CompleteJobController;
 use App\Http\Controllers\Caregiver\Job\GetBiddingResultsController;
 use App\Http\Controllers\Caregiver\Job\JobController;
@@ -144,6 +145,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::group(['prefix' => 'bidding'], function(){
             Route::post('submit-bid', [BiddingController::class, 'submitBid']);
             Route::get('get-results', [GetBiddingResultsController::class, 'getBiddingResult']);
+        });
+
+        Route::group(['prefix' => 'awarded-job'], function(){
+            Route::post('accept', [AwardedJobController::class, 'acceptAwardedJob']);
         });
 
         Route::post('search', [SearchJobController::class, 'search']);

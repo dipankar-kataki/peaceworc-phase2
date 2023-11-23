@@ -49,13 +49,11 @@ class OpenJobStatusSwitcher extends Command
                 foreach($jobs as $item){
     
                     $requested_start_date_time_for_the_job = Carbon::parse($item->start_date.''.$item->start_time);
+                    $requested_end_date_time_for_the_job = Carbon::parse($item->end_date.''.$item->end_time);
     
                     $current_time = Carbon::now();
     
-                    $to = Carbon::createFromFormat('Y-m-d H:s:i', $current_time);
-                    $from_start_date = Carbon::createFromFormat('Y-m-d H:s:i', $requested_start_date_time_for_the_job);
-    
-                    $diff_in_hours = $to->diffInHours($from_start_date);
+                    $diff_in_hours = $current_time->diffInHours($requested_start_date_time_for_the_job);
     
                     if( $diff_in_hours <= 5){
     
@@ -63,11 +61,20 @@ class OpenJobStatusSwitcher extends Command
                             'status' => JobStatus::QuickCall
                         ]);
 
-                        Log::info('Great! Job updated as Quick Call.');
+                        Log::info('Great! Job ==> '.$item->id.' updated as Quick Call.');
 
-                        Log::info('Open Job Switcher Command Exceuted In : '.Carbon::now() );
+                        Log::info('Open Job Status Switcher Command Exceuted In : '.Carbon::now() );
                         Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
     
+                    }else if(!$requested_end_date_time_for_the_job->gt($current_time)){
+                        AgencyPostJob::where('id', $item->id)->update([
+                            'status' => JobStatus::JobExpired
+                        ]);
+
+                        Log::info('Great! Job ==> '.$item->id.' updated as Expired.');
+
+                        Log::info('Open Job Status Switcher Command Exceuted In : '.Carbon::now() );
+                        Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
                     }
                 }
             }

@@ -2,13 +2,16 @@
 
 namespace App\Console\Commands;
 
+use App\Common\CaregiverNotificationType;
 use App\Common\FlagReason;
 use App\Common\JobStatus;
 use App\Common\StrikeReason;
 use App\Models\AgencyPostJob;
 use App\Models\AppDeviceToken;
+use App\Models\CaregiverBidding;
 use App\Models\CaregiverBiddingResultList;
 use App\Models\CaregiverFlag;
+use App\Models\CaregiverNotification;
 use App\Models\CaregiverProfileRegistration;
 use App\Models\Reward;
 use App\Models\Strike;
@@ -61,14 +64,15 @@ class AwardBiddedJob extends Command
 
                 $job_start_date_time = Carbon::parse($bid_result->job->start_date.''.$bid_result->job->start_time);
 
-                $time_diff = $job_start_date_time->diff(Carbon::now());
-                $time_diff_in_hours = $time_diff->format('%h');
+                $current_time = Carbon::now();
+
+                $time_diff_in_hours = $current_time->diffInHours($job_start_date_time);
 
                 if($time_diff_in_hours > 5){
                     if($bid_result->is_notification_sent == 0){
 
                         $data = [
-                            'message' => 'Hurray! You have won the bid. Please click accept button to Accept the job',
+                            'message' => 'Hurray! You won the bid. Please click the accept button to confirm the job.',
                             'title' => 'Bidding Results Declared',
         
                             'job_id' => $bid_result->job->id,
@@ -181,6 +185,10 @@ class AwardBiddedJob extends Command
                             'status' => JobStatus::QuickCall
                         ]);
 
+                        CaregiverBidding::where('job_id', $bid_result->job_id)->update([
+                            'status' => JobStatus::JobNotAccepted
+                        ]);
+
                         CaregiverBiddingResultList::where('job_id', $bid_result->job_id)->update([
                             'is_job_rejected' => 1
                         ]);
@@ -199,6 +207,12 @@ class AwardBiddedJob extends Command
                                 'strike_number' => $strike_number
                             ]);
 
+                            CaregiverNotification::create([
+                                'user_id' => $bid_result->user_id,
+                                'content' => 'Hey there, you received a STRIKE for not accepting the job named "'.$bid_result->job->title.'" on time.',
+                                'type' => CaregiverNotificationType::Strike
+                            ]);
+
 
                         }else if($get_strikes == 0 && $get_flags != 0){
                             CaregiverFlag::create([
@@ -213,6 +227,12 @@ class AwardBiddedJob extends Command
                                 'flag_number' => $flag_number
                             ]);
 
+                            CaregiverNotification::create([
+                                'user_id' => $bid_result->user_id,
+                                'content' => 'Hey there, you received a FLAG for not accepting the job named "'.$bid_result->job->title.'" on time.',
+                                'type' => CaregiverNotificationType::Flag
+                            ]);
+
                         }else if($get_strikes == 0 && $get_flags == 0){
                             CaregiverFlag::create([
                                 'user_id' => $bid_result->user_id,
@@ -224,6 +244,12 @@ class AwardBiddedJob extends Command
                                 'banned_from_quick_call' => $banned_from_quick_call,
                                 'rewards_loose' => $loss_of_rewards,
                                 'flag_number' => $flag_number
+                            ]);
+
+                            CaregiverNotification::create([
+                                'user_id' => $bid_result->user_id,
+                                'content' => 'Hey there, you received a FLAG for not accepting the job named "'.$bid_result->job->title.'" on time.',
+                                'type' => CaregiverNotificationType::Flag
                             ]);
                         }
 

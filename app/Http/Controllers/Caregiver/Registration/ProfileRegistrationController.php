@@ -108,7 +108,7 @@ class ProfileRegistrationController extends Controller
                                     'is_basic_info_added' => 1
                                 ]);
                             }catch(\Exception $e){
-                                Log::error('Oops! Something Went Wrong. Registration Failed', $e->getMessage());
+                                Log::error('Oops! Something Went Wrong. Registration Failed');
                             }
                             
                             return $this->success('Great! Basic Information Added Successfully.', null, null, 201);
@@ -119,7 +119,7 @@ class ProfileRegistrationController extends Controller
                 }
                 
             }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong.'.$e->getMessage(), null, null, 500);
+                return $this->error('Oops! Something Went Wrong.', null, null, 500);
             }
             
         }
@@ -152,7 +152,7 @@ class ProfileRegistrationController extends Controller
                         'is_optional_info_added' => 1
                     ]);
                 }catch(\Exception $e){
-                    Log::error('Oops! Something Went Wrong. Registration Failed', $e->getMessage());
+                    Log::error('Oops! Something Went Wrong. Registration Failed',);
                 }
             }
             return $this->success('Great! Optional Information Added Successfully.', null, null, 201);
