@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Caregiver\Job;
 
+use App\Common\AgencyNotificationType;
+use App\Common\CaregiverNotificationType;
 use App\Common\JobStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AcceptJob;
+use App\Models\AgencyNotification;
 use App\Models\AgencyPostJob;
+use App\Models\CaregiverNotification;
 use App\Models\CaregiverStatusInformation;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -74,6 +78,18 @@ class AcceptJobController extends Controller
                                                         'status' => JobStatus::JobAccepted
                                                     ]);
 
+                                                    CaregiverNotification::create([
+                                                        'user_id' => Auth::user()->id,
+                                                        'content' => 'Hurray! The job named "'.$get_request_job->title.'" has been accepted successfully.',
+                                                        'type' => CaregiverNotificationType::Job
+                                                    ]);
+
+                                                    AgencyNotification::create([
+                                                        'user_id' => Auth::user()->id,
+                                                        'content' => 'Hurray! Your posted job named "'.$get_request_job->title.'" has been accepted successfully by '.Auth::user()->name,
+                                                        'type' => AgencyNotificationType::Job
+                                                    ]);
+
                                                     DB::commit();
 
                                                     return $this->success('Great! Job accepted successfully.', null, null, 201);
@@ -109,6 +125,18 @@ class AcceptJobController extends Controller
                                             'status' => JobStatus::JobAccepted
                                         ]);
 
+                                        CaregiverNotification::create([
+                                            'user_id' => Auth::user()->id,
+                                            'content' => 'Hurray! The job named "'.$get_request_job->title.'" has been accepted successfully.',
+                                            'type' => CaregiverNotificationType::Job
+                                        ]);
+
+                                        AgencyNotification::create([
+                                            'user_id' => Auth::user()->id,
+                                            'content' => 'Hurray! Your posted job named "'.$get_request_job->title.'" has been accepted successfully by '.Auth::user()->name,
+                                            'type' => AgencyNotificationType::Job
+                                        ]);
+
                                         DB::commit();
 
                                         return $this->success('Great! Job accepted successfully.', null, null, 201);
@@ -140,6 +168,18 @@ class AcceptJobController extends Controller
 
                                         AgencyPostJob::where('id', $request->job_id)->update([
                                             'status' => JobStatus::JobAccepted
+                                        ]);
+
+                                        CaregiverNotification::create([
+                                            'user_id' => Auth::user()->id,
+                                            'content' => 'Hurray! The job named "'.$get_request_job->title.'" has been accepted successfully.',
+                                            'type' => CaregiverNotificationType::Job
+                                        ]);
+
+                                        AgencyNotification::create([
+                                            'user_id' => $get_request_job->user_id,
+                                            'content' => 'Hurray! Your posted job named "'.$get_request_job->title.'" has been accepted successfully by '.Auth::user()->name,
+                                            'type' => AgencyNotificationType::Job
                                         ]);
 
                                         DB::commit();
@@ -178,6 +218,18 @@ class AcceptJobController extends Controller
     
                                             AgencyPostJob::where('id', $request->job_id)->update([
                                                 'status' => JobStatus::JobAccepted
+                                            ]);
+
+                                            CaregiverNotification::create([
+                                                'user_id' => Auth::user()->id,
+                                                'content' => 'Hurray! The job named "'.$get_request_job->title.'" has been accepted successfully.',
+                                                'type' => CaregiverNotificationType::Job
+                                            ]);
+
+                                            AgencyNotification::create([
+                                                'user_id' => Auth::user()->id,
+                                                'content' => 'Hurray! Your posted job named "'.$get_request_job->title.'" has been accepted successfully by '.Auth::user()->name,
+                                                'type' => AgencyNotificationType::Job
                                             ]);
     
                                             DB::commit();

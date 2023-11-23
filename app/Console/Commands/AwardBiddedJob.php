@@ -106,9 +106,6 @@ class AwardBiddedJob extends Command
                                 Log::info('Notification sent cron error. Command exceuted In : ' . Carbon::now());
                                 Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
                             }
-                            
-    
-    
                         }
     
                     }

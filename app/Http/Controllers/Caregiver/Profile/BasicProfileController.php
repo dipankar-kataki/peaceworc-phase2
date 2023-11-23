@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Caregiver\Profile;
 
+use App\Common\CaregiverNotificationType;
 use App\Http\Controllers\Controller;
 use App\Mail\ChangePasswordMail;
 use App\Models\AppDeviceToken;
 use App\Models\CaregiverCertificate;
 use App\Models\CaregiverEducation;
 use App\Models\CaregiverFlag;
+use App\Models\CaregiverNotification;
 use App\Models\CaregiverProfileRegistration;
 use App\Models\CaregiverStatusInformation;
 use App\Models\Flag;
@@ -61,6 +63,12 @@ class BasicProfileController extends Controller
                             $token = $fcm_token;
                     
                             $this->sendWelcomeNotification($token, $message);
+
+                            CaregiverNotification::create([
+                                'user_id' => Auth::user()->id,
+                                'content' => 'Hurray! Password has been changed successfully.',
+                                'type' => CaregiverNotificationType::Security
+                            ]);
             
                             if($update){
                                 return $this->success('Great! Password changed successfully.', null, null, 201);

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Caregiver\Job;
 
+use App\Common\AgencyNotificationType;
+use App\Common\CaregiverNotificationType;
 use App\Common\JobStatus;
 use App\Http\Controllers\Controller;
 use App\Models\AcceptJob;
+use App\Models\AgencyNotification;
 use App\Models\AgencyPostJob;
+use App\Models\CaregiverNotification;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -34,11 +38,11 @@ class StartJobController extends Controller
                 if($check_if_job_is_ongoing ){
                     return $this->error('Oops! Failed To Start Job. One job is already in an ongoing state', null, null, 500);
                 }else{
-                    $get_job_date_time = AgencyPostJob::where('id', $request->job_id)->first(['start_date', 'start_time', 'end_date', 'end_time']);
+                    $get_job = AgencyPostJob::where('id', $request->job_id)->first(['title', 'start_date', 'start_time', 'end_date', 'end_time']);
 
-                    $selected_start_date_time_for_the_job = Carbon::parse($get_job_date_time->start_date.''.$get_job_date_time->start_time);
+                    $selected_start_date_time_for_the_job = Carbon::parse($get_job->start_date.''.$get_job->start_time);
 
-                    $selected_end_date_time_for_the_job = Carbon::parse($get_job_date_time->end_date.''.$get_job_date_time->end_time);
+                    $selected_end_date_time_for_the_job = Carbon::parse($get_job->end_date.''.$get_job->end_time);
                     
 
                     $current_time = Carbon::now();
@@ -66,6 +70,18 @@ class StartJobController extends Controller
             
                                 AgencyPostJob::where('id', $request->job_id)->update([
                                     'status' => JobStatus::OnGoing
+                                ]);
+
+                                CaregiverNotification::create([
+                                    'user_id' => Auth::user()->id,
+                                    'content' => 'Hurray! The job named "'.$get_job->title.'" has been accepted successfully.',
+                                    'type' => CaregiverNotificationType::Job
+                                ]);
+
+                                AgencyNotification::create([
+                                    'user_id' => $get_job->user_id,
+                                    'content' => 'Hurray! Your posted job named "'.$get_job->title.'" has been accepted successfully by '.Auth::user()->name,
+                                    'type' => AgencyNotificationType::Job
                                 ]);
 
                                 DB::commit();

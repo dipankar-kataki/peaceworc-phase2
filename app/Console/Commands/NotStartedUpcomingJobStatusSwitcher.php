@@ -2,13 +2,17 @@
 
 namespace App\Console\Commands;
 
+use App\Common\AgencyNotificationType;
+use App\Common\CaregiverNotificationType;
 use App\Common\FlagReason;
 use App\Common\JobStatus;
 use App\Common\StrikeReason;
 use App\Models\AcceptJob;
+use App\Models\AgencyNotification;
 use App\Models\AgencyPostJob;
 use App\Models\AppDeviceToken;
 use App\Models\CaregiverFlag;
+use App\Models\CaregiverNotification;
 use App\Models\CaregiverProfileRegistration;
 use App\Models\Reward;
 use App\Models\Strike;
@@ -141,10 +145,16 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
 
                         if($diff_between_start_date_and_current_date_in_minutes <= 30){
 
-                            $message= "Hey there you have one job which is not started yet. Please start your job.";
+                            $message= 'Hey there, you have one job named "'.$upcoming->job->title.'" which is not started yet. Please start the job right now.';
                             $token = $get_caregiver_device_token->fcm_token;
                     
                             $this->sendWelcomeNotification($token, $message);
+
+                            CaregiverNotification::create([
+                                'user_id' => $upcoming->user_id,
+                                'content' => 'Hey there, you have one job named "'.$upcoming->job->title.'" which is not started yet. Please start the job right now.',
+                                'type' => CaregiverNotificationType::Job
+                            ]);
 
                             Log::info('Great! Not started upcoming job notification sent.');
 
@@ -161,7 +171,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                 DB::beginTransaction(); 
 
                                 AcceptJob::where('job_id', $upcoming->job_id)->update([
-                                    'status' => JobStatus::QuickCall
+                                    'status' => JobStatus::JobNotStarted
                                 ]);
     
                                 AgencyPostJob::where('id', $upcoming->job_id)->update([
@@ -184,6 +194,12 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                         'strike_number' => $strike_number
                                     ]);
 
+                                    
+                                    CaregiverNotification::create([
+                                        'user_id' => $upcoming->user_id,
+                                        'content' => 'Hey there, you received a STRIKE for not starting the job named "'.$upcoming->job->title.'" on time.',
+                                        'type' => CaregiverNotificationType::Strike
+                                    ]);
 
                                 }else if($get_strikes == 0 && $get_flags != 0){
                                     CaregiverFlag::create([
@@ -198,6 +214,12 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                         'flag_number' => $flag_number
                                     ]);
 
+                                    CaregiverNotification::create([
+                                        'user_id' => $upcoming->user_id,
+                                        'content' => 'Hey there, you received a FLAG for not starting the job named "'.$upcoming->job->title.'" on time.',
+                                        'type' => CaregiverNotificationType::Flag
+                                    ]);
+
                                 }else if($get_strikes == 0 && $get_flags == 0){
                                     CaregiverFlag::create([
                                         'user_id' => $upcoming->user_id,
@@ -209,6 +231,12 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                         'banned_from_quick_call' => $banned_from_quick_call,
                                         'rewards_loose' => $loss_of_rewards,
                                         'flag_number' => $flag_number
+                                    ]);
+
+                                    CaregiverNotification::create([
+                                        'user_id' => $upcoming->user_id,
+                                        'content' => 'Hey there, you received a FLAG for not starting the job named "'.$upcoming->job->title.'" on time.',
+                                        'type' => CaregiverNotificationType::Flag
                                     ]);
                                 }
 
@@ -225,7 +253,11 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
 
 
                                 
-
+                                AgencyNotification::create([
+                                    'user_id' => $upcoming->job->user_id,
+                                    'content' => 'Hey there, your posted job named "'.$upcoming->job->title.'" has been moved to Quick Call due to a delay in starting.',
+                                    'type' => AgencyNotificationType::Job
+                                ]);
 
 
                                 DB::commit();

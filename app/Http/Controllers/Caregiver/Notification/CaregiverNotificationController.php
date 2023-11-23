@@ -15,7 +15,7 @@ class CaregiverNotificationController extends Controller
     use ApiResponse;
     public function getUnreadNotification(){
         try{
-            $get_unread_notifications = CaregiverNotification::where('user_id', Auth::user()->id)->where('mark_as_read', 0)->get();
+            $get_unread_notifications = CaregiverNotification::where('user_id', Auth::user()->id)->where('mark_as_read', 0)->latest()->get();
             $all_details = [];
             if(!$get_unread_notifications->isEmpty()){
                 foreach($get_unread_notifications as $notification){

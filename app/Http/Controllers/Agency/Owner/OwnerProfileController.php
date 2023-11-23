@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Agency\Owner;
 
+use App\Common\AgencyNotificationType;
 use App\Http\Controllers\Controller;
 use App\Mail\ChangePasswordMail;
+use App\Models\AgencyNotification;
 use App\Models\AppDeviceToken;
 use App\Models\User;
 use App\Traits\ApiResponse;
@@ -85,6 +87,12 @@ class OwnerProfileController extends Controller
                         $token = $fcm_token;
                 
                         $this->sendWelcomeNotification($token, $message);
+
+                        AgencyNotification::create([
+                            'user_id' => Auth::user()->id,
+                            'content' => 'Hurray! Password has been changed successfully.',
+                            'type' => AgencyNotificationType::Security
+                        ]);
         
                         if($update){
                             return $this->success('Great! Owner password changed successfully.', null, null, 201);
