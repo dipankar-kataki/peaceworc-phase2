@@ -33,7 +33,6 @@ class ClientController extends Controller
             'gender' => 'required',
             'age' => 'required',
             'address' => 'required',
-            'photo' => 'required|image|mimes:jpg,png,jpeg|max:1048',
             'short_address' => 'required',
             'street' => 'required',
             'city' => 'required',

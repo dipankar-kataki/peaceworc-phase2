@@ -20,7 +20,7 @@ class CreateClientProfilesTable extends Migration
             $table->string('phone');
             $table->string('email');
             $table->text('address');
-            $table->string('photo');
+            $table->string('photo')->nullable();
             $table->boolean('status')->default(1);
             $table->timestamps();
 
