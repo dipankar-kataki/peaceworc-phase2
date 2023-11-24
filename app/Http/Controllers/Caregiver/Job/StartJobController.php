@@ -55,7 +55,6 @@ class StartJobController extends Controller
                         return $this->error('Oops! This job has expired.', null, null, 200);
                     }else{
 
-                        // return $this->error('Oops! Ready to start job.', null, null, 500);
                         // $check_if_job_exists_inside_schedule = AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->where('status', JobStatus::JobAccepted)->exists();
 
 
