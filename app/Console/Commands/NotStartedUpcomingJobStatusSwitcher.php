@@ -65,6 +65,8 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                 foreach($get_upcoming_jobs as $upcoming){
 
                     $job_start_date = Carbon::parse($upcoming->job->start_date.''.$upcoming->job->start_time);
+                    // $job_end_date = Carbon::parse($upcoming->job->end_date.''.$upcoming->job->end_time);
+
                     $get_rewards = Reward::where('user_id', $upcoming->user_id)->sum('total_rewards');
                     $get_final_rewards_earned = CaregiverProfileRegistration::where('user_id', $upcoming->user_id)->first();
                     $my_rewards = 0;
@@ -135,11 +137,15 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                     $diff_between_start_date_and_current_date_in_minutes = 0;
                     $diff_between_start_date_and_current_date_in_hour = 0;
 
+                    $difference_between_old_start_date_and_end_date = 0;
+
                     //Checking if job start date is a future date or not. Means grater than current date or not.
                     if(!$job_start_date->gt($current_time)){ 
 
                         $diff_between_start_date_and_current_date_in_minutes = $current_time->diffInMinutes($job_start_date);
-                        $diff_between_start_date_and_current_date_in_hour = $current_time->diffInHours($job_start_date);
+                        // $diff_between_start_date_and_current_date_in_hour = $current_time->diffInHours($job_start_date);
+
+                        // $difference_between_old_start_date_and_end_date = $job_end_date->diffInHours($job_start_date);
 
                         $get_caregiver_device_token  = AppDeviceToken::where('user_id', $upcoming->user_id)->first();
 
@@ -164,20 +170,20 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                         }else{
                             //Here we are updating the start date and time with new date and time after adding 5 hours to it.
 
-                            $new_start_date = $job_start_date->addHours(5);
-                            $new_start_time = $new_start_date->toTimeString();
+                            // $new_start_date = $job_start_date->addHours(5);
+                            // $new_start_time = $new_start_date->toTimeString();
 
                             try{
                                 DB::beginTransaction(); 
 
                                 AcceptJob::where('job_id', $upcoming->job_id)->update([
-                                    'status' => JobStatus::JobNotStarted
+                                    'status' => JobStatus::JobNotAccepted
                                 ]);
     
                                 AgencyPostJob::where('id', $upcoming->job_id)->update([
-                                    'status' => JobStatus::QuickCall,
-                                    'start_date' => $new_start_date->toDateString(),
-                                    'start_time' => $new_start_time
+                                    'status' => JobStatus::JobNotAccepted,
+                                    // 'start_date' => $new_start_date->toDateString(),
+                                    // 'start_time' => $new_start_time
                                 ]);
 
                                 if( $get_strikes < 4 && $get_flags >= 3){

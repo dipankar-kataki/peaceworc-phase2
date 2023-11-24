@@ -15,7 +15,8 @@ class CancelledJobController extends Controller
         try{
             $get_canceled_jobs = AgencyPostJob::where(function ($query) {
                 $query->where('status', JobStatus::JobCancelled)
-                      ->orWhere('status', JobStatus::JobExpired);
+                      ->orWhere('status', JobStatus::JobExpired)
+                      ->orWhere('status', JobStatus::JobNotAccepted);
             })->paginate(10);
             return $this->success('Great! Jobs Fetched Successfully', $get_canceled_jobs, null, 200);
         }catch(\Exception $e){

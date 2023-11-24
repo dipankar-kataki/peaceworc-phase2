@@ -91,13 +91,13 @@ class StartJobController extends Controller
                             }catch(\Exception $e){
 
                                 DB::rollBack();
-                                
+
                                 return $this->error('Oops! Something went wrong. Not able to start the job.', null, null, 500);
                                 
                             }
                             
                         }else{
-                            return $this->error('Oops! Something Went Wrong. Failed To Start Job', null, null, 500);
+                            return $this->error('Oops! Something Went Wrong. Failed To Start Job. job not in schedule.', null, null, 500);
                         }
                     }
                 }

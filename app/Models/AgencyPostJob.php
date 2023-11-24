@@ -93,6 +93,8 @@ class AgencyPostJob extends Model
             return 'Deleted';
         }else if($value == 14){
             return 'Not Started';
+        }else if($value == 15){
+            return 'Not Accepted';
         }
     }
 
