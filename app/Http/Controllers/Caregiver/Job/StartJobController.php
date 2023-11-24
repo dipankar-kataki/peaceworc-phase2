@@ -56,10 +56,10 @@ class StartJobController extends Controller
                     }else{
 
                         // return $this->error('Oops! Ready to start job.', null, null, 500);
-                        $check_if_job_exists_inside_schedule = AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->where('status', JobStatus::JobAccepted)->exists();
+                        // $check_if_job_exists_inside_schedule = AcceptJob::where('user_id', Auth::user()->id)->where('job_id', $request->job_id)->where('status', JobStatus::JobAccepted)->exists();
 
 
-                        if($check_if_job_exists_inside_schedule){
+                        // if($check_if_job_exists_inside_schedule){
                             try{
 
                                 DB::beginTransaction();
@@ -96,9 +96,9 @@ class StartJobController extends Controller
                                 
                             }
                             
-                        }else{
-                            return $this->error('Oops! Something Went Wrong. Failed To Start Job. job not in schedule.', null, null, 500);
-                        }
+                        // }else{
+                        //     return $this->error('Oops! Something Went Wrong. Failed To Start Job. job not in schedule.', null, null, 500);
+                        // }
                     }
                 }
                 
