@@ -89,6 +89,7 @@ class ClientController extends Controller
                     $client_data = ClientProfile::where('status', 1)->where('email', $request->email)->first();
                     $details = [];
                     $client_details = [
+                        'client_id' => $client_data->id,
                         'agency_id' => $client_data->agency_id,
                         'name' => $client_data->name,
                         'phone' => $client_data->phone,
