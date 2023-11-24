@@ -91,7 +91,7 @@ class StartJobController extends Controller
                             }catch(\Exception $e){
 
                                 DB::rollBack();
-                                Log::error('Oops! Failed to start job.');
+                                
                                 return $this->error('Oops! Something went wrong. Not able to start the job.', null, null, 500);
                                 
                             }
