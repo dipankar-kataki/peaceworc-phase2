@@ -130,7 +130,7 @@ class AwardBiddedJob extends Command
                     $flag_number = 0;
                     $strike_number = 0;
 
-                    if($get_flags > 0){
+                    if($get_flags > 0 && $get_flags < 4){
 
                         $get_users_last_flag = CaregiverFlag::where('user_id', $bid_result->user_id)->where('status', 1)->latest()->first(); 
                         if($get_users_last_flag->flag_number == 1){
@@ -154,7 +154,7 @@ class AwardBiddedJob extends Command
                         $flag_number = 1;
                     }
                 
-                    if($get_strikes > 0){
+                    if($get_strikes > 0 && $get_strikes < 4){
 
                         $get_users_last_strike = Strike::where('user_id', $bid_result->user_id)->where('status', 1)->latest()->first(); 
                         if($get_users_last_strike->strike_number == 1){
@@ -193,7 +193,7 @@ class AwardBiddedJob extends Command
                             'is_job_rejected' => 1
                         ]);
 
-                        if($get_strikes != 0 && $get_flags == 0){
+                        if($get_strikes < 4 && $get_flags >= 3){
 
                             Strike::create([
                                 'user_id' => $bid_result->user_id,
@@ -214,7 +214,7 @@ class AwardBiddedJob extends Command
                             ]);
 
 
-                        }else if($get_strikes == 0 && $get_flags != 0){
+                        }else if($get_strikes == 0 && ( $get_flags > 0 && $get_flags < 4 )){
                             CaregiverFlag::create([
                                 'user_id' => $bid_result->user_id,
                                 'job_id' => $bid_result->job_id,

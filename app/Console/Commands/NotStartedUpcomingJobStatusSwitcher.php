@@ -82,7 +82,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
 
                     
                     
-                        if($get_flags > 0){
+                        if($get_flags > 0 && $get_flags < 4){
 
                             $get_users_last_flag = CaregiverFlag::where('user_id', $upcoming->user_id)->where('status', 1)->latest()->first(); 
                             if($get_users_last_flag->flag_number == 1){
@@ -106,7 +106,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                             $flag_number = 1;
                         }
                     
-                        if($get_strikes > 0){
+                        if($get_strikes > 0 && $get_strikes < 4){
 
                             $get_users_last_strike = Strike::where('user_id', $upcoming->user_id)->where('status', 1)->latest()->first(); 
                             if($get_users_last_strike->strike_number == 1){
@@ -180,7 +180,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                     'start_time' => $new_start_time
                                 ]);
 
-                                if($get_strikes != 0 && $get_flags == 0){
+                                if( $get_strikes < 4 && $get_flags >= 3){
 
                                     Strike::create([
                                         'user_id' => $upcoming->user_id,
@@ -201,7 +201,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                         'type' => CaregiverNotificationType::Strike
                                     ]);
 
-                                }else if($get_strikes == 0 && $get_flags != 0){
+                                }else if($get_strikes == 0 && ( $get_flags > 0 && $get_flags < 4 ) ){
                                     CaregiverFlag::create([
                                         'user_id' => $upcoming->user_id,
                                         'job_id' => $upcoming->job_id,
@@ -220,7 +220,8 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                         'type' => CaregiverNotificationType::Flag
                                     ]);
 
-                                }else if($get_strikes == 0 && $get_flags == 0){
+                                }
+                                else if($get_strikes == 0 && $get_flags == 0){
                                     CaregiverFlag::create([
                                         'user_id' => $upcoming->user_id,
                                         'job_id' => $upcoming->job_id,
