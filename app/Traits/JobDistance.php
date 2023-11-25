@@ -6,26 +6,17 @@ use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
-| Api Responser Trait
+|Job Distance Trait
 |--------------------------------------------------------------------------
 |
-| This trait will be used for any response we sent to clients.
+| This trait will be used to calculate distance between job and caregiver.
 |
 */
 
 trait JobDistance
 {
-	/**
-     * Return a success JSON response.
-     *
-     * @param  array|string  $data
-     * @param  string  $message
-     * @param  int|null  $code
-	 * @param  string $token
-     * @return \Illuminate\Http\JsonResponse
-     */
 
-	protected function jobDistance($lat1, $long1, $lat2, $long2, $unit)
+	protected function getJobDistance($lat1, $long1, $lat2, $long2, $unit)
 	{
 		if (($lat1 == $lat2  ) && ($long1 == $long2 )) {
             return 0;

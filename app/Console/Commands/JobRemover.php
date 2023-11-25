@@ -6,8 +6,6 @@ use App\Common\AgencyNotificationType;
 use App\Common\JobStatus;
 use App\Models\AgencyNotification;
 use App\Models\AgencyPostJob;
-use App\Traits\JobNotCompleteNotification;
-use App\Traits\WelcomeNotification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +14,6 @@ use Illuminate\Support\Facades\Log;
 class JobRemover extends Command
 {
 
-    use JobNotCompleteNotification, WelcomeNotification;
     /**
      * The name and signature of the console command.
      *
