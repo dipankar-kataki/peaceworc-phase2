@@ -104,9 +104,9 @@ class BiddingController extends Controller
                                         return $this->error('Oops! Something went wrong. Failed to place bid.', null, null, 500);
                                     }
     
-                                }else if( $time_diff_in_hours > 7 && $time_diff_in_hours < 72 ){
+                                }else if( $time_diff_in_hours > 6 && $time_diff_in_hours < 72 ){
                                     $bidding_start_time = $current_time;
-                                    $bidding_end_time = $current_time->copy()->addHours(3);
+                                    $bidding_end_time = $current_time->copy()->addHours(4);
     
                                     try{
                                         DB::beginTransaction();
@@ -132,31 +132,72 @@ class BiddingController extends Controller
                                         return $this->error('Oops! Something went wrong. Failed to place bid.', null, null, 500);
                                     }
     
-                                }else{
-                                    try{
-    
-                                        DB::beginTransaction();
-    
-                                        AgencyPostJob::where('id', $request->job_id)->update([
-                                            'status' => JobStatus::JobAccepted
-                                        ]);
-    
-                                        AcceptJob::create([
-                                            'user_id' => Auth::user()->id,
-                                            'job_id' => $request->job_id,
-                                            'status' => JobStatus::JobAccepted,
-                                            'job_accepted_time' => Carbon::now()
-                                        ]);
-    
-                                        DB::commit();
-    
-                                        return $this->success('Great! You have been awarded the job. Please start the job at appropriate time.', null, null, 201);
-    
-                                    }catch(\Exception $e){
-                                        DB::rollBack();
-                                        return $this->error('Oops! Something went wrong. Not able to place bid.', null, null, 400);
-                                    }
                                 }
+                                // else{
+
+                                //     $get_last_accepted_job_by_user = AcceptJob::where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted)->latest()->first();
+
+                                //     if($get_last_accepted_job_by_user != null){
+
+                                //         $last_accepted_job_end_date_time = Carbon::parse($get_last_accepted_job_by_user->end_date.''.$get_last_accepted_job_by_user->end_time);
+                                        
+                                //         $time_diff_btwn_last_accepted_job_and_request_job = $requested_job_start_date_time->diffInHours($last_accepted_job_end_date_time);
+
+                                //         if($time_diff_btwn_last_accepted_job_and_request_job > 3){
+                                //             try{
+    
+                                //                 DB::beginTransaction();
+            
+                                //                 AgencyPostJob::where('id', $request->job_id)->update([
+                                //                     'status' => JobStatus::JobAccepted
+                                //                 ]);
+            
+                                //                 AcceptJob::create([
+                                //                     'user_id' => Auth::user()->id,
+                                //                     'job_id' => $request->job_id,
+                                //                     'status' => JobStatus::JobAccepted,
+                                //                     'job_accepted_time' => Carbon::now()
+                                //                 ]);
+            
+                                //                 DB::commit();
+            
+                                //                 return $this->success('Great! You have been awarded the job. Please start the job at appropriate time.', null, null, 201);
+            
+                                //             }catch(\Exception $e){
+                                //                 DB::rollBack();
+                                //                 return $this->error('Oops! Something went wrong. Not able to place bid.', null, null, 400);
+                                //             }
+                                //         }else{
+                                //             return $this->error('Oops! Failed to place the bid. The time difference between your last accepted job and bidded job is less than 3 hours.', null, null, 400);
+                                //         }
+                                //     }else{
+                                //         try{
+    
+                                //             DB::beginTransaction();
+        
+                                //             AgencyPostJob::where('id', $request->job_id)->update([
+                                //                 'status' => JobStatus::JobAccepted
+                                //             ]);
+        
+                                //             AcceptJob::create([
+                                //                 'user_id' => Auth::user()->id,
+                                //                 'job_id' => $request->job_id,
+                                //                 'status' => JobStatus::JobAccepted,
+                                //                 'job_accepted_time' => Carbon::now()
+                                //             ]);
+        
+                                //             DB::commit();
+        
+                                //             return $this->success('Great! You have been awarded the job. Please start the job at appropriate time.', null, null, 201);
+        
+                                //         }catch(\Exception $e){
+                                //             DB::rollBack();
+                                //             return $this->error('Oops! Something went wrong. Not able to place bid.', null, null, 400);
+                                //         }
+                                //     }
+
+                                    
+                                // }
     
                                 
                             }
