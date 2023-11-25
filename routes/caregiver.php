@@ -212,108 +212,108 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::post('test-full-screen-notification', [SendNotificationController::class, 'testFullNotification']);
 
-Route::post('check-notification', function(\Illuminate\Http\Request $request){
+// Route::post('check-notification', function(){
 
 
-    $token[] = 'fo596PJvSGOOTs0j-kC0yl:APA91bFTyenroHQjHeZ_MNgxKMFCG_aFsUFonVkL8VPoPCEU1xU34f5LHEKcBrcQLLa53fShl-3clPNGNqhQjSGwiynqLZh9QOXxNxvv_tPwXK-jo2mUCOJTd4HdpNeC6UwZHE_0hym4';
+//     $token[] = 'fo596PJvSGOOTs0j-kC0yl:APA91bFTyenroHQjHeZ_MNgxKMFCG_aFsUFonVkL8VPoPCEU1xU34f5LHEKcBrcQLLa53fShl-3clPNGNqhQjSGwiynqLZh9QOXxNxvv_tPwXK-jo2mUCOJTd4HdpNeC6UwZHE_0hym4';
 
 
-    $server_key = env('FIREBASE_SERVER_KEY');
+//     $server_key = env('FIREBASE_SERVER_KEY');
             
-    $msg = [
-        'message'   => '',
-    ];
+//     $msg = [
+//         'message'   => '',
+//     ];
 
-    $notify_data = [
-        'body' => 'Message from peaceworc',
-        'title' => 'Peaceworc'
-    ];
+//     $notify_data = [
+//         'body' => 'Message from peaceworc',
+//         'title' => 'Peaceworc'
+//     ];
 
-    $registrationIds = $token;
+//     $registrationIds = $token;
 
-    if(count($token) > 1){
-        $fields = array
-        (
-            'registration_ids' => $registrationIds, //  for  multiple users
-            'notification'  => $notify_data,
-            'data'=> [],
-            'priority'=> 'high'
-        );
-    }
-    else{
+//     if(count($token) > 1){
+//         $fields = array
+//         (
+//             'registration_ids' => $registrationIds, //  for  multiple users
+//             'notification'  => $notify_data,
+//             'data'=> [],
+//             'priority'=> 'high'
+//         );
+//     }
+//     else{
         
-        $fields = array
-        (
-            'to' => $token, //  for  only one users
-            'notification'  => $notify_data,
-            'data'=> [
-                'job_id' => $request->data['job_id'],
-                'job_title' => $request->data['job_title'],
-                'job_amount' => $request->data['job_amount'],
-                'job_start_date' => $request->data['job_start_date'],
-                'job_start_time' => $request->data['job_start_time'],
-                'job_end_date' => $request->data['job_end_date'],
-                'job_end_time' =>  $request->data['job_end_time,'],
-                'care_type' =>  $request->data['care_type'],
-                'care_items' =>  $request->data['care_items'],
-                'notification_type' => $request->data['notification_type']
-            ],
-            'priority'=> 'high'
-        );
-    }
+//         $fields = array
+//         (
+//             'to' => $token, //  for  only one users
+//             'notification'  => $notify_data,
+//             'data'=> [
+//                 'job_id' => $request->data['job_id'],
+//                 'job_title' => $request->data['job_title'],
+//                 'job_amount' => $request->data['job_amount'],
+//                 'job_start_date' => $request->data['job_start_date'],
+//                 'job_start_time' => $request->data['job_start_time'],
+//                 'job_end_date' => $request->data['job_end_date'],
+//                 'job_end_time' =>  $request->data['job_end_time,'],
+//                 'care_type' =>  $request->data['care_type'],
+//                 'care_items' =>  $request->data['care_items'],
+//                 'notification_type' => $request->data['notification_type']
+//             ],
+//             'priority'=> 'high'
+//         );
+//     }
         
-    // // if(count($token) > 1){
-    // //     $fields = array
-    // //     (
-    // //         'registration_ids' => $registrationIds, //  for  multiple users
-    // //         'notification'  => $notify_data,
-    // //         'data'=> [],
-    // //         'priority'=> 'high'
-    // //     );
-    // // }
-    // // else{
+//     // // if(count($token) > 1){
+//     // //     $fields = array
+//     // //     (
+//     // //         'registration_ids' => $registrationIds, //  for  multiple users
+//     // //         'notification'  => $notify_data,
+//     // //         'data'=> [],
+//     // //         'priority'=> 'high'
+//     // //     );
+//     // // }
+//     // // else{
         
-    //     $fields = array
-    //     (
-    //         'to' => $registrationIds, //  for  only one users
-    //         'notification'  => $notify_data,
-    //         'data'=> [
-    //             'message' => 'WelcomE back Fatele' 
-    //         ],
-    //         'priority'=> 'high'
-    //     );
-    // // }
+//     //     $fields = array
+//     //     (
+//     //         'to' => $registrationIds, //  for  only one users
+//     //         'notification'  => $notify_data,
+//     //         'data'=> [
+//     //             'message' => 'WelcomE back Fatele' 
+//     //         ],
+//     //         'priority'=> 'high'
+//     //     );
+//     // // }
         
-    $headers[] = 'Content-Type: application/json';
-    $headers[] = 'Authorization: key='. $server_key;
+//     $headers[] = 'Content-Type: application/json';
+//     $headers[] = 'Authorization: key='. $server_key;
 
-    $ch = curl_init();
-    curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
-    curl_setopt( $ch,CURLOPT_POST, true );
-    curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-    curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-    curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-    curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-    $result = curl_exec($ch );
-    if ($result === FALSE) 
-    {
-        die('FCM Send Error: ' . curl_error($ch));
-    }
-    curl_close( $ch );
-    return $result;
+//     $ch = curl_init();
+//     curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+//     curl_setopt( $ch,CURLOPT_POST, true );
+//     curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+//     curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+//     curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+//     curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
+//     $result = curl_exec($ch );
+//     if ($result === FALSE) 
+//     {
+//         die('FCM Send Error: ' . curl_error($ch));
+//     }
+//     curl_close( $ch );
+//     return $result;
 
-});
+// });
 
-Route::get('time-and-zone',function(){
-    // echo date('Y-m-d H:i A');
-    // echo "\n ------------------- \n";
-    // echo  date_default_timezone_get() ;
+// Route::get('time-and-zone',function(){
+//     // echo date('Y-m-d H:i A');
+//     // echo "\n ------------------- \n";
+//     // echo  date_default_timezone_get() ;
 
-    // echo "\n ------------- Timezone Using Carbon----------- \n";
+//     // echo "\n ------------- Timezone Using Carbon----------- \n";
 
-    // echo $timeZone = Carbon::now();
-    // echo "\n ------------------- \n";
-    // echo $timeZone->tzName;
+//     // echo $timeZone = Carbon::now();
+//     // echo "\n ------------------- \n";
+//     // echo $timeZone->tzName;
 
      
-});
+// });
