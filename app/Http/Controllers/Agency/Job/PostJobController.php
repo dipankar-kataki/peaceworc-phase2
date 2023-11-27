@@ -59,6 +59,9 @@ class PostJobController extends Controller
                     if($get_status->is_business_info_complete == 0 ||  $get_status->is_authorize_info_added == 0){
                         return $this->error('Oops! The Agency Profile Has To Be Completed First Before Posting A Job.', null, null, 400);
                     }else{
+
+                            
+
                             $job_start_date = DateTime::createFromFormat("m-d-Y" , $request->start_date);
 
                             $job_end_date = DateTime::createFromFormat("m-d-Y" , $request->end_date);
@@ -66,7 +69,6 @@ class PostJobController extends Controller
                             $requested_start_date_time_for_the_job = Carbon::parse($job_start_date->format('Y-m-d').''.$request->start_time);
 
                             $requested_end_date_time_for_the_job = Carbon::parse($job_end_date->format('Y-m-d').''.$request->end_time);
-
 
                             $current_time = Carbon::now();
 
@@ -77,11 +79,9 @@ class PostJobController extends Controller
                             }else if( $requested_end_date_time_for_the_job < $current_time ){ 
                                 return $this->error('Oops! The selected end date or time has already passed. Please choose a new date or time.', null, null, 400);
                             }else{ 
-
-                                $to = Carbon::createFromFormat('Y-m-d H:s:i', $current_time);
-                                $from = Carbon::createFromFormat('Y-m-d H:s:i', $requested_start_date_time_for_the_job);
         
-                                $diff_in_hours = $to->diffInHours($from);
+                                $diff_in_hours = $requested_start_date_time_for_the_job->diffInHours($current_time);
+
         
                                 $status = 0;
         
@@ -90,9 +90,6 @@ class PostJobController extends Controller
                                 }else if($diff_in_hours > 5){
                                     $status = JobStatus::Open;
                                 }
-
-                                // return $this->success('Time difference in hours --->'.$diff_in_hours, $status, null, 200);
-                            
     
                                 try{
                                     
