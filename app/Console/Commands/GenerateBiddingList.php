@@ -77,6 +77,7 @@ class GenerateBiddingList extends Command
                     $get_total_rewards_of_the_bidder = CaregiverProfileRegistration::where('user_id', $bid_ended_job->user_id)->first();
                     $get_total_strikes_of_the_bidder = Strike::where('user_id', $bid_ended_job->user_id)->count();
                     $get_total_flags_of_the_bidder = CaregiverFlag::where('user_id', $bid_ended_job->user_id)->count();
+                    
                     $check_if_bidder_have_any_certificate = CaregiverCertificate::where('user_id', $bid_ended_job->user_id)->count();
                     $get_bid_placing_time_of_the_bidder = CaregiverBidding::where('job_id', $bid_ended_job->job_id)->where('user_id', $bid_ended_job->user_id)->first();
 

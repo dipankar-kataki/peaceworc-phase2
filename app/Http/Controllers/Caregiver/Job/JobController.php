@@ -37,7 +37,7 @@ class JobController extends Controller
                     $lat2 = $job->lat;
                     $long2 = $job->long;
 
-                    $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
+                    $miles = $this->getJobDistance($lat1, $long1, $lat2, $long2, 'M');
 
                     $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $job->user_id)->first();
                     $details = [
@@ -78,7 +78,7 @@ class JobController extends Controller
                 $lat2 = $get_jobs->lat;
                 $long2 = $get_jobs->long;
 
-                $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
+                $miles = $this->getJobDistance($lat1, $long1, $lat2, $long2, 'M');
                
                     $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $get_jobs->user_id)->first();
                     $details = [
@@ -131,7 +131,7 @@ class JobController extends Controller
                 $lat2 = $job->lat;
                 $long2 = $job->long;
 
-                $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
+                $miles = $this->getJobDistance($lat1, $long1, $lat2, $long2, 'M');
 
                 $get_jobs_bidded_by_single_user = CaregiverBidding::where('user_id', Auth::user()->id)->where('job_id', $job->id)->where('status', JobStatus::BiddingStarted )->first();
                     
