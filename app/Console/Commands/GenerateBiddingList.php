@@ -52,16 +52,157 @@ class GenerateBiddingList extends Command
      */
     public function handle()
     {
+        try{
+            $get_all_biddings = CaregiverBidding::with('job')->where('status', JobStatus::BiddingEnded)->where('is_bidding_list_generated', 0)->where('is_job_awarded', 0)->get();
+            
+            $taskCounter = 0;
+            $ongoing_job_id = 0;
+            $bidding_end_time = 0;
+            $bidder_user_id = 0;
+            $bidded_job_title = null;
+
+            foreach($get_all_biddings as $bids){
+
+                $get_bidder_rewards = CaregiverProfileRegistration::where('user_id', $bids->user_id)->first('rewards_earned');
+                $get_bidder_flags_count = CaregiverFlag::where('user_id', $bids->user_id)->count();
+                $get_bidder_strikes_count = Strike::where('user_id', $bids->user_id)->count();
+                $get_bidder_certificates_count = CaregiverCertificate::where('user_id', $bids->user_id)->count();
+
+                $is_list_generated_for_this_job = CaregiverBiddingResultList::where('job_id', $bids->job_id)->where('is_list_generation_complete', 1)->exists();
+                if(!$is_list_generated_for_this_job){
+
+                    $is_user_exists_in_list = CaregiverBiddingResultList::where('job_id', $bids->job_id)->where('user_id', $bids->user_id)->exists();
+
+                    if(!$is_user_exists_in_list ){
+                        $get_last_bidder = CaregiverBiddingResultList::where('job_id', $bids->job_id)->latest()->first();
+                        if($get_last_bidder == null){
+                            CaregiverBiddingResultList::create([
+                                'job_id' => $bids->job_id,
+                                'user_id' => $bids->user_id,
+                                'caregiver_bid_win_position' => 1,
+                                'time_for_notification' => Carbon::now()->addMinutes(5)
+                            ]);
+                        }else{
+    
+                            if($get_last_bidder->user_id != $bids->user_id ){
+    
+                                $get_last_bidder_rewards = CaregiverProfileRegistration::where('user_id', $get_last_bidder->user_id)->first('rewards_earned');
+                                $get_last_bidder_flags_count = CaregiverFlag::where('user_id', $get_last_bidder->user_id)->count();
+                                $get_last_bidder_strikes_count = Strike::where('user_id', $get_last_bidder->user_id)->count();
+                                $get_last_bidder_certificates_count = CaregiverCertificate::where('user_id', $get_last_bidder->user_id)->count();
+                                
+                                $get_last_bidder_win_position = $get_last_bidder->caregiver_bid_win_position;
+                                $get_last_bidder_time_for_notification = $get_last_bidder->time_for_notification;
+    
+                                $win_position = 0;
+    
+    
+                                if($get_bidder_rewards->rewards_earned > $get_last_bidder_rewards->rewards_earned){
+                                    $win_position = $get_last_bidder_win_position;
+                                }
+    
+                                if($get_bidder_flags_count > $get_last_bidder_flags_count){
+                                    $win_position = $get_last_bidder_win_position;
+                                }
+    
+                                if($get_bidder_strikes_count > $get_last_bidder_strikes_count){
+                                    $win_position = $get_last_bidder_win_position;
+                                }
+    
+                                if($get_bidder_certificates_count > $get_last_bidder_certificates_count){
+                                    $win_position = $get_last_bidder_win_position;
+                                }
+    
+    
+                                try {
+    
+                                    DB::beginTransaction();
+    
+                                    CaregiverBiddingResultList::create([
+                                        'job_id' => $bids->job_id,
+                                        'user_id' => $bids->user_id,
+                                        'caregiver_bid_win_position' =>  $win_position,
+                                        'time_for_notification' => Carbon::parse($get_last_bidder_time_for_notification)->addMinute()
+                                    ]);
+    
+                                    CaregiverBiddingResultList::where('job_id', $get_last_bidder->job_id)->where('user_id', $get_last_bidder->user_id, )->update([
+                                        'caregiver_bid_win_position' => $win_position + 1
+                                    ]);
+    
+                                    CaregiverBidding::where('job_id', $bids->job_id)->where('user_id', $bids->user_id)->where('status', JobStatus::BiddingEnded)->update([
+                                        'is_bidding_list_generated' => 1
+                                    ]);
+    
+                                    DB::commit();
+    
+                                } catch (\Exception $e) {
+                                    DB::rollBack();
+    
+                                    Log::error( 'Oops! Something went wrong in generating bidding list cron job.');
+                                    Log::error( 'Error ==> '.$e->getMessage().'. On line number ==>'.$e->getLine() );
+                                    Log::info('Generate bidding list cron error. Command exceuted In : ' . Carbon::now());
+                                    Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
+                                }
+                            }
+                        }
+                    }
+                    
+                } 
+
+                $ongoing_job_id = $bids->job_id;
+
+                $taskCounter++;
+
+                $bidding_end_time = $bids->job->bidding_end_time;
+                $bidder_user_id = $bids->user_id;
+                $bidded_job_title = $bids->job->title;
+
+            }
+
+            if($taskCounter === count($get_all_biddings)){
+                $check_if_job_id_exist = CaregiverBiddingResultList::where('job_id', $ongoing_job_id)->exists();
+
+                if($check_if_job_id_exist){
+                    try{
+                        DB::beginTransaction();
+
+                        CaregiverBiddingResultList::where('job_id', $ongoing_job_id)->update([
+                            'is_list_generation_complete' => 1
+                        ]);
+
+                        CaregiverBidding::where('job_id', $ongoing_job_id)->update([
+                            'is_bidding_list_generated' => 1
+                        ]);
+
+                        CaregiverNotification::create([
+                            'user_id' => $bidder_user_id,
+                            'content' => 'Hey there, the bidding list has been generated for the job "'.$bidded_job_title.'". Please wait for the results to be declared.',
+                            'type' => CaregiverNotificationType::Job,
+                            
+                        ]);
+
+                        DB::commit();
+
+                    }catch(\Exception $e){
+                        DB::rollBack();
+
+                        Log::error('Oops! Something went wrong in generating bidding list cron job.');
+                        Log::error('Error ==>'.$e->getMessage().' On line number ==>'.$e->getLine());
+                        Log::info('Generate bidding list cron error. Command exceuted In : ' . Carbon::now());
+                        Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
+                    }
+                }
+            }
+        }catch(\Exception $e){
+            Log::info('Oops! Something went wrong while generating bidding list.');
+            Log::error('Error ==> '.$e->getMessage().' '.'Error occured on line no. ===> '.$e->getLine() );
+            Log::info('This cron job executed on ==> '. Carbon::now() );
+            Log::info('XXXXXXXXXXXXXXXXXXXxx ------------------------ xxXXXXXXXXXXXXXXXXXXXX');
+        }
+
+
         try {
-            /*
-                Here I am checking if the ( total rewards, strikes count, flags count, certificate count, created at time ) of the bidder 
-                is greater than last bidder. if greater then create a record of the bidder by giving the win position of the last bidder
-                and simultaneously updating the win position of the last bidder by +1. 
-                if no bidders found inside the bidding list table than simply give the current bidder 1st win position.
-
-                Note: Please understand the scenerio first and carefully review the code before performing any modifications. 
-
-            */
+            
 
             $get_bidding_ended_jobs = CaregiverBidding::with('job')->where('status', JobStatus::BiddingEnded)->get();
 
