@@ -14,8 +14,8 @@ class AddColumnIsBiddingListGeneratedToCaregiverBiddingsTable extends Migration
     public function up()
     {
         Schema::table('caregiver_biddings', function (Blueprint $table) {
-            $table->boolean('is_bidding_list_generated')->default(0)->after('status');
-            $table->boolean('is_job_awarded')->default(0)->after('is_bidding_list_generated');
+            $table->boolean('is_bid_ranked')->default(0)->after('status');
+            $table->boolean('is_job_awarded')->default(0)->after('is_bid_ranked');
         });
     }
 
