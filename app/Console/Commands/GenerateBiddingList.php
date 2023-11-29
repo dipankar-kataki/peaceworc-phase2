@@ -53,103 +53,28 @@ class GenerateBiddingList extends Command
     public function handle()
     {
         try{
-            $get_all_biddings = CaregiverBidding::with('job')->where('status', JobStatus::BiddingEnded)->where('is_bid_ranked', 0)->where('is_job_awarded', 0)->get();
+            $get_bidders = CaregiverBidding::with('job')->where('status', JobStatus::BiddingEnded)->where('is_bid_ranked', 0)->orderByDesc('rewards_earned')->orderBy('created_at')->get();
             
             $taskCounter = 0;
             $ongoing_job_id = 0;
-            $bidding_end_time = 0;
             $bidder_user_id = 0;
             $bidded_job_title = null;
 
-            foreach($get_all_biddings as $bids){
-
-                $get_bidder_rewards = CaregiverProfileRegistration::where('user_id', $bids->user_id)->first('rewards_earned');
-                $get_bidder_flags_count = CaregiverFlag::where('user_id', $bids->user_id)->count();
-                $get_bidder_strikes_count = Strike::where('user_id', $bids->user_id)->count();
-                $get_bidder_certificates_count = CaregiverCertificate::where('user_id', $bids->user_id)->count();
-
-                $is_list_generation_started_for_this_job = CaregiverBiddingResultList::where('job_id', $bids->job_id)->exists();
-                $win_position = 1;
-
-                if($is_list_generation_started_for_this_job){
-
-                    $get_last_bidder = CaregiverBiddingResultList::where('job_id', $bids->job_id)->latest()->first();
-                    
-
-                    if($get_last_bidder->user_id != $bids->user_id ){
-
-                        $get_last_bidder_rewards = CaregiverProfileRegistration::where('user_id', $get_last_bidder->user_id)->first('rewards_earned');
-                        $get_last_bidder_flags_count = CaregiverFlag::where('user_id', $get_last_bidder->user_id)->count();
-                        $get_last_bidder_strikes_count = Strike::where('user_id', $get_last_bidder->user_id)->count();
-                        $get_last_bidder_certificates_count = CaregiverCertificate::where('user_id', $get_last_bidder->user_id)->count();
-                        
-                        $get_last_bidder_win_position = $get_last_bidder->caregiver_bid_win_position;
-                        $get_last_bidder_time_for_notification = $get_last_bidder->time_for_notification;
-
-                        
-
-
-                        // if($get_bidder_rewards->rewards_earned > $get_last_bidder_rewards->rewards_earned){
-                        //     $win_position = $get_last_bidder_win_position;
-                        // }else if($get_bidder_flags_count > $get_last_bidder_flags_count){
-                        //     $win_position = $get_last_bidder_win_position;
-                        // }else if($get_bidder_strikes_count > $get_last_bidder_strikes_count){
-                        //     $win_position = $get_last_bidder_win_position;
-                        // }else if($get_bidder_certificates_count > $get_last_bidder_certificates_count){
-                        //     $win_position = $get_last_bidder_win_position;
-                        // }else{
-                        //     $win_position = $get_last_bidder_win_position + 1;
-                        // }
-
-                        // Log::info('Last bidder ==> '.$get_last_bidder->user_id.' Win Position for user Current Bidder ==> '.$get_last_bidder_win_position);
-
-                        // Log::info('Current Bidder ==> '.$bids->user_id.' Win Position ==> '.$win_position);
-
-
-                        try {
-
-                            DB::beginTransaction();
-
-                            CaregiverBiddingResultList::create([
-                                'job_id' => $bids->job_id,
-                                'user_id' => $bids->user_id,
-                                'caregiver_bid_win_position' =>  $get_last_bidder_win_position + 1,
-                                'time_for_notification' => Carbon::parse($get_last_bidder_time_for_notification)->addMinute()
-                            ]);
-
-                            // CaregiverBiddingResultList::where('job_id', $get_last_bidder->job_id)->where('user_id', $get_last_bidder->user_id, )->update([
-                            //     'caregiver_bid_win_position' => $win_position
-                            // ]);
-
-                            CaregiverBidding::where('job_id', $bids->job_id)->where('user_id', $bids->user_id)->where('status', JobStatus::BiddingEnded)->update([
-                                'is_bid_ranked' => 1
-                            ]);
-
-                            DB::commit();
-
-                        } catch (\Exception $e) {
-                            DB::rollBack();
-
-                            Log::error( 'Oops! Something went wrong in generating bidding list cron job.');
-                            Log::error( 'Error ==> '.$e->getMessage().'. On line number ==>'.$e->getLine() );
-                            Log::info('Generate bidding list cron error. Command exceuted In : ' . Carbon::now());
-                            Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
-                        }
-                    }
-
-                }else{
+            foreach($get_bidders as $bidder){
+                $is_bided_job_exists = CaregiverBiddingResultList::where('job_id', $bidder->job_id)->exists();
+                if(!$is_bided_job_exists){
                     try{
+
                         DB::beginTransaction();
 
                         CaregiverBiddingResultList::create([
-                            'job_id' => $bids->job_id,
-                            'user_id' => $bids->user_id,
-                            'caregiver_bid_win_position' => $win_position,
+                            'job_id' => $bidder->job_id,
+                            'user_id' => $bidder->user_id,
                             'time_for_notification' => Carbon::now()->addMinutes(5)
                         ]);
 
-                        CaregiverBidding::where('job_id', $bids->job_id)->where('user_id', $bids->user_id)->update([
-                            'is_bid_ranked' => 1
+                        CaregiverBidding::where('user_id', $bidder->user_id)->where('job_id', $bidder->job_id)->update([
+                            'is_bid_ranked' => 1,
                         ]);
 
                         DB::commit();
@@ -157,57 +82,90 @@ class GenerateBiddingList extends Command
                     }catch(\Exception $e){
                         DB::rollBack();
 
-                        Log::error('Oops! Something went wrong in generating bidding list cron job.');
-                        Log::error('Error ==>'.$e->getMessage().' On line number ==>'.$e->getLine());
-                        Log::info('Generate bidding list cron error. Command exceuted In : ' . Carbon::now());
-                        Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
+                        Log::error('Oops! Something went wrong in generating bidding list transaction.');
+                        Log::error('Error ==> '.$e->getMessage().' '.'Error occured on line no. ===> '.$e->getLine() );
+                        Log::info('This cron job executed on ==> '. Carbon::now() );
+                        Log::info('XXXXXXXXXXXXXXXXXXXxx ------------------------ xxXXXXXXXXXXXXXXXXXXXX');
                     }
-                    
-                }
+                }else{
+                    $is_bidder_already_ranked = CaregiverBiddingResultList::where('user_id', $bidder->user_id)->where('job_id', $bidder->job_id)->exists();
+                    if(!$is_bidder_already_ranked){
+                        $get_previous_time_for_notification = CaregiverBiddingResultList::where('job_id', $bidder->job_id)->orderBy('id', 'DESC')->first();
+                        
 
-                $ongoing_job_id = $bids->job_id;
+                        try{
+
+                            $time_for_notification = Carbon::parse($get_previous_time_for_notification->time_for_notification)->addMinute();
+
+                            DB::beginTransaction();
+    
+                            CaregiverBiddingResultList::create([
+                                'job_id' => $bidder->job_id,
+                                'user_id' => $bidder->user_id,
+                                'time_for_notification' => $time_for_notification
+                            ]);
+    
+                            CaregiverBidding::where('user_id', $bidder->user_id)->where('job_id', $bidder->job_id)->update([
+                                'is_bid_ranked' => 1,
+                            ]);
+    
+                            DB::commit();     
+    
+                        }catch(\Exception $e){
+                            DB::rollBack();
+    
+                            Log::error('Oops! Something went wrong in generating bidding list transaction.');
+                            Log::error('Error ==> '.$e->getMessage().' '.'Error occured on line no. ===> '.$e->getLine() );
+                            Log::info('This cron job executed on ==> '. Carbon::now() );
+                            Log::info('XXXXXXXXXXXXXXXXXXXxx ------------------------ xxXXXXXXXXXXXXXXXXXXXX');
+    
+                        }
+                    }
+                }
+                
+
+                $ongoing_job_id = $bidder->job_id;
 
                 $taskCounter++;
 
-                $bidding_end_time = $bids->job->bidding_end_time;
-                $bidder_user_id = $bids->user_id;
-                $bidded_job_title = $bids->job->title;
-
+                $bidder_user_id = $bidder->user_id;
+                $bidded_job_title = $bidder->job->title;
             }
 
-            // if($taskCounter === count($get_all_biddings)){
+            if($taskCounter === count($get_bidders)){
 
-            //     try{
-            //         DB::beginTransaction();
+                try{
+                    DB::beginTransaction();
 
-            //         CaregiverBiddingResultList::where('job_id', $ongoing_job_id)->update([
-            //             'is_list_generation_complete' => 1
-            //         ]);
+                    CaregiverBiddingResultList::where('job_id', $ongoing_job_id)->update([
+                        'is_list_generation_complete' => 1
+                    ]);
 
-            //         CaregiverNotification::create([
-            //             'user_id' => $bidder_user_id,
-            //             'content' => 'Hey there, the bidding list has been generated for the job "'.$bidded_job_title.'". Please wait for the results to be declared.',
-            //             'type' => CaregiverNotificationType::Job,
+                    CaregiverNotification::create([
+                        'user_id' => $bidder_user_id,
+                        'content' => 'Hey there, the bidding list has been generated for the job "'.$bidded_job_title.'". Please wait for the results to be declared.',
+                        'type' => CaregiverNotificationType::Job,
                         
-            //         ]);
+                    ]);
 
-            //         DB::commit();
+                    DB::commit();
 
-            //     }catch(\Exception $e){
-            //         DB::rollBack();
+                }catch(\Exception $e){
+                    DB::rollBack();
 
-            //         Log::error('Oops! Something went wrong in generating bidding list cron job.');
-            //         Log::error('Error ==>'.$e->getMessage().' On line number ==>'.$e->getLine());
-            //         Log::info('Generate bidding list cron error. Command exceuted In : ' . Carbon::now());
-            //         Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
-            //     }
+                    Log::error('Oops! Something went wrong in generating bidding list cron job.');
+                    Log::error('Error ==>'.$e->getMessage().' On line number ==>'.$e->getLine());
+                    Log::info('Generate bidding list cron error. Command exceuted In : ' . Carbon::now());
+                    Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
+                }
 
-            // }
+            }
         }catch(\Exception $e){
             Log::info('Oops! Something went wrong while generating bidding list.');
             Log::error('Error ==> '.$e->getMessage().' '.'Error occured on line no. ===> '.$e->getLine() );
             Log::info('This cron job executed on ==> '. Carbon::now() );
             Log::info('XXXXXXXXXXXXXXXXXXXxx ------------------------ xxXXXXXXXXXXXXXXXXXXXX');
         }
+        
     }
 }

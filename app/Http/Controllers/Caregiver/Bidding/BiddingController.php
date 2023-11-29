@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AcceptJob;
 use App\Models\AgencyPostJob;
 use App\Models\CaregiverBidding;
+use App\Models\CaregiverProfileRegistration;
 use App\Models\CaregiverStatusInformation;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
@@ -49,18 +50,8 @@ class BiddingController extends Controller
                             }else{
 
                                 $requested_job_start_date_time = Carbon::parse($get_job_details->start_date.''.$get_job_details->start_time);
-                                
-                                $get_already_accepted_jobs_by_bidder = AcceptJob::with('job')->where('user_id', Auth::user()->id)->where('status', JobStatus::JobAccepted )->get();
 
-                                foreach($get_already_accepted_jobs_by_bidder as $accepted_job){
-                                    $accepted_job_end_date_time = Carbon::parse($accepted_job->job->end_date.''.$accepted_job->job->end_time);
-
-                                    $time_diff_btwn_last_accepted_job_and_requested_job = $requested_job_start_date_time->diffInHours($accepted_job_end_date_time);
-
-                                    if($time_diff_btwn_last_accepted_job_and_requested_job < 3){
-                                        return $this->error('Oops! Not eligible for bidding. Time difference between the last accepted job and the bidded job must exceed 3 hours.', null, null, 400);
-                                    }
-                                }
+                                $get_bidder_rewards = CaregiverProfileRegistration::where('user_id', Auth::user()->id)->first('rewards_earned');
 
                                 if($get_job_details->bidding_start_time == null && $get_job_details->bidding_end_time == null){
 
@@ -90,6 +81,7 @@ class BiddingController extends Controller
                                             'user_id' => Auth::user()->id,
                                             'job_id' => $request->job_id,
                                             'status' => JobStatus::BiddingStarted,
+                                            'rewards_earned' => $get_bidder_rewards->rewards_earned
                                         ]);
         
                                         DB::commit();
@@ -105,12 +97,14 @@ class BiddingController extends Controller
                                     CaregiverBidding::create([
                                         'user_id' => Auth::user()->id,
                                         'job_id' => $request->job_id,
-                                        'status' => JobStatus::BiddingStarted
+                                        'status' => JobStatus::BiddingStarted,
+                                        'rewards_earned' => $get_bidder_rewards->rewards_earned
                                     ]);
     
                                     return $this->success('Great! You have successfully placed your bid.', null, null, 201);
                                     
                                 }
+                                
                             }
                         }
                     }
