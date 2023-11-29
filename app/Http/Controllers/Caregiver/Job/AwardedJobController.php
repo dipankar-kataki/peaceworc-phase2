@@ -56,9 +56,9 @@ class AwardedJobController extends Controller
                             'is_job_awarded' => 1
                         ]);
 
-                        CaregiverBiddingResultList::where('job_id', $request->job_id)->update([
-                            'is_bidded_job_awarded' => 1,
-                            'is_job_accepted' => DB::raw('IF(user_id = ' . Auth::user()->id . ', 1, 0)'),
+                        CaregiverBiddingResultList::where('job_id', $request->job_id)->where('user_id', Auth::user()->id)->update([
+                            // 'is_job_accepted' => DB::raw('IF(user_id = ' . Auth::user()->id . ', 1, 0)'),
+                            'is_job_accepted' => 1
                         ]);
 
                         CaregiverNotification::create([
