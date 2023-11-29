@@ -334,7 +334,7 @@ class AwardBiddedJob extends Command
             // }
         }catch(\Exception $e){
             Log::error('Oops! Something went wrong in awarding bidded cron job.');
-            var_dump('Error ==>', $e->getMessage());
+            Log::error( 'Error message ==> '.$e->getMessage().' on line number ==> '.$e->getLine() );
             Log::info('Awarding bidded job cron error. Command exceuted In : ' . Carbon::now());
             Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
         }

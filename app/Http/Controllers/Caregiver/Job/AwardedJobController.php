@@ -92,4 +92,24 @@ class AwardedJobController extends Controller
             }
         }
     }
+
+    public function rejectAwardedJob(Request $request){
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->error('Oops! '.$validator->errors()->first(), null, null, 400);
+        }else{
+            try{
+                CaregiverBiddingResultList::where('job_id', $request->job_id)->where('user_id', Auth::user()->id)->where('is_job_rejected', 0)->where('is_notification_sent', 1)->update([
+                    'is_job_rejected' => 1
+                ]);
+
+                return $this->success('Great! Job rejected successfully', null, null, 200);
+            }catch(\Exception $e){
+                return $this->error('Oops! Something went wrong while rejecting job.', null, null, 500);
+            }
+        }
+    }
 }

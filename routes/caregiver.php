@@ -149,6 +149,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::group(['prefix' => 'awarded-job'], function(){
             Route::post('accept', [AwardedJobController::class, 'acceptAwardedJob']);
+            Route::post('reject', [AwardedJobController::class, 'rejectAwardedJob']);
         });
 
         Route::post('search', [SearchJobController::class, 'search']);
