@@ -42,7 +42,7 @@ class QuickCallController extends Controller
                             $lat2 = $job->lat;
                             $long2 = $job->long;
 
-                            $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
+                            $miles = $this->getJobDistance($lat1, $long1, $lat2, $long2, 'M');
 
 
                             $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $job->user_id)->first();
@@ -92,7 +92,7 @@ class QuickCallController extends Controller
                         $lat2 = $get_jobs->lat;
                         $long2 = $get_jobs->long;
 
-                        $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
+                        $miles = $this->getJobDistance($lat1, $long1, $lat2, $long2, 'M');
 
                             $details = [
                                 'job_id' => $get_jobs->id,
