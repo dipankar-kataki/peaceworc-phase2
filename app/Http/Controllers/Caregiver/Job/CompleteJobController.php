@@ -163,7 +163,7 @@ class CompleteJobController extends Controller
                 $lat2 = $get_jobs->lat;
                 $long2 = $get_jobs->long;
     
-                $miles = $this->jobDistance($lat1, $long1, $lat2, $long2, 'M');
+                $miles = $this->getJobDistance($lat1, $long1, $lat2, $long2, 'M');
                 
                 $job_owner = AgencyProfileRegistration::with('user')->where('user_id', $get_jobs->user_id)->first();
                 $details = [

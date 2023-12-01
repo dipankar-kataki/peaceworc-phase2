@@ -22,7 +22,7 @@ class MapLocationController extends Controller
             foreach($get_jobs as $jobs){
                 $lat2 = $jobs->lat;
                 $long2 = $jobs->long;
-                $miles = $this->jobDistance($_GET['current_lat'], $_GET['current_long'], $lat2, $long2, 'M');
+                $miles = $this->getJobDistance($_GET['current_lat'], $_GET['current_long'], $lat2, $long2, 'M');
 
                 if($miles <= 50){
 
