@@ -58,7 +58,8 @@ class OpenJobStatusSwitcher extends Command
                     if( $diff_in_hours <= 5){
     
                         AgencyPostJob::where('id', $item->id)->update([
-                            'status' => JobStatus::QuickCall
+                            'status' => JobStatus::QuickCall,
+                            'job_type' => JobStatus::QuickCall
                         ]);
 
                         Log::info('Great! Job ==> '.$item->id.' updated as Quick Call.');
