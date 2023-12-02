@@ -21,7 +21,8 @@ class Kernel extends ConsoleKernel
         Commands\UpdateBiddedJobStatus::class,
         Commands\GenerateBiddingList::class,
         Commands\AwardBiddedJob::class,
-        Commands\StrikeAndFlagForJobNotAccepting::class
+        Commands\StrikeAndFlagForJobNotAccepting::class,
+        Commands\UpdateNotAcceptedBiddedJobStatus::class,
 
     ];
 
@@ -35,6 +36,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('generateBiddingList:cron')->everyThreeMinutes();
         $schedule->command('awardBiddedJob:cron')->everyMinute();
         $schedule->command('strikeAndFlagForJobNotAccepting:cron')->everyTwoHours();
+        $schedule->command('updateNotAcceptedBiddedJobStatus:cron')->everyFiveMinutes();
     }
 
     /**
