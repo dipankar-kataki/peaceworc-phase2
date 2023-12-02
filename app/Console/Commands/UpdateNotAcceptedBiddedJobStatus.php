@@ -69,7 +69,7 @@ class UpdateNotAcceptedBiddedJobStatus extends Command
     
                                     AgencyNotification::create([
                                         'user_id' => $job->user_id,
-                                        'content' => 'Hey there, your earlier posted job named '.$job->title.' has been reposted as open job since no one has accepted the job after bidding.',
+                                        'content' => 'Hey there, your earlier posted job named "'.$job->title.'" has been reposted as open job since no one has accepted the job after bidding.',
                                         'type' => AgencyNotificationType::Job
                                     ]);
 
@@ -90,7 +90,7 @@ class UpdateNotAcceptedBiddedJobStatus extends Command
     
                                     AgencyNotification::create([
                                         'user_id' => $job->user_id,
-                                        'content' => 'Hey there, your earlier posted job named '.$job->title.' has been reposted as quick call job since no one has accepted the job after bidding.',
+                                        'content' => 'Hey there, your earlier posted job named "'.$job->title.'" has been reposted as quick call job since no one has accepted the job after bidding.',
                                         'type' => AgencyNotificationType::Job
                                     ]);
 
