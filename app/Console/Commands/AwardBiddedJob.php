@@ -64,7 +64,7 @@ class AwardBiddedJob extends Command
                 $get_rewards_earned = CaregiverProfileRegistration::where('user_id', $bidder->user_id)->first('rewards_earned');
                 $get_app_device_token = AppDeviceToken::where('user_id', $bidder->user_id)->first('fcm_token');
 
-                if(!$get_time_for_notification->gt(Carbon::now())){
+                if(! Carbon::parse($get_time_for_notification)->gt(Carbon::now())){
                     $data = [
 
                         'message' => 'Hurray! You won the bid. Please click the accept button to confirm the job.',
