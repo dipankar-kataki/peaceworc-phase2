@@ -177,11 +177,11 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                 DB::beginTransaction(); 
 
                                 AcceptJob::where('job_id', $upcoming->job_id)->update([
-                                    'status' => JobStatus::JobNotAccepted
+                                    'status' => JobStatus::JobNotStarted
                                 ]);
     
                                 AgencyPostJob::where('id', $upcoming->job_id)->update([
-                                    'status' => JobStatus::JobNotAccepted,
+                                    'status' => JobStatus::JobNotStarted,
                                     // 'start_date' => $new_start_date->toDateString(),
                                     // 'start_time' => $new_start_time
                                 ]);
