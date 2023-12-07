@@ -41,9 +41,12 @@ class AcceptJobController extends Controller
 
 
                        $get_request_job = AgencyPostJob::where('id', $request->job_id)->first();
+                       $is_job_already_accepted_by_another_caregiver = AcceptJob::where('job_id', $request->job_id)->exists();
 
                         if($get_request_job == null){
                             return $this->error('Oops! Failed to accept the job. Job may be expired or deleted by the agency.', null, null, 400);
+                        }else if($is_job_already_accepted_by_another_caregiver){
+                            return $this->error('Oops! This job has already been accepted by another caregiver.', null, null, 400);
                         }else{
                             $get_job_type = $get_request_job->job_type;
 
