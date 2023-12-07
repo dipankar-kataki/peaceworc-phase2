@@ -91,7 +91,7 @@ class StartJobController extends Controller
 
                                 DB::rollBack();
 
-                                return $this->error('Oops! Something went wrong. Not able to start the job.'.$e->getMessage().' On line number ==>'.$e->getLine(), null, null, 500);
+                                return $this->error('Oops! Something went wrong. Not able to start the job.', null, null, 500);
                                 
                             }
                             
@@ -102,7 +102,7 @@ class StartJobController extends Controller
                 }
                 
             }catch(\Exception $e){
-                return $this->error('Oops! Something Went Wrong. Failed To Start Job'. $e->getMessage().' On line number'.$e->getLine(), null, null, 500);
+                return $this->error('Oops! Something Went Wrong. Failed To Start Job', null, null, 500);
             }
         }
         
