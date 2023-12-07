@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Common\AgencyNotificationType;
 use App\Common\JobStatus;
+use App\Models\AcceptJob;
 use App\Models\AgencyNotification;
 use App\Models\AgencyPostJob;
 use Carbon\Carbon;
@@ -55,11 +56,15 @@ class JobRemover extends Command
 
 
             $removeExpiredJob = AgencyPostJob::where('payment_status', 1)->get();
+        
             if(!$removeExpiredJob->isEmpty()){
                 $current_time = Carbon::now();
 
                 foreach($removeExpiredJob as $job){
                    $end_date_time = Carbon::parse($job->end_date.''.$job->end_time);
+
+                   $is_job_accepted = AcceptJob::where('job_id', $job->id)->exists();
+
                    if(!$end_date_time->gt($current_time)){
 
                         try{
@@ -68,6 +73,14 @@ class JobRemover extends Command
                             AgencyPostJob::where('id', $job->id)->update([
                                 'status' => JobStatus::JobExpired
                             ]);
+
+                            if($is_job_accepted){
+                                AcceptJob::where('job_id', $job->id)->update([
+                                    'status' => JobStatus::JobExpired
+                                ]);
+                            }
+
+
 
                             AgencyNotification::create([
                                 'user_id' => $job->user_id,
