@@ -38,7 +38,7 @@ class StartJobController extends Controller
                 if($check_if_job_is_ongoing ){
                     return $this->error('Oops! Failed To Start Job. One job is already in an ongoing state', null, null, 500);
                 }else{
-                    $get_job = AgencyPostJob::where('id', $request->job_id)->first(['title', 'start_date', 'start_time', 'end_date', 'end_time']);
+                    $get_job = AgencyPostJob::where('id', $request->job_id)->first(['user_id','title', 'start_date', 'start_time', 'end_date', 'end_time']);
 
                     $selected_start_date_time_for_the_job = Carbon::parse($get_job->start_date.''.$get_job->start_time);
 
