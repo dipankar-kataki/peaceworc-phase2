@@ -54,11 +54,11 @@ class JobRemover extends Command
         try{
 
 
-            $removeExpiredQuickCallJob = AgencyPostJob::where('payment_status', 1)->where('status', JobStatus::QuickCall)->get();
-            if(!$removeExpiredQuickCallJob->isEmpty()){
+            $removeExpiredJob = AgencyPostJob::where('payment_status', 1)->get();
+            if(!$removeExpiredJob->isEmpty()){
                 $current_time = Carbon::now();
 
-                foreach($removeExpiredQuickCallJob as $job){
+                foreach($removeExpiredJob as $job){
                    $end_date_time = Carbon::parse($job->end_date.''.$job->end_time);
                    if(!$end_date_time->gt($current_time)){
 
