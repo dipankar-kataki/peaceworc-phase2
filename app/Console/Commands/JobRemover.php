@@ -55,7 +55,7 @@ class JobRemover extends Command
         try{
 
 
-            $removeExpiredJob = AgencyPostJob::where('payment_status', 1)->get();
+            $removeExpiredJob = AgencyPostJob::where('payment_status', 1)->where('status', '!=', JobStatus::JobExpired)->get();
         
             if(!$removeExpiredJob->isEmpty()){
                 $current_time = Carbon::now();
