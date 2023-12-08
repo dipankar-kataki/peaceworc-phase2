@@ -55,55 +55,59 @@ class JobRemover extends Command
         try{
 
 
-            $removeExpiredJob = AgencyPostJob::where('payment_status', 1)->where('status', '!=', JobStatus::JobExpired)->get();
+            $removeExpiredJob = AgencyPostJob::where('payment_status', 1)->where('status', '<>', JobStatus::JobExpired)->get();
         
             if(!$removeExpiredJob->isEmpty()){
                 $current_time = Carbon::now();
 
+
+
                 foreach($removeExpiredJob as $job){
                    $end_date_time = Carbon::parse($job->end_date.''.$job->end_time);
+                   $difference_in_hours = $current_time->diffInHours($end_date_time);
 
-                   $is_job_accepted = AcceptJob::where('job_id', $job->id)->exists();
+                   if($difference_in_hours > 48){
+                        $is_job_accepted = AcceptJob::where('job_id', $job->id)->exists();
 
-                   if(!$end_date_time->gt($current_time)){
-
-                        try{
-                            DB::beginTransaction();
-
-                            AgencyPostJob::where('id', $job->id)->update([
-                                'status' => JobStatus::JobExpired
-                            ]);
-
-                            if($is_job_accepted){
-                                AcceptJob::where('job_id', $job->id)->update([
+                        if(!$end_date_time->gt($current_time)){
+    
+                            try{
+                                DB::beginTransaction();
+    
+                                AgencyPostJob::where('id', $job->id)->update([
                                     'status' => JobStatus::JobExpired
                                 ]);
-                            }
-
-
-
-                            AgencyNotification::create([
-                                'user_id' => $job->user_id,
-                                'content' => 'Hey There, the Job named "'.$job->title.'" has expired.',
-                                'type' => AgencyNotificationType::Job,
-                            ]);
-
-                            DB::commit();
     
-                            Log::info('Job -->'. $job->id.' Updated as Expired');
-                            Log::info('Job Remover Command Exceuted In ===> : '.Carbon::now() );
-
+                                if($is_job_accepted){
+                                    AcceptJob::where('job_id', $job->id)->update([
+                                        'status' => JobStatus::JobExpired
+                                    ]);
+                                }
+    
+    
+    
+                                AgencyNotification::create([
+                                    'user_id' => $job->user_id,
+                                    'content' => 'Hey There, the Job named "'.$job->title.'" has expired.',
+                                    'type' => AgencyNotificationType::Job,
+                                ]);
+    
+                                DB::commit();
+        
+                                Log::info('Job -->'. $job->id.' Updated as Expired');
+                                Log::info('Job Remover Command Exceuted In ===> : '.Carbon::now() );
+    
+                            }
+                            catch(\Exception $e){
+                                DB::rollBack();
+    
+                                Log::info('Oops! Something went wrong in auto job remover');
+                                var_dump('Error ==>'. $e->getMessage());
+                                Log::info('Job Remover Error Command Exceuted In : '.Carbon::now() );
+                            }
+                            
                         }
-                        catch(\Exception $e){
-                            DB::rollBack();
-
-                            Log::info('Oops! Something went wrong in auto job remover');
-                            var_dump('Error ==>'. $e->getMessage());
-                            Log::info('Job Remover Error Command Exceuted In : '.Carbon::now() );
-                        }
-                        
                    }
-
                 }
             }
 
