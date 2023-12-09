@@ -182,7 +182,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
         
                                     Log::info('Profile of user id ===> '.$upcoming->user_id.' deactivated because of 3 strikes.');
                                 }catch(\Exception $e){
-                                    Log::error('Oops! Something went wrong in deactivating profile from strike and flag not accepting cron.');
+                                    Log::error('Oops! Something went wrong in deactivating profile from not started upcoming job cron.');
                                     Log::error( 'Error message ==> '.$e->getMessage().' on line number ==> '.$e->getLine() );
                                     Log::info('Error. Command exceuted In : ' . Carbon::now());
                                     Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
