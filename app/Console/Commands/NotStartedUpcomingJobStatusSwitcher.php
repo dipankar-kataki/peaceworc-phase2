@@ -75,8 +75,8 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                         $my_rewards = $get_rewards;
                     }
 
-                    $get_flags = CaregiverFlag::where('user_id', $upcoming->user_id)->count();
-                    $get_strikes = Strike::where('user_id', $upcoming->user_id)->count();
+                    $get_flags = CaregiverFlag::where('user_id', $upcoming->user_id)->where('status', 1)->count();
+                    $get_strikes = Strike::where('user_id', $upcoming->user_id)->where('status', 1)->count();
                     $banned_from_bidding = null;
                     $banned_from_quick_call = null;
                     $loss_of_rewards = 0;
