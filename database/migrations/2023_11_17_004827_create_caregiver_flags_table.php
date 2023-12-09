@@ -21,8 +21,8 @@ class CreateCaregiverFlagsTable extends Migration
             $table->string('flag_lift_reason')->nullable();
             $table->string('start_date_time');
             $table->string('end_date_time');
-            $table->time('banned_from_bidding');
-            $table->time('banned_from_quick_call');
+            $table->string('banned_from_bidding');
+            $table->string('banned_from_quick_call');
             $table->integer('rewards_loose')->default(0);  
             $table->boolean('status')->default('1');
             

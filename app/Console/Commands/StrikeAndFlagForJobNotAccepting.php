@@ -11,6 +11,7 @@ use App\Models\CaregiverBiddingResultList;
 use App\Models\CaregiverFlag;
 use App\Models\CaregiverNotification;
 use App\Models\CaregiverProfileRegistration;
+use App\Models\CaregiverStatusInformation;
 use App\Models\Reward;
 use App\Models\Strike;
 use Carbon\Carbon;
@@ -65,8 +66,8 @@ class StrikeAndFlagForJobNotAccepting extends Command
                 foreach($get_bidders as $bidder){
                 
                     $get_bidder_total_rewards_earned = CaregiverProfileRegistration::where('user_id', $bidder->user_id)->first('rewards_earned');
-                    $get_bidder_total_strikes = Strike::where('user_id', $bidder->user_id)->count();
-                    $get_bidder_total_flags = CaregiverFlag::where('user_id', $bidder->user_id)->count();
+                    $get_bidder_total_strikes = Strike::where('user_id', $bidder->user_id)->where('status', 1)->count();
+                    $get_bidder_total_flags = CaregiverFlag::where('user_id', $bidder->user_id)->where('status', 1)->count();
     
                     if($get_bidder_total_flags < 3){
     
@@ -120,76 +121,91 @@ class StrikeAndFlagForJobNotAccepting extends Command
                         }
                         
                     }
-    
-                    try{
-    
-                        DB::beginTransaction();
-    
-                        CaregiverBidding::where('job_id', $bidder->job_id)->update([
-                            'status' => JobStatus::JobNotAccepted,
-                        ]);
-    
-                        if($get_bidder_total_strikes < 4 && $get_bidder_total_flags >= 3){
-    
-                            Strike::create([
-                                'user_id' => $bidder->user_id,
-                                'job_id' => $bidder->job_id,
-                                'strike_reason' => StrikeReason::JobNotAccepted,
-                                'start_date_time' => Carbon::now(),
-                                'end_date_time' => $banned_from_quick_call,
-                                'banned_from_bidding' => $banned_from_bidding,
-                                'banned_from_quick_call' => $banned_from_quick_call,
-                                'rewards_loose' => $loss_of_rewards,
-                                'strike_number' => $strike_number
+
+                    if($get_bidder_total_strikes == 3){
+                        try{
+                            CaregiverStatusInformation::where('user_id', $bidder->user_id)->update([
+                                'is_profile_approved' => 0
                             ]);
-    
-                            CaregiverNotification::create([
-                                'user_id' => $bidder->user_id,
-                                'content' => 'Hey there, you received a STRIKE for not accepting the job named "'.$bidder->job->title.'" on time.',
-                                'type' => CaregiverNotificationType::Strike
-                            ]);
-    
-    
-                        }else if($get_bidder_total_strikes == 0 && $get_bidder_total_flags < 4 ){
-                            CaregiverFlag::create([
-                                'user_id' => $bidder->user_id,
-                                'job_id' => $bidder->job_id,
-                                'flag_reason' => FlagReason::JobNotAccepted,
-                                'start_date_time' => Carbon::now(),
-                                'end_date_time' => $banned_from_quick_call,
-                                'banned_from_bidding' => $banned_from_bidding,
-                                'banned_from_quick_call' => $banned_from_quick_call,
-                                'rewards_loose' => $loss_of_rewards,
-                                'flag_number' => $flag_number
-                            ]);
-    
-                            CaregiverNotification::create([
-                                'user_id' => $bidder->user_id,
-                                'content' => 'Hey there, you received a FLAG for not accepting the job named "'.$bidder->job->title.'" on time.',
-                                'type' => CaregiverNotificationType::Flag
-                            ]);
+
+                            Log::info('Profile of user id ===> '.$bidder->user_id.' deactivated because of 3 strikes.');
+                        }catch(\Exception $e){
+                            Log::error('Oops! Something went wrong in deactivating profile from strike and flag not accepting cron.');
+                            Log::error( 'Error message ==> '.$e->getMessage().' on line number ==> '.$e->getLine() );
+                            Log::info('Error. Command exceuted In : ' . Carbon::now());
+                            Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
                         }
+                    }else{
+                        try{
     
-                        CaregiverProfileRegistration::where('user_id', $bidder->user_id)->update([
-                            'rewards_earned' => $get_bidder_total_rewards_earned->rewards_earned == 0 ? 0 : abs(round($get_bidder_total_rewards_earned->rewards_earned - $loss_of_rewards) )
-                        ]);
-    
-                        Reward::create([
-                            'user_id' => $bidder->user_id,
-                            'job_id' => $bidder->job_id,
-                            'total_rewards' => $get_bidder_total_rewards_earned->rewards_earned == 0 ? 0 : abs(round($get_bidder_total_rewards_earned->rewards_earned - $loss_of_rewards) )
-                        ]);
-    
-                        DB::commit();
-    
-                    }catch(\Exception $e){
-    
-                        DB::rollBack();
-    
-                        Log::error('Oops! Something went wrong in giving strike and flags for not accepting bidded job cron.');
-                        Log::error( 'Error message ==> '.$e->getMessage().' on line number ==> '.$e->getLine() );
-                        Log::info('Strike and flag cron error. Command exceuted In : ' . Carbon::now());
-                        Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
+                            DB::beginTransaction();
+        
+                            CaregiverBidding::where('job_id', $bidder->job_id)->update([
+                                'status' => JobStatus::JobNotAccepted,
+                            ]);
+        
+                            if($get_bidder_total_strikes < 4 && $get_bidder_total_flags >= 3){
+        
+                                Strike::create([
+                                    'user_id' => $bidder->user_id,
+                                    'job_id' => $bidder->job_id,
+                                    'strike_reason' => StrikeReason::JobNotAccepted,
+                                    'start_date_time' => Carbon::now(),
+                                    'end_date_time' => $banned_from_quick_call,
+                                    'banned_from_bidding' => $banned_from_bidding->diff(Carbon::now())->format('%D:%H:%I:%S'),
+                                    'banned_from_quick_call' => $banned_from_quick_call->diff(Carbon::now())->format('%D:%H:%I:%S'),
+                                    'rewards_loose' => $loss_of_rewards,
+                                    'strike_number' => $strike_number
+                                ]);
+        
+                                CaregiverNotification::create([
+                                    'user_id' => $bidder->user_id,
+                                    'content' => 'Hey there, you received a STRIKE for not accepting the job named "'.$bidder->job->title.'" on time.',
+                                    'type' => CaregiverNotificationType::Strike
+                                ]);
+        
+        
+                            }else if($get_bidder_total_strikes == 0 && $get_bidder_total_flags < 4 ){
+                                CaregiverFlag::create([
+                                    'user_id' => $bidder->user_id,
+                                    'job_id' => $bidder->job_id,
+                                    'flag_reason' => FlagReason::JobNotAccepted,
+                                    'start_date_time' => Carbon::now(),
+                                    'end_date_time' => $banned_from_quick_call,
+                                    'banned_from_bidding' => $banned_from_bidding->diff(Carbon::now())->format('%D:%H:%I:%S'),
+                                    'banned_from_quick_call' => $banned_from_quick_call->diff(Carbon::now())->format('%D:%H:%I:%S'),
+                                    'rewards_loose' => $loss_of_rewards,
+                                    'flag_number' => $flag_number
+                                ]);
+        
+                                CaregiverNotification::create([
+                                    'user_id' => $bidder->user_id,
+                                    'content' => 'Hey there, you received a FLAG for not accepting the job named "'.$bidder->job->title.'" on time.',
+                                    'type' => CaregiverNotificationType::Flag
+                                ]);
+                            }
+        
+                            CaregiverProfileRegistration::where('user_id', $bidder->user_id)->update([
+                                'rewards_earned' => $get_bidder_total_rewards_earned->rewards_earned == 0 ? 0 : abs(round($get_bidder_total_rewards_earned->rewards_earned - $loss_of_rewards) )
+                            ]);
+        
+                            Reward::create([
+                                'user_id' => $bidder->user_id,
+                                'job_id' => $bidder->job_id,
+                                'total_rewards' => $get_bidder_total_rewards_earned->rewards_earned == 0 ? 0 : abs(round($get_bidder_total_rewards_earned->rewards_earned - $loss_of_rewards) )
+                            ]);
+        
+                            DB::commit();
+        
+                        }catch(\Exception $e){
+        
+                            DB::rollBack();
+        
+                            Log::error('Oops! Something went wrong in giving strike and flags for not accepting bidded job cron.');
+                            Log::error( 'Error message ==> '.$e->getMessage().' on line number ==> '.$e->getLine() );
+                            Log::info('Strike and flag cron error. Command exceuted In : ' . Carbon::now());
+                            Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
+                        }
                     }
                 }
             }
