@@ -262,7 +262,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
     
                                     DB::commit();
         
-                                    Log::info('Great! Not started upcoming job status changed to quick call and a new start date-time added.');
+                                    Log::info('Great! Upcoming job ===> '.$upcoming->job_id.' status changed to job not started.');
         
                                     Log::info('Not started upcoming job switcher command exceuted In : '.Carbon::now() );
                                     Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
