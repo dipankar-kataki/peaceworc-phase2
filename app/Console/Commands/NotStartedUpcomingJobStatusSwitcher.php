@@ -169,10 +169,6 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                             Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
 
                         }else{
-                            //Here we are updating the start date and time with new date and time after adding 5 hours to it.
-
-                            // $new_start_date = $job_start_date->addHours(5);
-                            // $new_start_time = $new_start_date->toTimeString();
 
                             if($get_strikes == 3){
                                 try{
@@ -188,7 +184,9 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                     Log::info("-------------------- xxxxxxxxxxxxxxxxxxxxx --------------------");
                                 }
                             }else{
+                                
                                 try{
+                                    
                                     DB::beginTransaction(); 
     
                                     AcceptJob::where('job_id', $upcoming->job_id)->update([
@@ -197,8 +195,6 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
         
                                     AgencyPostJob::where('id', $upcoming->job_id)->update([
                                         'status' => JobStatus::JobNotStarted,
-                                        // 'start_date' => $new_start_date->toDateString(),
-                                        // 'start_time' => $new_start_time
                                     ]);
     
                                     if( $get_strikes < 3 && $get_flags == 3){
@@ -209,7 +205,7 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                             'strike_reason' => StrikeReason::JobNotStarted,
                                             'start_date_time' => Carbon::now(),
                                             'end_date_time' => $banned_from_quick_call,
-                                            'banned_from_bidding' => $banned_from_bidding->diff(Carbon::now())->format('%D:%H:%I:%S'),,
+                                            'banned_from_bidding' => $banned_from_bidding->diff(Carbon::now())->format('%D:%H:%I:%S'),
                                             'banned_from_quick_call' => $banned_from_quick_call->diff(Carbon::now())->format('%D:%H:%I:%S'),
                                             'rewards_loose' => $loss_of_rewards,
                                             'strike_number' => $strike_number
@@ -223,13 +219,14 @@ class NotStartedUpcomingJobStatusSwitcher extends Command
                                         ]);
     
                                     }else if($get_strikes == 0 && $get_flags < 3  ){
+
                                         CaregiverFlag::create([
                                             'user_id' => $upcoming->user_id,
                                             'job_id' => $upcoming->job_id,
                                             'flag_reason' => FlagReason::JobNotStarted,
                                             'start_date_time' => Carbon::now(),
                                             'end_date_time' => $banned_from_quick_call,
-                                            'banned_from_bidding' => $banned_from_bidding->diff(Carbon::now())->format('%D:%H:%I:%S'),,
+                                            'banned_from_bidding' => $banned_from_bidding->diff(Carbon::now())->format('%D:%H:%I:%S'),
                                             'banned_from_quick_call' => $banned_from_quick_call->diff(Carbon::now())->format('%D:%H:%I:%S'),
                                             'rewards_loose' => $loss_of_rewards,
                                             'flag_number' => $flag_number
