@@ -64,7 +64,7 @@ class AwardBiddedJob extends Command
                 foreach($get_bidders as $bidder){
 
                     $get_time_for_notification = $bidder->time_for_notification;
-                    $get_rewards_earned = CaregiverProfileRegistration::where('user_id', $bidder->user_id)->first('rewards_earned');
+                    // $get_rewards_earned = CaregiverProfileRegistration::where('user_id', $bidder->user_id)->first('rewards_earned');
                     $get_app_device_token = AppDeviceToken::where('user_id', $bidder->user_id)->first('fcm_token');
     
                     if(! Carbon::parse($get_time_for_notification)->gt(Carbon::now())){
@@ -83,7 +83,7 @@ class AwardBiddedJob extends Command
                             'care_type' =>  $bidder->job->care_type,
                             'care_items' =>  $bidder->job->care_items,
                             'address' => $bidder->job->short_address,
-                            'rewards' => $get_rewards_earned->rewards_earned,
+                            'rewards' => $bidder->job->job_rewards,
                             'notification_type' => 'fullscreen'
                         ];
     

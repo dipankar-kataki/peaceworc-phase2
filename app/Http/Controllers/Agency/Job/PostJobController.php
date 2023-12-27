@@ -81,11 +81,12 @@ class PostJobController extends Controller
                             }else{ 
         
                                 $diff_in_hours = $requested_start_date_time_for_the_job->diffInHours($current_time);
+                                $diff_in_minutes =  $requested_start_date_time_for_the_job->diffInMinutes($current_time);
 
         
                                 $status = 0;
         
-                                if( $diff_in_hours <= 5){
+                                if( $diff_in_hours <= 5 && $diff_in_minutes < 1){
                                     $status = JobStatus::QuickCall;
                                 }else if($diff_in_hours > 5){
                                     $status = JobStatus::Open;

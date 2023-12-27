@@ -85,23 +85,22 @@ class CompleteJobController extends Controller
                 if( $job_end_date_time->gt( Carbon::now() ) ){
                     return $this->error('Oops! Failed to complete job. Job end time not arrived yet. Please wait.', null, null, 400);
                 }else{
-                    $job_start_date_time = Carbon::parse($get_job->job->start_date.''.$get_job->job->start_time);
+                    // $job_start_date_time = Carbon::parse($get_job->job->start_date.''.$get_job->job->start_time);
                     $get_total_rewards_earned = CaregiverProfileRegistration::where('user_id', $get_job->user_id)->first();
                     
-                    
 
-                    $time_diff_in_hours = Carbon::parse($get_job->job_accepted_time)->diffInHours($job_start_date_time);
+                    // $time_diff_in_hours = Carbon::parse($get_job->job_accepted_time)->diffInHours($job_start_date_time);
 
-                    $earned_rewards = 1;
+                    $earned_rewards = $get_job->job_rewards;
 
 
-                    if( $time_diff_in_hours <= 3 && $time_diff_in_hours > 2){
-                        $earned_rewards = 3;
-                    }else if( $time_diff_in_hours <= 2  && $time_diff_in_hours > 1){
-                        $earned_rewards = 5;
-                    }else if( $time_diff_in_hours <= 1){
-                        $earned_rewards = 15;
-                    }
+                    // if( $time_diff_in_hours <= 3 && $time_diff_in_hours > 2){
+                    //     $earned_rewards = 3;
+                    // }else if( $time_diff_in_hours <= 2  && $time_diff_in_hours > 1){
+                    //     $earned_rewards = 5;
+                    // }else if( $time_diff_in_hours <= 1){
+                    //     $earned_rewards = 15;
+                    // }
                     
 
                     try{
@@ -127,8 +126,6 @@ class CompleteJobController extends Controller
                             'rewards_earned' => $get_total_rewards_earned->rewards_earned + $earned_rewards
                         ]);
 
-
-        
                         DB::commit();
         
                         return $this->success('Great! Job Completed Successfully.', null, null, 201);
