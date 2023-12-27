@@ -90,6 +90,17 @@ class PostJobController extends Controller
                                 }else if($diff_in_hours > 5){
                                     $status = JobStatus::Open;
                                 }
+
+                                $rewards = 1;
+
+
+                                if( $diff_in_hours <= 3 && $diff_in_hours > 2){
+                                    $rewards = 3;
+                                }else if( $diff_in_hours <= 2  && $diff_in_hours > 1){
+                                    $rewards = 5;
+                                }else if( $diff_in_hours <= 1){
+                                    $rewards = 15;
+                                }
     
                                 try{
                                     
@@ -122,6 +133,7 @@ class PostJobController extends Controller
                                         'check_list' => json_encode($request->check_list),
                                         'status' => $status,
                                         'job_type' => $status,
+                                        'job_rewards' => $rewards,
                                     ]);
 
                                     if($create){
