@@ -86,7 +86,7 @@ class PostJobController extends Controller
         
                                 $status = 0;
         
-                                if( ($diff_in_hours <= 5)  && ($diff_in_minutes > 1)){
+                                if( ($diff_in_hours <= 5)  && ($diff_in_minutes < 1)){
                                     $status = JobStatus::QuickCall;
                                 }else if($diff_in_hours > 5){
                                     $status = JobStatus::Open;
