@@ -62,6 +62,7 @@ class UpcomingController extends Controller
                                 'lat' => $job->job->lat,
                                 'long' => $job->job->long,
                                 'status' => $job->job->status,
+                                'rewards' => $job->job->job_rewards,
                                 'job_starts_in' => $diff_in_hours
                             ];
                             array_push($all_details, $details);
@@ -118,6 +119,7 @@ class UpcomingController extends Controller
                                 'lat' => $get_job->job->lat,
                                 'long' => $get_job->job->long,
                                 'status' => $get_job->job->status,
+                                'rewards' => $$get_job->job->job_rewards,
                                 'job_starts_in' => $diff_in_hours
                             ];
 
