@@ -81,16 +81,19 @@ class PostJobController extends Controller
                             }else{ 
         
                                 $diff_in_hours = $requested_start_date_time_for_the_job->diffInHours($current_time);
-                                $diff_in_minutes =  $requested_start_date_time_for_the_job->diffInMinutes($current_time);
+                                $diff_in_minutes =  $requested_start_date_time_for_the_job->diffInMinutes($current_time) % 60;
 
         
                                 $status = 0;
         
-                                if( $diff_in_hours <= 5 && $diff_in_minutes < 1){
+                                if( ($diff_in_hours <= 5)  && ($diff_in_minutes > 1)){
                                     $status = JobStatus::QuickCall;
                                 }else if($diff_in_hours > 5){
                                     $status = JobStatus::Open;
                                 }
+
+                                // return $this->success('Great! Job Posted Successfully', 'Diff in hr ==>'.$diff_in_hours.'  '.'Diff in min ==>'.$diff_in_minutes, null, 200);
+                                // return $this->success('Great! Job Posted Successfully', $status, null, 200);
 
                                 $rewards = 1;
 
